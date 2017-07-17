@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class FoxBot:
+class FoxMain:
     """My custom cog that does stuff!"""
 
     def __init__(self, bot):
@@ -15,4 +15,4 @@ class FoxBot:
         await self.bot.say("I can do stuff!")
 
 def setup(bot):
-    bot.add_cog(FoxBot(bot))
+    bot.add_cog(FoxMain(bot))
