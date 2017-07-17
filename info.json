@@ -1,7 +1,7 @@
 {
-    "AUTHOR" : "Author name",
-    "INSTALL_MSG" : "A install message that appears as soon as the end user does !cog repo add",
-    "NAME" : "Repository Name",
-    "SHORT" : "A short description, appears on !cog list",
-    "DESCRIPTION" : "A longer description, appears on !cog info repo"
+    "AUTHOR" : "Bobloy",
+    "INSTALL_MSG" : "Placeholder",
+    "NAME" : "Fox-Cogs",
+    "SHORT" : "Cogs by Bobloy",
+    "DESCRIPTION" : "Cogs for RED Discord Bot by Bobloy"
 }

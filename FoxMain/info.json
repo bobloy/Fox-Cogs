@@ -1,10 +1,9 @@
 {
-    "AUTHOR" : "Author name",
-    "INSTALL_MSG" : "A install message that appears as soon as the end user does !cog install repo cogname",
-    "NAME" : "The class name of the cog, MUST BE matching, including capitalization",
-    "SHORT" : "A Short description, appears on !cog list repo",
-    "DESCRIPTION" : "A longer description, appears on !cog list repo cogname",
+    "AUTHOR" : "Bobloy",
+    "INSTALL_MSG" : "Placeholder Install MSG",
+    "NAME" : "FoxMain",
+    "SHORT" : "Cog to interact with Fox",
+    "DESCRIPTION" : "Cog to interact with Fox",
     "TAGS" : ["example", "tags", "list"],
-    "REQUIREMENTS" : ["tabulate", "Pillow"],
     "HIDDEN" : false
 }
