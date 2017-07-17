@@ -16,7 +16,7 @@ class FoxMain:
 
 
     @fox.commands()
-        async def punch(self, user : discord.Member):
+    async def punch(self, user : discord.Member):
         """I will puch anyone! >.<"""
 
         #Your code will go here
