@@ -8,14 +8,16 @@ class Fox:
         self.bot = bot
 
     @commands.command()
-    async def fox(self):
+    async def fox(self, ctx):
         """This does stuff!"""
 
         #Your code will go here
-        await self.bot.say("I can do stuff!")
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+        #await self.bot.say("I can do stuff!")
 
 
-    @fox.commands()
+    @fox.command(pass_context=True)
     async def punch(self, user : discord.Member):
         """I will puch anyone! >.<"""
         #Your code will go here
