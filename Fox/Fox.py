@@ -17,7 +17,7 @@ class Fox:
         #await self.bot.say("I can do stuff!")
 
 
-    @fox.command(pass_context=True)
+    @fox.command()
     async def punch(self, user : discord.Member):
         """I will puch anyone! >.<"""
         #Your code will go here
