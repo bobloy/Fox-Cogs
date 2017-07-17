@@ -1,7 +1,7 @@
 {
     "AUTHOR" : "Bobloy",
     "INSTALL_MSG" : "Placeholder Install MSG",
-    "NAME" : "FoxMain",
+    "NAME" : "Fox",
     "SHORT" : "Cog to interact with Fox",
     "DESCRIPTION" : "Cog to interact with Fox",
     "TAGS" : ["example", "tags", "list"],
