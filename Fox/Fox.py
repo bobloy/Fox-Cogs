@@ -11,7 +11,7 @@ class Fox:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.group(pass_context=True)
     async def fox(self, ctx):
         """This does stuff!"""
 
@@ -78,4 +78,4 @@ def check_files():
     
 
 def setup(bot):
-    bot.add_cog(FoxMain(bot))
+    bot.add_cog(Fox(bot))
