@@ -7,7 +7,7 @@ class Fox:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group()
+    @commands.group(pass_context=True)
     async def fox(self, ctx):
         """This does stuff!"""
 
