@@ -67,14 +67,14 @@ def check_folders():
         print("Creating data/Fox-Cogs folder...")
         os.makedirs("data/Fox-Cogs")
 
-    if not os.path.exists("data/Fox-Cogs/Fox"):
-        print("Creating data/Fox-Cogs/Fox folder...")
-        os.makedirs("data/Fox-Cogs/Fox")
+    if not os.path.exists("data/Fox-Cogs/fox"):
+        print("Creating data/Fox-Cogs/fox folder...")
+        os.makedirs("data/Fox-Cogs/fox")
 
 
 def check_files():
-    if not dataIO.is_valid_json("data/Fox-Cogs/Fox/fox.json"):
-        dataIO.save_json("data/Fox-Cogs/Fox/fox.json" ,{})
+    if not dataIO.is_valid_json("data/Fox-Cogs/fox/fox.json"):
+        dataIO.save_json("data/Fox-Cogs/fox/fox.json" ,{})
     
 
 def setup(bot):
