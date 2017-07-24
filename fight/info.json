@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "Bobloy",
+    "INSTALL_MSG" : "Placeholder Install MSG",
+    "NAME" : "Fight",
+    "SHORT" : "Cog to organize tournaments",
+    "DESCRIPTION" : "Cog to organize tournaments within Discord",
+    "TAGS" : ["fight", "tournament", "tourney", "tourny", "elimination", "fox", "fox-cogs", "fox-cog", "bobloy"],
+    "HIDDEN" : false,
+	"DISABLED" : false
+}
