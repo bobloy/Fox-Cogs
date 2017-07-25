@@ -12,13 +12,13 @@ class Test:
         self.file_path = "data/Fox-Cogs/test/test.json"
         self.the_data = dataIO.load_json(self.file_path)
 
-    def save_repos(self):
+    def save_data(self):
          dataIO.save_json(self.file_path, self.the_data)
 
     @commands.command()
     async def test(self):
         self.the_data["WOAH"] = True
-        save_repos()
+        self.save_data()
 
 
 def check_folders():
