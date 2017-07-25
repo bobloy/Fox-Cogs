@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "Bobloy",
+    "INSTALL_MSG" : "Placeholder Install MSG",
+    "NAME" : "Test",
+    "SHORT" : "Test cog",
+    "DESCRIPTION" : "Test cog",
+    "TAGS" : ["example", "test", "cog"],
+    "HIDDEN" : false,
+	"DISABLED" : false
+}
