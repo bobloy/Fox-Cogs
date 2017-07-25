@@ -1,4 +1,6 @@
+import discord
 import os
+from discord.ext import commands
 
 from .utils.dataIO import dataIO
 from .utils import checks
@@ -11,8 +13,12 @@ class Test:
         self.the_data = dataIO.load_json(self.file_path)
 
     def save_repos(self):
-         dataIO.save_json(self.file_path, self.repos)
+         dataIO.save_json(self.file_path, self.the_data)
 
+    @commands.command()
+    async def test(self):
+        self.the_data["WOAH"] = True
+        save_repos()
 
 
 def check_folders():
@@ -28,8 +34,8 @@ def check_folders():
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/test/test.json"):
         dataIO.save_json("data/Fox-Cogs/test/test.json" ,{})
-         
-def main()
+
+def setup(bot):
     check_folders()
     check_files()
-    n = Test()
+    bot.add_cog(Fight(bot))
