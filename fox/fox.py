@@ -47,19 +47,19 @@ class Fox:
         """Removes clan from future data grabs"""
         await self.bot.say("Todo")
 
-    async def getclanstats(self):
+    async def _getclanstats(self):
         await self.bot.say("Getclanstats Todo")
 
-    async def gettrophy(self):
+    async def _gettrophy(self):
         await self.bot.say("Gettrophy Todo")
 
-    async def parseclanstats(self):
+    async def _parseclanstats(self):
         await self.bot.say("Parseclanstats Todo")
 
-    async def parsedate(self):
+    async def _parsedate(self):
         await self.bot.say("Parsedate Todo")
 
-    async def parsemember(self):
+    async def _parsemember(self):
         await self.bot.say("Parsemember Todo")
     
 def check_folders():
