@@ -33,8 +33,8 @@ class Fight:
         await self.bot.say("ONE PUNCH! And " + user.mention + " is out! ლ(ಠ益ಠლ)")
 
     @fight.command()
-    async def score(self):
-        """Enters score for current game"""
+    async def score(self, ctx):
+        """Enters score for current match, or for passed game ID"""
         await self.bot.say("Todo")
 
     @fight.command()
@@ -49,7 +49,7 @@ class Fight:
 
     @fight.group(pass_context=True)
     async def bracket(self, ctag):
-        """Removes clan from future data grabs"""
+        """Shows your current match your next opponent"""
         await self.bot.say("Todo")
 
         #Your code will go here
@@ -59,13 +59,13 @@ class Fight:
 
     @bracket.command()
     async def full(self, ctag):
-         """Adds clan to grab-list"""
+         """Shows the full bracket"""
         await self.bot.say("Todo")
 
 
      @commands.group(pass_context=True)
      async def setfight(self, ctx):
-        """This does stuff!"""
+        """Admin command for starting or managing tournaments"""
 
         #Your code will go here
         if ctx.invoked_subcommand is None:
@@ -78,17 +78,20 @@ class Fight:
         """Prints low trophy users for all registered clans"""
         await self.bot.say("Todo")
 
-    async def _getclanstats(self):
+    async def _activefight(self):
+        """Checks if there is an active tournament already"""
         await self.bot.say("Getclanstats Todo")
 
-    async def _gettrophy(self):
+    async def _infight(self, user : discord.Member):
+        """Checks if passed member is already in the tournament"""
         await self.bot.say("Gettrophy Todo")
 
-    async def _parseclanstats(self):
+    async def _openregistration(self):
+        """Checks if tournament is accepting joins"""
         await self.bot.say("Parseclanstats Todo")
 
-    async def _parsedate(self):
-        await self.bot.say("Parsedate Todo")
+    async def _comparescores(self):
+        await self.bot.say("")
 
     async def _parsemember(self):
         await self.bot.say("Parsemember Todo")
