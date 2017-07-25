@@ -21,31 +21,40 @@ class Fight:
         #await self.bot.say("I can do stuff!")
 
 
-    @fox.command()
-    async def punch(self, user : discord.Member):
-        """I will puch anyone! >.<"""
+    @fight.command()
+    async def join(self, user : discord.Member):
+        """Join the active brawl"""
         #Your code will go here
         await self.bot.say("ONE PUNCH! And " + user.mention + " is out! ლ(ಠ益ಠლ)")
 
-    @fox.command()
-    async def lowtrophy(self):
+    @fight.command()
+    async def score(self):
         """Prints low trophy users for all registered clans"""
         await self.bot.say("Todo")
 
-    @fox.command()
-    async def gettrophy(self):
+    @fight.command()
+    async def leave(self):
         """Gets fresh data from Clashstat"""
         await self.bot.say("Todo")
 
-    @fox.command()
-    async def addclan(self, ctag, ckind = "Unranked", irank = 0):
+    @fight.command()
+    async def leaderboard(self, ctag, ckind = "Unranked", irank = 0):
         """Adds clan to grab-list"""
         await self.bot.say("Todo")
 
-    @fox.command()
-    async def removeclan(self, ctag):
+    @fight.group(pass_context=True)
+    async def bracket(self, ctag):
         """Removes clan from future data grabs"""
         await self.bot.say("Todo")
+
+    @bracket.command()
+    async def full(self, ctag):
+         """This does stuff!"""
+
+        #Your code will go here
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+        #await self.bot.say("I can do stuff!")
 
     async def getclanstats(self):
         await self.bot.say("Getclanstats Todo")
