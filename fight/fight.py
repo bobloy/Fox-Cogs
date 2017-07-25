@@ -10,6 +10,8 @@ class Fight:
 
     def __init__(self, bot):
         self.bot = bot
+        self.path = "data/Fox-Cogs/fight/"
+        self.file_path = "data/Fox-Cogs/fight/fight.json"
 
     @commands.group(pass_context=True)
     async def fight(self, ctx):
@@ -88,4 +90,6 @@ def check_files():
     
 
 def setup(bot):
+    check_folders()
+    check_files()
     bot.add_cog(Fight(bot))
