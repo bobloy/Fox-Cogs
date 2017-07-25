@@ -18,7 +18,7 @@ class Test:
     @commands.command()
     async def test(self):
         self.the_data["WOAH"] = True
-        self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
+        #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
         self.the_data["Yeah dude"]["knarly"] = "ur lyin"
         self.the_data["Yeah dude"]["knarly"]["kick-ass"]["no way!!!"] = "Biiiiiitch"
         self.save_data()
