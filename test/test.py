@@ -6,7 +6,7 @@ from .utils.dataIO import dataIO
 from .utils import checks
 
 class Test:
-    def __init__(self):
+    def __init__(self, bot):
         self.bot = bot
         self.path = "data/Fox-Cogs/test"
         self.file_path = "data/Fox-Cogs/test/test.json"
