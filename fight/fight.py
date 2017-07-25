@@ -12,7 +12,8 @@ class Fight:
         self.bot = bot
         self.path = "data/Fox-Cogs/fight/"
         self.file_path = "data/Fox-Cogs/fight/fight.json"
-
+        self.the_data = dataIO.load__json(self.file_path)
+        self.fights = 
     @commands.group(pass_context=True)
     async def fight(self, ctx):
         """This does stuff!"""
@@ -24,19 +25,21 @@ class Fight:
 
 
     @fight.command()
-    async def join(self, user : discord.Member):
+    async def join(self, ctx):
         """Join the active brawl"""
         #Your code will go here
+        if not user:
+            user = ctx.message.author
         await self.bot.say("ONE PUNCH! And " + user.mention + " is out! ლ(ಠ益ಠლ)")
 
     @fight.command()
     async def score(self):
-        """Prints low trophy users for all registered clans"""
+        """Enters score for current game"""
         await self.bot.say("Todo")
 
     @fight.command()
     async def leave(self):
-        """Gets fresh data from Clashstat"""
+        """Forfeit your match and all future matches"""
         await self.bot.say("Todo")
 
     @fight.command()
@@ -57,6 +60,22 @@ class Fight:
     @bracket.command()
     async def full(self, ctag):
          """Adds clan to grab-list"""
+        await self.bot.say("Todo")
+
+
+     @commands.group(pass_context=True)
+     async def setfight(self, ctx):
+        """This does stuff!"""
+
+        #Your code will go here
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+        #await self.bot.say("I can do stuff!")
+
+
+     @setfight.command()
+     async def score(self):
+        """Prints low trophy users for all registered clans"""
         await self.bot.say("Todo")
 
     async def _getclanstats(self):
