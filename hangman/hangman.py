@@ -19,7 +19,7 @@ class hangman:
     @commands.command(aliases=['h'],no_pm=True)
     async def hangman(self, ctx, guess: str=None):
         """Play a game of hangman against the bot!"""
-        if str is None:
+        if guess is None:
             if self.the_data["running"] == True:
                 await self.bot.say("Game of hangman is already running!")
                 #await self.bot.send_cmd_help(ctx)
