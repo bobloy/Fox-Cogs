@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "Bobloy",
+    "INSTALL_MSG" : "Placeholder Install MSG",
+    "NAME" : "Hangman",
+    "SHORT" : "Play a game of hangman",
+    "DESCRIPTION" : "Play a game of hangman"",
+    "TAGS" : ["game", "fun", "hangman"],
+    "HIDDEN" : false,
+	"DISABLED" : false
+}
