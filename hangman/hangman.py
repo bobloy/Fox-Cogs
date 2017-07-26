@@ -20,7 +20,7 @@ class hangman:
     async def hangman(self, ctx, guess : str=None):
         """Play a game of hangman against the bot!"""
         if guess is None:
-            if self.the_data["running"] is True:
+            if self.the_data["running"] == True:
                 await self.bot.say("Game of hangman is already running!")
                 #await self.bot.send_cmd_help(ctx)
             else:
@@ -44,12 +44,12 @@ class hangman:
         """
         
     async def _startgame(self):
-            self.the_data["running"] = True
-            self.save_data()
+        self.the_data["running"] = True
+        self.save_data()
         
     async def _stopgame(self):
-            self.the_data["running"] = False
-            self.save_data()
+        self.the_data["running"] = False
+        self.save_data()
         
     async def _getphrase(self):
         '''Get a new phrase for the game'''
