@@ -24,8 +24,8 @@ class hangman:
                 await self.bot.say("Game of hangman is already running!")
                 #await self.bot.send_cmd_help(ctx)
             else:
-                await self.bot.say("Starting a game of hangman!")
                 self._startgame()
+                await self.bot.say("Starting a game of hangman!")
         else:
             await self.bot.say("A game of hangman is now stopping!")
             self._stopgame()
