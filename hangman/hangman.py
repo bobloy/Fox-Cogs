@@ -14,18 +14,20 @@ class hangman:
         self.the_data = dataIO.load_json(self.file_path)
 
     def save_data(self):
-         dataIO.save_json(self.file_path, self.the_data)
+        dataIO.save_json(self.file_path, self.the_data)
 
     @commands.command(pass_context=True, aliases=['h'])
     async def hangman(self, ctx):
-		if ctx.invoked_subcommand is None:
-	
-			if self.the_data["running"] == True:
-				await self.bot.say("Game of hangman is already running!")
-				await self.bot.send_cmd_help(ctx)
-			else:
-				self._startgame()
-
+        """Play a game of hangman against the bot!"""
+        if ctx is None:
+            if self.the_data["running"] == True:
+                await self.bot.say("Game of hangman is already running!")
+                await self.bot.send_cmd_help(ctx)
+            else:
+                self._startgame()
+        else:
+            self._stopgame()
+        '''
         #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
         if "Yeah dude" not in self.the_data:
             self.the_data["Yeah dude"]={}
@@ -37,16 +39,23 @@ class hangman:
         #self.the_data["Yeah dude"]["knarly"] = "ur lyin"
         #self.the_data["Yeah dude"]["knarly"]["kick-ass"]["no way!!!"] = "Biiiiiitch"
         self.save_data()
-
-	async def _startgame(self):
-	
-	async def _stopgame(self):
-	
-	async def _getphrase(self):
-	
-	async def _guessletter(self):
-	
-	
+    '''
+        
+    async def _startgame(self):
+            self.the_data["running"] = True
+            self.save_data()
+            await self.bot.say("A game of hangman is now starting!")
+        
+    async def _stopgame(self):
+            self.the_data["running"] = False
+            self.save_data()
+            await self.bot.say("A game of hangman is now stopping!")
+        
+    async def _getphrase(self):
+    
+    async def _guessletter(self):
+    
+    
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")
