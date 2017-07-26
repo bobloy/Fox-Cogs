@@ -16,18 +16,20 @@ class hangman:
     def save_data(self):
         dataIO.save_json(self.file_path, self.the_data)
 
-    @commands.command(aliases=['h'],no_pm=True)
-    async def hangman(self, guess: str=None):
+    @commands.command(aliases=['h'], pass_context=True)
+    async def hangman(self, ctx, guess : str=None):
         """Play a game of hangman against the bot!"""
         if guess is None:
-            if self.the_data["running"] == True:
+            if self.the_data["running"] is True:
                 await self.bot.say("Game of hangman is already running!")
                 #await self.bot.send_cmd_help(ctx)
             else:
+                await self.bot.say("Starting a game of hangman!")
                 self._startgame()
         else:
+            await self.bot.say("A game of hangman is now stopping!")
             self._stopgame()
-        '''
+        """
         #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
         if "Yeah dude" not in self.the_data:
             self.the_data["Yeah dude"]={}
@@ -39,17 +41,15 @@ class hangman:
         #self.the_data["Yeah dude"]["knarly"] = "ur lyin"
         #self.the_data["Yeah dude"]["knarly"]["kick-ass"]["no way!!!"] = "Biiiiiitch"
         self.save_data()
-    '''
+        """
         
     async def _startgame(self):
             self.the_data["running"] = True
             self.save_data()
-            await self.bot.say("A game of hangman is now starting!")
         
     async def _stopgame(self):
             self.the_data["running"] = False
             self.save_data()
-            await self.bot.say("A game of hangman is now stopping!")
         
     async def _getphrase(self):
         '''Get a new phrase for the game'''
