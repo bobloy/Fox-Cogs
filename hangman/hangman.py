@@ -52,10 +52,10 @@ class hangman:
             await self.bot.say("A game of hangman is now stopping!")
         
     async def _getphrase(self):
-		'''Get a new phrase for the game'''
-		
+        '''Get a new phrase for the game'''
+        
     async def _guessletter(self):
-		'''Checks the guess on a letter'''
+        '''Checks the guess on a letter'''
     
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
