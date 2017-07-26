@@ -24,11 +24,11 @@ class hangman:
                 await self.bot.say("Game of hangman is already running!")
                 """await self.bot.send_cmd_help(ctx)"""
             else:
-                self._startgame()
+                await self._startgame()
                 await self.bot.say("Starting a game of hangman!")
         else:
             await self.bot.say("A game of hangman is now stopping!")
-            self._stopgame()
+            await self._stopgame()
         """
         #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
         if "Yeah dude" not in self.the_data:
