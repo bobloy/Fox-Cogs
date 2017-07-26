@@ -22,7 +22,7 @@ class hangman:
         if guess is None:
             if self.the_data["running"] == True:
                 await self.bot.say("Game of hangman is already running!")
-                #await self.bot.send_cmd_help(ctx)
+                """await self.bot.send_cmd_help(ctx)"""
             else:
                 self._startgame()
                 await self.bot.say("Starting a game of hangman!")
