@@ -16,10 +16,16 @@ class hangman:
     def save_data(self):
          dataIO.save_json(self.file_path, self.the_data)
 
-    @commands.group(pass_context=True)
+    @commands.command(pass_context=True, aliases=['h'])
     async def hangman(self, ctx):
-        if self.the_data["running"] == True:
-			
+		if ctx.invoked_subcommand is None:
+	
+			if self.the_data["running"] == True:
+				await self.bot.say("Game of hangman is already running!")
+				await self.bot.send_cmd_help(ctx)
+			else:
+				self._startgame()
+
         #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
         if "Yeah dude" not in self.the_data:
             self.the_data["Yeah dude"]={}
@@ -32,7 +38,15 @@ class hangman:
         #self.the_data["Yeah dude"]["knarly"]["kick-ass"]["no way!!!"] = "Biiiiiitch"
         self.save_data()
 
-	async 
+	async def _startgame(self):
+	
+	async def _stopgame(self):
+	
+	async def _getphrase(self):
+	
+	async def _guessletter(self):
+	
+	
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")

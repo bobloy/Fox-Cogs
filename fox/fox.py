@@ -21,29 +21,29 @@ class Fox:
         #await self.bot.say("I can do stuff!")
 
 
-    @fox.command()
-    async def punch(self, user : discord.Member):
+    @fox.command(name="punch")
+    async def fox_punch(self, user : discord.Member):
         """I will puch anyone! >.<"""
         #Your code will go here
         await self.bot.say("ONE PUNCH! And " + user.mention + " is out! ლ(ಠ益ಠლ)")
 
-    @fox.command()
-    async def lowtrophy(self):
+    @fox.command(name="lowtrophy")
+    async def fox_lowtrophy(self):
         """Prints low trophy users for all registered clans"""
         await self.bot.say("Todo")
 
-    @fox.command()
-    async def gettrophy(self):
+    @fox.command(name="gettrophy")
+    async def fox_gettrophy(self):
         """Gets fresh data from Clashstat"""
         await self.bot.say("Todo")
 
-    @fox.command()
-    async def addclan(self, ctag, ckind = "Unranked", irank = 0):
+    @fox.command(name="addclan")
+    async def fox_addclan(self, ctag, ckind = "Unranked", irank = 0):
         """Adds clan to grab-list"""
         await self.bot.say("Todo")
 
-    @fox.command()
-    async def removeclan(self, ctag):
+    @fox.command(name="removeclan")
+    async def fox_removeclan(self, ctag):
         """Removes clan from future data grabs"""
         await self.bot.say("Todo")
 
