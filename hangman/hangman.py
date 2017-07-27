@@ -20,7 +20,7 @@ class hangman:
         self.the_data = dataIO.load_json(self.file_path)
         #self.hanglist = ("_","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
         self.hanglist = (
-        """.
+        """
            \_________
             |/        
             |              
@@ -31,7 +31,7 @@ class hangman:
             |\___                 
             """,
 
-        """.
+        """
            \_________
             |/   |      
             |              
@@ -42,7 +42,7 @@ class hangman:
             |\___                 
             H""",
 
-        """.
+        """
            \_________       
             |/   |              
             |   <:never:336861463446814720>
@@ -53,7 +53,7 @@ class hangman:
             |\___                       
             HA""",
 
-        """.
+        """
            \________               
             |/   |                   
             |   <:never:336861463446814720>                   
@@ -65,7 +65,7 @@ class hangman:
             HAN""",
 
 
-        """.
+        """
            \_________             
             |/   |               
             |   <:never:336861463446814720>                    
@@ -77,7 +77,7 @@ class hangman:
             HANG""",
 
 
-        """.
+        """
            \_________              
             |/   |                     
             |   <:never:336861463446814720>                      
@@ -90,7 +90,7 @@ class hangman:
 
 
 
-        """.
+        """
            \________                   
             |/   |                         
             |   <:never:336861463446814720>                       
@@ -102,7 +102,7 @@ class hangman:
             HANGMA""",
 
 
-        """.
+        """
            \________
             |/   |     
             |   <:never:336861463446814720>     
@@ -126,9 +126,9 @@ class hangman:
             else:
                 await self.bot.say("Starting a game of hangman!")
                 self._startgame()
-                self._printgame()
+                await self._printgame()
         else:
-            self._guessletter(guess)
+            await self._guessletter(guess)
             if self.the_data["hangman"] >= 7:
                 await self.bot.say("You Lose!")
                 self._stopgame()
@@ -159,14 +159,14 @@ class hangman:
     def _getphrase(self):
         '''Get a new phrase for the game'''
         
-    def _guessletter(self, guess : str = None):
+    async def _guessletter(self, guess : str = None):
         '''Checks the guess on a letter'''
         self.the_data["hangman"] += 1
         self.save_data()
-        self._printgame(self)
+        await self._printgame(self)
             
     
-    def _printgame(self):
+    async def _printgame(self):
         '''Print the current state of game'''
         await self.bot.say(self.hanglist[self.the_data["hangman"]])
     
