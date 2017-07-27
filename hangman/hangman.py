@@ -18,8 +18,100 @@ class hangman:
         self.path = "data/Fox-Cogs/hangman"
         self.file_path = "data/Fox-Cogs/hangman/hangman.json"
         self.the_data = dataIO.load_json(self.file_path)
-        self.hanglist = ("_","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
+        #self.hanglist = ("_","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
+        self.hanglist = (
+        """
+           _________
+            |/        
+            |              
+            |                
+            |                 
+            |               
+            |                   
+            |___                 
+            """,
 
+        """
+           _________
+            |/   |      
+            |              
+            |                
+            |                 
+            |               
+            |                   
+            |___                 
+            H""",
+
+        """
+           _________       
+            |/   |              
+            |   (_)
+            |                         
+            |                       
+            |                         
+            |                          
+            |___                       
+            HA""",
+
+        """
+           ________               
+            |/   |                   
+            |   (_)                  
+            |    |                     
+            |    |                    
+            |                           
+            |                            
+            |___                    
+            HAN""",
+
+
+        """
+           _________             
+            |/   |               
+            |   (_)                   
+            |   /|                     
+            |    |                    
+            |                        
+            |                          
+            |___                          
+            HANG""",
+
+
+        """
+           _________              
+            |/   |                     
+            |   (_)                     
+            |   /|\                    
+            |    |                       
+            |                             
+            |                            
+            |___                          
+            HANGM""",
+
+
+
+        """
+           ________                   
+            |/   |                         
+            |   (_)                      
+            |   /|\                             
+            |    |                          
+            |   /                            
+            |                                  
+            |___                              
+            HANGMA""",
+
+
+        """
+           ________
+            |/   |     
+            |   (_)    
+            |   /|\           
+            |    |        
+            |   / \        
+            |               
+            |___           
+            HANGMAN""")
     def save_data(self):
         dataIO.save_json(self.file_path, self.the_data)
 
@@ -36,8 +128,7 @@ class hangman:
                 self._startgame()
                 await self._printgame()
         else:
-            await self.bot.say("A game of hangman is now stopping!")
-            self._stopgame()
+            self._guessletter(guess)
         """
         #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
         if "Yeah dude" not in self.the_data:
@@ -63,14 +154,14 @@ class hangman:
     def _getphrase(self):
         '''Get a new phrase for the game'''
         
-    def _guessletter(self):
+    def _guessletter(self, guess : str = None):
         '''Checks the guess on a letter'''
+        self.the_data["hangman"] += 1
+        self.save_data()
     
     async def _printgame(self):
         '''Print the current state of game'''
         await self.bot.say(self.hanglist[self.the_data["hangman"]])
-        self.the_data["hangman"] += 1
-        self.save_data()
     
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
