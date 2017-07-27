@@ -29,6 +29,7 @@ class hangman:
         if guess is None:
             if self.the_data["running"] == True:
                 await self.bot.say("Game of hangman is already running!\nEnter your guess!")
+                await self._printgame()
                 """await self.bot.send_cmd_help(ctx)"""
             else:
                 await self.bot.say("Starting a game of hangman!")
@@ -67,7 +68,7 @@ class hangman:
     
     async def _printgame(self):
         '''Print the current state of game'''
-        await self.bot.say(self.hangman[self.the_data["hangman"]])
+        await self.bot.say(self.hanglist[self.the_data["hangman"]])
         self.the_data["hangman"] += 1
         await self.save_data()
     
