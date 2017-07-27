@@ -151,6 +151,7 @@ class hangman:
         self.the_data["running"] = True
         self.the_data["hangman"] = 0
         self.the_data["answer"] = self._getphrase()
+        self.the_data["guesses"] = []
         self.save_data()
         
     def _stopgame(self):
@@ -167,7 +168,7 @@ class hangman:
         
     str def _guesses(self)
         '''Returns the current letter list'''
-        return self.the_data
+        return self.the_data["guesses"]
         
     async def _guessletter(self, guess : str = None):
         '''Checks the guess on a letter and prints game'''
