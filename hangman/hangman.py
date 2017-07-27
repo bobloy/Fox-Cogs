@@ -19,7 +19,6 @@ class hangman:
         self.file_path = "data/Fox-Cogs/hangman/hangman.json"
         self.the_data = dataIO.load_json(self.file_path)
         self.hangman = ( "","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
-        raise RuntimeError("init error")
             
 
     def save_data(self):
