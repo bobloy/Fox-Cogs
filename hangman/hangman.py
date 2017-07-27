@@ -158,15 +158,15 @@ class hangman:
         self.the_data["running"] = False
         self.save_data()
     
-    str def _getphrase(self):
+    def _getphrase(self):
         '''Get a new phrase for the game and returns it'''
         return "SPACE" #For now
     
-    str def _hideanswer(self):
+    def _hideanswer(self):
         '''Returns the obscured answer'''
         return self.the_data["answer"] #For now
         
-    str def _guesses(self)
+    def _guesses(self)
         '''Returns the current letter list'''
         return self.the_data["guesses"]
         
