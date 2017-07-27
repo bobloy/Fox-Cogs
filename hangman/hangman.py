@@ -163,7 +163,7 @@ class hangman:
         
     async def _getphrase(self):
         '''Get a new phrase for the game'''
-        url = "https://www.playstationtrophies.org/forum/wheel-of-fortune-2012-/176009-wheel-fortune-answer-list.html"
+        '''url = "https://www.playstationtrophies.org/forum/wheel-of-fortune-2012-/176009-wheel-fortune-answer-list.html"
         async with aiohttp.get(url) as response:
             soupObject = BeautifulSoup(await response.text(), "html.parser")
         try:
@@ -171,7 +171,7 @@ class hangman:
             await self.bot.say(online + ' players are playing this game at the moment')
         except:
             await self.bot.say("Couldn't load amount of players. No one is playing this game anymore or there's an error.")
-    
+        '''
     async def _guessletter(self):
         '''Checks the guess on a letter'''
         
