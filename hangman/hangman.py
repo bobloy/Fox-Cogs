@@ -12,8 +12,6 @@ try: # check if BeautifulSoup4 is installed
 except:
     soupAvailable = False
 
-import aiohttp
-
 class hangman:
     def __init__(self, bot):
         self.bot = bot
@@ -22,99 +20,6 @@ class hangman:
         self.the_data = dataIO.load_json(self.file_path)
         self.hangman = ( "","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
         raise RuntimeError("init error")
-        '''self.hangman = (
-        """
-            _________
-            |/        
-            |              
-            |                
-            |                 
-            |               
-            |                   
-            |___                 
-            """,
-
-        """
-           _________
-            |/   |      
-            |              
-            |                
-            |                 
-            |               
-            |                   
-            |___                 
-            H""",
-
-        """
-           _________       
-            |/   |              
-            |   (_)
-            |                         
-            |                       
-            |                         
-            |                          
-            |___                       
-            HA""",
-
-        """
-           ________               
-            |/   |                   
-            |   (_)                  
-            |    |                     
-            |    |                    
-            |                           
-            |                            
-            |___                    
-            HAN""",
-
-
-        """
-           _________             
-            |/   |               
-            |   (_)                   
-            |   /|                     
-            |    |                    
-            |                        
-            |                          
-            |___                          
-            HANG""",
-
-
-        """
-           _________              
-            |/   |                     
-            |   (_)                     
-            |   /|\                    
-            |    |                       
-            |                             
-            |                            
-            |___                          
-            HANGM""",
-
-
-
-        """
-           ________                   
-            |/   |                         
-            |   (_)                      
-            |   /|\                             
-            |    |                          
-            |   /                            
-            |                                  
-            |___                              
-            HANGMA""",
-
-
-        """
-           ________
-            |/   |     
-            |   (_)    
-            |   /|\           
-            |    |        
-            |   / \        
-            |               
-            |___           
-            HANGMAN""")'''
             
 
     def save_data(self):
@@ -155,7 +60,6 @@ class hangman:
         self.the_data["running"] = True
         self.the_data["hangman"] = 0
         await self.save_data()
-        
         #self._getphrase()
         #self._printgame()
         
