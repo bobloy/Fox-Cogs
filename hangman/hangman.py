@@ -6,6 +6,13 @@ from discord.ext import commands
 from .utils.dataIO import dataIO
 from .utils import checks
 
+try: # check if BeautifulSoup4 is installed
+    from bs4 import BeautifulSoup
+    soupAvailable = True
+except:
+    soupAvailable = False
+    
+    
 class hangman:
     def __init__(self, bot):
         self.bot = bot
