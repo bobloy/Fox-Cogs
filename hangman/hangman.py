@@ -118,7 +118,6 @@ class hangman:
     @commands.command(aliases=['h'], pass_context=True)
     async def hangman(self, ctx, guess : str=None):
         """Play a game of hangman against the bot!"""
-        self._stopgame()
         if guess is None:
             if self.the_data["running"] == True:
                 await self.bot.say("Game of hangman is already running!\nEnter your guess!")
@@ -130,7 +129,7 @@ class hangman:
                 await self._printgame()
         else:
             self._guessletter(guess)
-            if self.the_data["hangman"] == 7:
+            if self.the_data["hangman"] >= 7:
                 await self.bot.say("You Lose!")
                 self._stopgame()
                 
