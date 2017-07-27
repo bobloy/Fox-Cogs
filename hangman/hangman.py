@@ -20,7 +20,7 @@ class hangman:
         self.the_data = dataIO.load_json(self.file_path)
         #self.hanglist = ("_","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
         self.hanglist = (
-        """
+        """.
            _________
             |/        
             |              
@@ -31,7 +31,7 @@ class hangman:
             |___                 
             """,
 
-        """
+        """.
            _________
             |/   |      
             |              
@@ -42,7 +42,7 @@ class hangman:
             |___                 
             H""",
 
-        """
+        """.
            _________       
             |/   |              
             |   (_)
@@ -53,7 +53,7 @@ class hangman:
             |___                       
             HA""",
 
-        """
+        """.
            ________               
             |/   |                   
             |   (_)                  
@@ -65,7 +65,7 @@ class hangman:
             HAN""",
 
 
-        """
+        """.
            _________             
             |/   |               
             |   (_)                   
@@ -77,7 +77,7 @@ class hangman:
             HANG""",
 
 
-        """
+        """.
            _________              
             |/   |                     
             |   (_)                     
@@ -90,7 +90,7 @@ class hangman:
 
 
 
-        """
+        """.
            ________                   
             |/   |                         
             |   (_)                      
@@ -102,7 +102,7 @@ class hangman:
             HANGMA""",
 
 
-        """
+        """.
            ________
             |/   |     
             |   (_)    
@@ -145,6 +145,7 @@ class hangman:
         
     def _startgame(self):
         self.the_data["running"] = True
+        self.the_data["hangman"] = 0
         self.save_data()
         
     def _stopgame(self):
@@ -158,6 +159,10 @@ class hangman:
         '''Checks the guess on a letter'''
         self.the_data["hangman"] += 1
         self.save_data()
+        await self._printgame()
+        if self.the_data["hangman"] == 7:
+            await self.bot.say("You lose!")
+            
     
     async def _printgame(self):
         '''Print the current state of game'''
