@@ -121,12 +121,12 @@ class hangman:
         if guess is None:
             if self.the_data["running"] == True:
                 await self.bot.say("Game of hangman is already running!\nEnter your guess!")
-                await self._printgame()
+                self._printgame()
                 """await self.bot.send_cmd_help(ctx)"""
             else:
                 await self.bot.say("Starting a game of hangman!")
                 self._startgame()
-                await self._printgame()
+                self._printgame()
         else:
             self._guessletter(guess)
             if self.the_data["hangman"] >= 7:
@@ -164,11 +164,9 @@ class hangman:
         self.the_data["hangman"] += 1
         self.save_data()
         self._printgame()
-        
-      
             
     
-    async def _printgame(self):
+    def _printgame(self):
         '''Print the current state of game'''
         await self.bot.say(self.hanglist[self.the_data["hangman"]])
     
