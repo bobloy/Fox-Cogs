@@ -162,7 +162,7 @@ class hangman:
         #await self._printgame()
         
         if self.the_data["hangman"] == 7:
-            await self.bot.say("You lose!")
+            await self.bot.say("Starting a game of hangman!")
             
     
     async def _printgame(self):
