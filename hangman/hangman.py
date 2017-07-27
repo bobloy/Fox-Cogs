@@ -177,9 +177,9 @@ class hangman:
         
     async def _printgame(self):
         '''Print the current state of game'''
-        await self.bot.say(self.hangman[the_data["hangman"]])
-        self.the_data["hangman"] += 1
-        await self.save_data()
+        #await self.bot.say(self.hangman[the_data["hangman"]])
+        #self.the_data["hangman"] += 1
+        #await self.save_data()
         
     
 def check_folders():
