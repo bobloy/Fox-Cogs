@@ -20,7 +20,7 @@ class hangman:
         self.the_data = dataIO.load_json(self.file_path)
         #self.hanglist = ("_","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
         self.hanglist = (
-        """
+        """>
            \_________
             |/        
             |              
@@ -31,7 +31,7 @@ class hangman:
             |\___                 
             """,
 
-        """
+        """>
            \_________
             |/   |      
             |              
@@ -42,7 +42,7 @@ class hangman:
             |\___                 
             H""",
 
-        """
+        """>
            \_________       
             |/   |              
             |   <:never:336861463446814720>
@@ -53,7 +53,7 @@ class hangman:
             |\___                       
             HA""",
 
-        """
+        """>
            \________               
             |/   |                   
             |   <:never:336861463446814720>                   
@@ -65,7 +65,7 @@ class hangman:
             HAN""",
 
 
-        """
+        """>
            \_________             
             |/   |               
             |   <:never:336861463446814720>                    
@@ -77,7 +77,7 @@ class hangman:
             HANG""",
 
 
-        """
+        """>
            \_________              
             |/   |                     
             |   <:never:336861463446814720>                      
@@ -90,7 +90,7 @@ class hangman:
 
 
 
-        """
+        """>
            \________                   
             |/   |                         
             |   <:never:336861463446814720>                       
@@ -102,7 +102,7 @@ class hangman:
             HANGMA""",
 
 
-        """
+        """>
            \________
             |/   |     
             |   <:never:336861463446814720>     
