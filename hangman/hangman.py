@@ -58,7 +58,7 @@ class hangman:
             |/   |                   
             |   <:never:336861463446814720>                   
             |    |                     
-            |     |                    
+            |    |                    
             |                           
             |                            
             |\___                    
@@ -150,17 +150,27 @@ class hangman:
     def _startgame(self):
         self.the_data["running"] = True
         self.the_data["hangman"] = 0
+        self.the_data["answer"] = self._getphrase()
         self.save_data()
         
     def _stopgame(self):
         self.the_data["running"] = False
         self.save_data()
+    
+    str def _getphrase(self):
+        '''Get a new phrase for the game and returns it'''
+        return "SPACE" #For now
+    
+    str def _hideanswer(self):
+        '''Returns the obscured answer'''
+        return self.the_data["answer"] #For now
         
-    def _getphrase(self):
-        '''Get a new phrase for the game'''
+    str def _guesses(self)
+        '''Returns the current letter list'''
+        return self.the_data
         
     async def _guessletter(self, guess : str = None):
-        '''Checks the guess on a letter'''
+        '''Checks the guess on a letter and prints game'''
         self.the_data["hangman"] += 1
         self.save_data()
         await self._printgame()
@@ -168,7 +178,11 @@ class hangman:
     
     async def _printgame(self):
         '''Print the current state of game'''
-        await self.bot.say(self.hanglist[self.the_data["hangman"]])
+        cSay = ("Guess this: "+self._hidanswer()+"/n"
+                +"Used Letters: "+self._guesses+"/n"
+                +self.hanglist[self.the_data["hangman"]])
+        await self.bot.say(cSay)
+        
     
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
