@@ -18,7 +18,7 @@ class hangman:
         self.path = "data/Fox-Cogs/hangman"
         self.file_path = "data/Fox-Cogs/hangman/hangman.json"
         self.the_data = dataIO.load_json(self.file_path)
-        self.hangman = ( "","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
+        self.hangman = ("","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
 
     def save_data(self):
         dataIO.save_json(self.file_path, self.the_data)
