@@ -33,6 +33,7 @@ class hangman:
             else:
                 await self.bot.say("Starting a game of hangman!")
                 self._startgame()
+                await self._printgame()
         else:
             await self.bot.say("A game of hangman is now stopping!")
             self._stopgame()
@@ -64,6 +65,12 @@ class hangman:
     def _guessletter(self):
         '''Checks the guess on a letter'''
     
+    async def _printgame(self):
+        '''Print the current state of game'''
+        await self.bot.say(self.hangman[the_data["hangman"]])
+        self.the_data["hangman"] += 1
+        await self.save_data()
+    
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")
@@ -76,9 +83,13 @@ def check_folders():
         
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
-        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json" ,{"running" : False })
+        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json" ,{"running" : False, "hangman" : 0 })
 
+        
 def setup(bot):
     check_folders()
     check_files()
-    bot.add_cog(hangman(bot))
+    if soupAvailable:
+        bot.add_cog(hangman(bot))
+    else:
+        raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
