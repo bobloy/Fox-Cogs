@@ -163,7 +163,7 @@ class hangman:
         '''Checks the guess on a letter'''
         self.the_data["hangman"] += 1
         self.save_data()
-        self._printgame()
+        self._printgame(self)
             
     
     def _printgame(self):
