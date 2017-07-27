@@ -7,10 +7,10 @@ from .utils.dataIO import dataIO
 from .utils import checks
 
 try: # check if BeautifulSoup4 is installed
-	from bs4 import BeautifulSoup
-	soupAvailable = True
+    from bs4 import BeautifulSoup
+    soupAvailable = True
 except:
-	soupAvailable = False
+    soupAvailable = False
 
 import aiohttp
 
@@ -200,5 +200,5 @@ def setup(bot):
     if soupAvailable:
         bot.add_cog(hangman(bot))
     else:
-		raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
+        raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
         
