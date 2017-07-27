@@ -28,14 +28,14 @@ class hangman:
         """Play a game of hangman against the bot!"""
         if guess is None:
             if self.the_data["running"] == True:
-                await self.bot.say("Game of hangman is already running!\n Enter your guess!")
+                await self.bot.say("Game of hangman is already running!\nEnter your guess!")
                 """await self.bot.send_cmd_help(ctx)"""
             else:
-                await self._startgame()
                 await self.bot.say("Starting a game of hangman!")
+                self._startgame()
         else:
             await self.bot.say("A game of hangman is now stopping!")
-            await self._stopgame()
+            self._stopgame()
         """
         #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
         if "Yeah dude" not in self.the_data:
@@ -50,18 +50,18 @@ class hangman:
         self.save_data()
         """
         
-    async def _startgame(self):
+    def _startgame(self):
         self.the_data["running"] = True
         self.save_data()
         
-    async def _stopgame(self):
+    def _stopgame(self):
         self.the_data["running"] = False
         self.save_data()
         
-    async def _getphrase(self):
+    def _getphrase(self):
         '''Get a new phrase for the game'''
         
-    async def _guessletter(self):
+    def _guessletter(self):
         '''Checks the guess on a letter'''
     
 def check_folders():
