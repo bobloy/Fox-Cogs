@@ -152,14 +152,14 @@ class hangman:
     async def _startgame(self):
         self.the_data["running"] = True
         self.the_data["hangman"] = 0
-        self.save_data()
+        await self.save_data()
         
         #self._getphrase()
         #self._printgame()
         
     async def _stopgame(self):
         self.the_data["running"] = False
-        self.save_data()
+        await self.save_data()
         
     async def _getphrase(self):
         '''Get a new phrase for the game'''
@@ -179,7 +179,7 @@ class hangman:
         '''Print the current state of game'''
         await self.bot.say(self.hangman[the_data["hangman"]])
         self.the_data["hangman"] += 1
-        self.save_data()
+        await self.save_data()
         
     
 def check_folders():
