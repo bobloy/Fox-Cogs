@@ -6,20 +6,12 @@ from discord.ext import commands
 from .utils.dataIO import dataIO
 from .utils import checks
 
-try: # check if BeautifulSoup4 is installed
-    from bs4 import BeautifulSoup
-    soupAvailable = True
-except:
-    soupAvailable = False
-
 class hangman:
     def __init__(self, bot):
         self.bot = bot
         self.path = "data/Fox-Cogs/hangman"
         self.file_path = "data/Fox-Cogs/hangman/hangman.json"
         self.the_data = dataIO.load_json(self.file_path)
-        self.hangman = ( "","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
-            
 
     def save_data(self):
         dataIO.save_json(self.file_path, self.the_data)
@@ -29,51 +21,41 @@ class hangman:
         """Play a game of hangman against the bot!"""
         if guess is None:
             if self.the_data["running"] == True:
-                await self.bot.say("Game of hangman is already running!\nEnter your guess!")
+                await self.bot.say("Game of hangman is already running!\n Enter your guess!")
                 """await self.bot.send_cmd_help(ctx)"""
             else:
-                raise RuntimeError("starting error")
+                await self._startgame()
                 await self.bot.say("Starting a game of hangman!")
-                #self._startgame()
-                #await self._printgame()
-                
         else:
-            raise RuntimeError("stopping error")
             await self.bot.say("A game of hangman is now stopping!")
-            self._stopgame()
+            await self._stopgame()
+        """
+        #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
+        if "Yeah dude" not in self.the_data:
+            self.the_data["Yeah dude"]={}
+        self.the_data["Yeah dude"]["knarly"]= {"ur lyin" : True,
+                                               "kick-ass" : { "no way!!!" : "Biiiiiitch" },
+                                               "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                               }
         
-    def _startgame(self):
-        self.the_data["running"] = True
-        #self.the_data["hangman"] = 0
+        #self.the_data["Yeah dude"]["knarly"] = "ur lyin"
+        #self.the_data["Yeah dude"]["knarly"]["kick-ass"]["no way!!!"] = "Biiiiiitch"
         self.save_data()
-        #self._getphrase()
-        #self._printgame()
+        """
         
-    def _stopgame(self):
+    async def _startgame(self):
+        self.the_data["running"] = True
+        self.save_data()
+        
+    async def _stopgame(self):
         self.the_data["running"] = False
         self.save_data()
         
     async def _getphrase(self):
         '''Get a new phrase for the game'''
-        '''url = "https://www.playstationtrophies.org/forum/wheel-of-fortune-2012-/176009-wheel-fortune-answer-list.html"
-        async with aiohttp.get(url) as response:
-            soupObject = BeautifulSoup(await response.text(), "html.parser")
-        try:
-            online = soupObject.find(class_='home-stats').find('li').find('strong').get_text()
-            await self.bot.say(online + ' players are playing this game at the moment')
-        except:
-            await self.bot.say("Couldn't load amount of players. No one is playing this game anymore or there's an error.")
-        '''
+        
     async def _guessletter(self):
         '''Checks the guess on a letter'''
-        
-    async def _printgame(self):
-        '''Print the current state of game'''
-        raise RuntimeError("print error")
-        #await self.bot.say(self.hangman[the_data["hangman"]])
-        #self.the_data["hangman"] += 1
-        #await self.save_data()
-        
     
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
@@ -87,14 +69,9 @@ def check_folders():
         
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
-        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json" ,{"running" : False, "hangman" : 0 })
+        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json" ,{"running" : False })
 
-        
 def setup(bot):
     check_folders()
     check_files()
-    if soupAvailable:
-        bot.add_cog(hangman(bot))
-    else:
-        raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
-        
+    bot.add_cog(hangman(bot))
