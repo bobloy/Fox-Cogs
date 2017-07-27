@@ -34,13 +34,13 @@ class hangman:
             else:
                 raise RuntimeError("starting error")
                 await self.bot.say("Starting a game of hangman!")
-                await self._startgame()
+                self._startgame()
                 await self._printgame()
                 
         else:
             raise RuntimeError("stopping error")
             await self.bot.say("A game of hangman is now stopping!")
-            await self._stopgame()
+            self._stopgame()
         """
         #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
         if "Yeah dude" not in self.the_data:
@@ -55,16 +55,16 @@ class hangman:
         self.save_data()
         """
         
-    async def _startgame(self):
+    def _startgame(self):
         self.the_data["running"] = True
         self.the_data["hangman"] = 0
-        await self.save_data()
+        self.save_data()
         #self._getphrase()
         #self._printgame()
         
-    async def _stopgame(self):
+    def _stopgame(self):
         self.the_data["running"] = False
-        await self.save_data()
+        self.save_data()
         
     async def _getphrase(self):
         '''Get a new phrase for the game'''
