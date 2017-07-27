@@ -166,7 +166,7 @@ class hangman:
         '''Returns the obscured answer'''
         return self.the_data["answer"] #For now
         
-    def _guesses(self)
+    def _guesses(self):
         '''Returns the current letter list'''
         return self.the_data["guesses"]
         
