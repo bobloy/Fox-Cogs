@@ -21,7 +21,7 @@ class hangman:
         self.file_path = "data/Fox-Cogs/hangman/hangman.json"
         self.the_data = dataIO.load_json(self.file_path)
         self.hangman = ( "","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
-        
+        raise RuntimeError("init error")
         '''self.hangman = (
         """
             _________
@@ -128,11 +128,13 @@ class hangman:
                 await self.bot.say("Game of hangman is already running!\nEnter your guess!")
                 """await self.bot.send_cmd_help(ctx)"""
             else:
+                raise RuntimeError("starting error")
                 await self.bot.say("Starting a game of hangman!")
                 await self._startgame()
                 await self._printgame()
                 
         else:
+            raise RuntimeError("stopping error")
             await self.bot.say("A game of hangman is now stopping!")
             await self._stopgame()
         """
@@ -177,6 +179,7 @@ class hangman:
         
     async def _printgame(self):
         '''Print the current state of game'''
+        raise RuntimeError("print error")
         #await self.bot.say(self.hangman[the_data["hangman"]])
         #self.the_data["hangman"] += 1
         #await self.save_data()
