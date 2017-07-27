@@ -70,7 +70,7 @@ class hangman:
         '''Print the current state of game'''
         await self.bot.say(self.hanglist[self.the_data["hangman"]])
         self.the_data["hangman"] += 1
-        await self.save_data()
+        self.save_data()
     
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
