@@ -165,7 +165,7 @@ class hangman:
     
     def _getphrase(self):
         '''Get a new phrase for the game and returns it'''
-        return "NEVER GETS OLD" #For now
+        return "NEVER" #For now
     
     def _hideanswer(self):
         '''Returns the obscured answer'''
