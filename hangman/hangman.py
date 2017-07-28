@@ -116,7 +116,7 @@ class hangman:
         dataIO.save_json(self.file_path, self.the_data)
 
     @commands.command(aliases=['h'], pass_context=True)
-    async def hangman(self, ctx, guess : str=None):
+    async def hangman(self, ctx, guess : chr=None):
         """Play a game of hangman against the bot!"""
         if guess is None:
             if self.the_data["running"] == True:
@@ -164,7 +164,14 @@ class hangman:
     
     def _hideanswer(self):
         '''Returns the obscured answer'''
-        return self.the_data["answer"] #For now
+        out_str = ""
+        for i in self.the_data["answer"]:
+            if i in self.the_data["guesses"]:
+                out_str += i
+            else:
+                out_str += *
+                
+        return out_str
         
     def _guesses(self):
         '''Returns the current letter list'''
@@ -175,17 +182,27 @@ class hangman:
         
         return out_str
         
-    async def _guessletter(self, guess : str = None):
+    async def _guessletter(self, guess : chr = None):
         '''Checks the guess on a letter and prints game'''
-        self.the_data["hangman"] += 1
+        if guess
+        
+        if guess.upper() in self.the_data["guesses"]:
+            await self.bot.say("Already guessed that! Try again")
+            return
+        
+        
+        if not guess.upper() in self.the_data["answer"]:
+            self.the_data["hangman"] += 1
+            
+        self.the_data["guesses"].append(guess.upper())
         self.save_data()
         await self._printgame()
             
     
     async def _printgame(self):
         '''Print the current state of game'''
-        cSay = ("Guess this: "+str(self._hideanswer())+"/n"
-                +"Used Letters: "+str(self._guesses)+"/n"
+        cSay = ("Guess this: "+str(self._hideanswer())+"\n"
+                +"Used Letters: "+str(self._guesses)+"\n"
                 +self.hanglist[self.the_data["hangman"]])
         await self.bot.say(cSay)
         
