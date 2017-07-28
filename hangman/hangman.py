@@ -202,7 +202,7 @@ class hangman:
     async def _printgame(self):
         '''Print the current state of game'''
         cSay = ("Guess this: "+str(self._hideanswer())+"\n"
-                +"Used Letters: "+str(self._guesslist)+"\n"
+                +"Used Letters: "+str(self._guesslist())+"\n"
                 +self.hanglist[self.the_data["hangman"]])
         await self.bot.say(cSay)
         
