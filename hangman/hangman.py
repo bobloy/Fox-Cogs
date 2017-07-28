@@ -116,7 +116,7 @@ class hangman:
         dataIO.save_json(self.file_path, self.the_data)
 
     @commands.command(aliases=['h'], pass_context=True)
-    async def hangman(self, ctx, guess : string=None):
+    async def hangman(self, ctx, guess : str=None):
         """Play a game of hangman against the bot!"""
         if guess is None:
             if self.the_data["running"] == True:
