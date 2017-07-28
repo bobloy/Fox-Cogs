@@ -184,7 +184,7 @@ class hangman:
         
     async def _guessletter(self, guess : chr = None):
         '''Checks the guess on a letter and prints game'''
-        if guess
+        #if guess
         
         if guess.upper() in self.the_data["guesses"]:
             await self.bot.say("Already guessed that! Try again")
