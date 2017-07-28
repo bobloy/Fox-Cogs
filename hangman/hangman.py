@@ -168,7 +168,12 @@ class hangman:
         
     def _guesses(self):
         '''Returns the current letter list'''
-        return self.the_data["guesses"]
+		out_str = ""
+		for i in self.the_data["guesses"]
+			out_str += str(i) + ","
+		out_str = out_str[:-1]
+		
+        return out_str
         
     async def _guessletter(self, guess : str = None):
         '''Checks the guess on a letter and prints game'''
@@ -179,8 +184,8 @@ class hangman:
     
     async def _printgame(self):
         '''Print the current state of game'''
-        cSay = ("Guess this: "+self._hideanswer()+"/n"
-                +"Used Letters: "+self._guesses+"/n"
+        cSay = ("Guess this: "+str(self._hideanswer())+"/n"
+                +"Used Letters: "+str(self._guesses)+"/n"
                 +self.hanglist[self.the_data["hangman"]])
         await self.bot.say(cSay)
         
