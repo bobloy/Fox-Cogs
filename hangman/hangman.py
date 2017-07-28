@@ -169,7 +169,7 @@ class hangman:
             if i in self.the_data["guesses"]:
                 out_str += i
             else:
-                out_str += *
+                out_str += "*"
                 
         return out_str
         
