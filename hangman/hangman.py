@@ -18,6 +18,7 @@ class hangman:
         self.path = "data/Fox-Cogs/hangman"
         self.file_path = "data/Fox-Cogs/hangman/hangman.json"
         self.the_data = dataIO.load_json(self.file_path)
+        self.winbool = False
         #self.hanglist = ("_","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
         self.hanglist = (
         """>
@@ -130,7 +131,7 @@ class hangman:
         else:
             await self._guessletter(guess)
             
-            if self._hideanswer() == self.the_data["answer"]:
+            if self.winbool == True:
                 await self.bot.say("You Win!")
                 self._stopgame()
                 
@@ -157,6 +158,7 @@ class hangman:
         self.the_data["hangman"] = 0
         self.the_data["answer"] = self._getphrase()
         self.the_data["guesses"] = []
+        self.winbool = False
         self.save_data()
         
     def _stopgame(self):
@@ -170,11 +172,14 @@ class hangman:
     def _hideanswer(self):
         '''Returns the obscured answer'''
         out_str = ""
+        
+        self.winbool = True
         for i in self.the_data["answer"]:
             if i in self.the_data["guesses"]:
                 out_str += " __"+i+"__ "
             else:
                 out_str += " **\_** "
+                self.winbool = False
                 
         return out_str
         
