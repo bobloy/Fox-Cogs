@@ -129,6 +129,11 @@ class hangman:
                 await self._printgame()
         else:
             await self._guessletter(guess)
+            
+            if self._hideanswer() == self.the_data["answer"]:
+                await self.bot.say("You Win!")
+                self._stopgame()
+                
             if self.the_data["hangman"] >= 7:
                 await self.bot.say("You Lose!")
                 self._stopgame()
@@ -160,14 +165,14 @@ class hangman:
     
     def _getphrase(self):
         '''Get a new phrase for the game and returns it'''
-        return "SPACE" #For now
+        return "NEVER GETS OLD" #For now
     
     def _hideanswer(self):
         '''Returns the obscured answer'''
         out_str = ""
         for i in self.the_data["answer"]:
             if i in self.the_data["guesses"]:
-                out_str += " -_"+i+"_- "
+                out_str += " __"+i+"__ "
             else:
                 out_str += " **\_** "
                 
@@ -196,6 +201,8 @@ class hangman:
             
         self.the_data["guesses"].append(guess.upper())
         self.save_data()
+        
+       
         await self._printgame()
             
     
