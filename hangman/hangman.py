@@ -167,9 +167,9 @@ class hangman:
         out_str = ""
         for i in self.the_data["answer"]:
             if i in self.the_data["guesses"]:
-                out_str += i
+                out_str += " _"+i+"_ "
             else:
-                out_str += "*"
+                out_str += " **\_** "
                 
         return out_str
         
