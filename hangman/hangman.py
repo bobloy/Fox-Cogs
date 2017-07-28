@@ -168,11 +168,11 @@ class hangman:
         
     def _guesses(self):
         '''Returns the current letter list'''
-		out_str = ""
-		for i in self.the_data["guesses"]
-			out_str += str(i) + ","
-		out_str = out_str[:-1]
-		
+        out_str = ""
+        for i in self.the_data["guesses"]
+            out_str += str(i) + ","
+        out_str = out_str[:-1]
+        
         return out_str
         
     async def _guessletter(self, guess : str = None):
