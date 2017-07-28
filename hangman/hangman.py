@@ -167,13 +167,13 @@ class hangman:
         out_str = ""
         for i in self.the_data["answer"]:
             if i in self.the_data["guesses"]:
-                out_str += " _"+i+"_ "
+                out_str += " -_"+i+"_- "
             else:
                 out_str += " **\_** "
                 
         return out_str
         
-    def _guesses(self):
+    def _guesslist(self):
         '''Returns the current letter list'''
         out_str = ""
         for i in self.the_data["guesses"]:
@@ -202,7 +202,7 @@ class hangman:
     async def _printgame(self):
         '''Print the current state of game'''
         cSay = ("Guess this: "+str(self._hideanswer())+"\n"
-                +"Used Letters: "+str(self._guesses)+"\n"
+                +"Used Letters: "+str(self._guesslist)+"\n"
                 +self.hanglist[self.the_data["hangman"]])
         await self.bot.say(cSay)
         
