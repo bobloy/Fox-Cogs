@@ -169,7 +169,7 @@ class hangman:
     def _guesses(self):
         '''Returns the current letter list'''
         out_str = ""
-        for i in self.the_data["guesses"]
+        for i in self.the_data["guesses"]:
             out_str += str(i) + ","
         out_str = out_str[:-1]
         
