@@ -172,7 +172,7 @@ class hangman:
 		phrases = phrasefile.readlines()
 		
 		outphrase = ""
-		while outphrase == ""
+		while outphrase == "":
 			outphrase = phrases[randint(0,len(phrases)-1)].partition(" (")[0]
 		
         return outphrase 
