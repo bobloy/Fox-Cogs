@@ -168,13 +168,13 @@ class hangman:
     
     def _getphrase(self):
         '''Get a new phrase for the game and returns it'''
-		phrasefile = open("data/Fox-Cogs/hangman/hanganswers.txt")
-		phrases = phrasefile.readlines()
-		
-		outphrase = ""
-		while outphrase == "":
-			outphrase = phrases[randint(0,len(phrases)-1)].partition(" (")[0]
-		
+        phrasefile = open("data/Fox-Cogs/hangman/hanganswers.txt")
+        phrases = phrasefile.readlines()
+        
+        outphrase = ""
+        while outphrase == "":
+            outphrase = phrases[randint(0,len(phrases)-1)].partition(" (")[0]
+        
         return outphrase 
     
     def _hideanswer(self):
@@ -183,8 +183,8 @@ class hangman:
         
         self.winbool = True
         for i in self.the_data["answer"]:
-			if i == " " or i == "-":
-				out_str += i
+            if i == " " or i == "-":
+                out_str += i
             elif i in self.the_data["guesses"]:
                 out_str += " __"+i+"__ "
             else:
