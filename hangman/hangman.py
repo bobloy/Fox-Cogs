@@ -168,7 +168,7 @@ class hangman:
     
     def _getphrase(self):
         '''Get a new phrase for the game and returns it'''
-        phrasefile = open("data/Fox-Cogs/hangman/hanganswers.txt")
+        phrasefile = open("data/Fox-Cogs/hangman/hanganswers.txt",'r')
         phrases = phrasefile.readlines()
         
         outphrase = ""
@@ -186,9 +186,9 @@ class hangman:
             if i == " " or i == "-":
                 out_str += i
             elif i in self.the_data["guesses"]:
-                out_str += " __"+i+"__ "
+                out_str += "__"+i+"__ "
             else:
-                out_str += " **\_** "
+                out_str += "**\_** "
                 self.winbool = False
                 
         return out_str
