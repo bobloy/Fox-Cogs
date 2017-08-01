@@ -13,6 +13,7 @@ try: # check if BeautifulSoup4 is installed
 except:
     soupAvailable = False
     
+    
 class hangman:
     def __init__(self, bot):
         self.bot = bot
@@ -243,7 +244,7 @@ def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
         dataIO.save_json("data/Fox-Cogs/hangman/hangman.json" ,{"running" : False, "hangman" : 0 })
     
-    if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hanganswers.txt"): 
+    if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hanganswers.txt"): #don't need this?
         f = open("data/Fox-Cogs/hangman/hanganswers.txt",'w+')
         f = None
         
