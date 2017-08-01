@@ -155,9 +155,9 @@ class hangman:
         """
         
     def _startgame(self):
+        self.the_data["answer"] = self._getphrase()
         self.the_data["running"] = True
         self.the_data["hangman"] = 0
-        self.the_data["answer"] = self._getphrase()
         self.the_data["guesses"] = []
         self.winbool = False
         self.save_data()
@@ -242,6 +242,10 @@ def check_folders():
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
         dataIO.save_json("data/Fox-Cogs/hangman/hangman.json" ,{"running" : False, "hangman" : 0 })
+    
+    if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hanganswers.txt"): #Don't need if?
+        f = open("data/Fox-Cogs/hangman/hanganswers.txt",'w+')
+        f = None
         
 
         
