@@ -178,8 +178,8 @@ class hangman:
         
         outphrase = ""
         while outphrase == "":
-            outphrase = phrases[randint(0,len(phrases)-1)].partition(" (")[0]
-        
+            #outphrase = phrases[randint(0,len(phrases)-1)].partition(" (")[0]
+            outphrase = phrases[randint(0,10)].partition(" (")[0]
         return outphrase 
     
     def _hideanswer(self):
