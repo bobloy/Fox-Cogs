@@ -18,8 +18,8 @@ class hangtest:
         self.bot = bot
     
     @commands.command(aliases=['h'], pass_context=True)
-    async def hangtest(self, ctx, guess : str=None):
-        await os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
+    def hangtest(self, ctx, guess : str=None):
+        os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
 
 class hangman:
     def __init__(self, bot):
