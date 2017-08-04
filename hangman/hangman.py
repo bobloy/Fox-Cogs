@@ -13,7 +13,14 @@ try: # check if BeautifulSoup4 is installed
 except:
     soupAvailable = False
     
+class hangtest:
+    def __init__(self,bot):
+        self.bot = bot
     
+    @commands.command(aliases=['h'], pass_context=True)
+    async def hangtest(self, ctx, guess : str=None):
+        await os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
+
 class hangman:
     def __init__(self, bot):
         self.bot = bot
@@ -117,10 +124,7 @@ class hangman:
             HANGMAN""")
     def save_data(self):
         dataIO.save_json(self.file_path, self.the_data)
-        
-    @commands.command(aliases=['h'], pass_context=True)
-    async def hangtest(self, ctx, guess : str=None):
-        await os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
+       
         
         
     @commands.command(aliases=['h'], pass_context=True)
@@ -260,5 +264,6 @@ def setup(bot):
     check_files()
     if soupAvailable:
         bot.add_cog(hangman(bot))
+        bot.agg_cog(hangtest(bot))
     else:
         raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
