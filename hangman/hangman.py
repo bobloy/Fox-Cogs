@@ -119,7 +119,7 @@ class hangman:
         dataIO.save_json(self.file_path, self.the_data)
         
     @commands.command(aliases=['h'], pass_context=True)
-    async def hangman(self, ctx, guess : str=None):
+    async def hangtest(self, ctx, guess : str=None):
         await os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
         
         
