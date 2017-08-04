@@ -117,9 +117,10 @@ class hangman:
             HANGMAN""")
     def save_data(self):
         dataIO.save_json(self.file_path, self.the_data)
-    @command.commands(pass_context=True)
-    async def hangtest(self,ctx):
-        os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
+        
+    @commands.command(aliases=['h'], pass_context=True)
+    async def hangman(self, ctx, guess : str=None):
+        await os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
         
         
     @commands.command(aliases=['h'], pass_context=True)
@@ -180,8 +181,8 @@ class hangman:
         while outphrase == "":
             #outphrase = phrases[randint(0,len(phrases)-1)].partition(" (")[0]
             outphrase = phrases[randint(0,10)].partition(" (")[0]
-        return outphrase 
-    
+        return outphrase
+   
     def _hideanswer(self):
         '''Returns the obscured answer'''
         out_str = ""
