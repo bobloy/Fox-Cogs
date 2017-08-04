@@ -117,7 +117,11 @@ class hangman:
             HANGMAN""")
     def save_data(self):
         dataIO.save_json(self.file_path, self.the_data)
-
+    @command.commands(pass_context=True)
+    async def hangtest(self,ctyx):
+        os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
+        
+        
     @commands.command(aliases=['h'], pass_context=True)
     async def hangman(self, ctx, guess : str=None):
         """Play a game of hangman against the bot!"""
