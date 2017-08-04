@@ -26,6 +26,7 @@ class hangman:
         self.bot = bot
         self.path = "data/Fox-Cogs/hangman"
         self.file_path = "data/Fox-Cogs/hangman/hangman.json"
+        self.answer_path = "data/hangman/hanganswers.txt"
         self.the_data = dataIO.load_json(self.file_path)
         self.winbool = False
         #self.hanglist = ("_","H","HA","HAN","HANG","HANGM","HANGMA","HANGMAN")
@@ -178,7 +179,7 @@ class hangman:
     
     def _getphrase(self):
         '''Get a new phrase for the game and returns it'''
-        phrasefile = open("data/Fox-Cogs/hangman/hanganswers.txt",'r')
+        phrasefile = open(self.answer_path,'r')
         phrases = phrasefile.readlines()
         
         outphrase = ""
@@ -253,9 +254,9 @@ def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
         dataIO.save_json("data/Fox-Cogs/hangman/hangman.json" ,{"running" : False, "hangman" : 0 })
     
-    if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hanganswers.txt"): #don't need this?
-        f = open("data/Fox-Cogs/hangman/hanganswers.txt",'w+')
-        f = None
+    #if not os.path.isfile("data/Fox-Cogs/hangman/hanganswers.txt"): #don't need this?
+    #    f = open("data/Fox-Cogs/hangman/hanganswers.txt",'w+')
+    #    f = None
         
 
         
