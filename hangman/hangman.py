@@ -118,7 +118,7 @@ class hangman:
     def save_data(self):
         dataIO.save_json(self.file_path, self.the_data)
     @command.commands(pass_context=True)
-    async def hangtest(self,ctyx):
+    async def hangtest(self,ctx):
         os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
         
         
