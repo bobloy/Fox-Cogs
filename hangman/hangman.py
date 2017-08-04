@@ -195,7 +195,7 @@ class hangman:
         self.winbool = True
         for i in self.the_data["answer"]:
             if i == " " or i == "-":
-                out_str += i
+                out_str += i*2
             elif i in self.the_data["guesses"]:
                 out_str += "__"+i+"__ "
             else:
