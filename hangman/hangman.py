@@ -14,11 +14,11 @@ except:
     soupAvailable = False
     
 class hangtest:
-    def __init__(self,bot):
+    def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(aliases=['h'], pass_context=True)
-    async def hangtest(self, ctx, guess : str=None):
+    @commands.command(aliases=['ht'], pass_context=True)
+    async def hangtest(self, ctx):
         os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
         await self.bot.say("Hanganswers deleted")
 
