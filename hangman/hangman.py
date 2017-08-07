@@ -215,7 +215,7 @@ class hangman:
         
     async def _guessletter(self, guess : chr = None):
         '''Checks the guess on a letter and prints game'''
-        if not guess.upper() in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or not len(guess)==1
+        if not guess.upper() in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or not len(guess)==1:
             await self.bot.say("Invalid guess. Only A-Z is accepted")
             return
         
