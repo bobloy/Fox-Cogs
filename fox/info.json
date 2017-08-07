@@ -5,6 +5,6 @@
     "SHORT" : "Cog to interact with Fox",
     "DESCRIPTION" : "Cog to interact with Fox",
     "TAGS" : ["example", "tags", "list"],
-    "HIDDEN" : false,
+    "HIDDEN" : true,
 	"DISABLED" : false
 }

@@ -5,6 +5,6 @@
     "SHORT" : "Cog to organize tournaments",
     "DESCRIPTION" : "Cog to organize tournaments within Discord",
     "TAGS" : ["fight", "tournament", "tourney", "tourny", "elimination", "fox", "fox-cogs", "fox-cog", "bobloy"],
-    "HIDDEN" : false,
+    "HIDDEN" : true,
 	"DISABLED" : false
 }
