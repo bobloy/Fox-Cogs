@@ -25,7 +25,7 @@ class Fight:
             await self.bot.send_cmd_help(ctx)
             #await self.bot.say("I can do stuff!")
 
-    @fight.command(name="request")
+    @fight.command(name="join")
     async def fight_join(self, ctx, user : discord.Member):
         """Join the active brawl"""
         #Your code will go here
