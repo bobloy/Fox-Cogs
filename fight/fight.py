@@ -51,7 +51,8 @@ class Fight:
 
     @fight.group(pass_context=True)
     async def bracket(self, ctx, ctag):
-        """Shows your current match your next opponent, run bracket full to see all matches"""
+        """Shows your current match your next opponent,
+            run [p]fight bracket full to see all matches"""
         await self.bot.say("Todo Bracket")
 
         #Your code will go here
