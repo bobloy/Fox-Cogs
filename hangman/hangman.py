@@ -128,7 +128,7 @@ class hangman:
        
         
         
-    @commands.command(aliases=['h'], pass_context=True)
+    @commands.command(aliases=['h','H'], pass_context=True)
     async def hangman(self, ctx, guess : str=None):
         """Play a game of hangman against the bot!"""
         if guess is None:
@@ -215,7 +215,9 @@ class hangman:
         
     async def _guessletter(self, guess : chr = None):
         '''Checks the guess on a letter and prints game'''
-        #if guess
+        if not guess.upper() in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or not len(guess)==1
+            await self.bot.say("Invalid guess. Only A-Z is accepted")
+            return
         
         if guess.upper() in self.the_data["guesses"]:
             await self.bot.say("Already guessed that! Try again")
