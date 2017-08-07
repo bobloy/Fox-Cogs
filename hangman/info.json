@@ -1,7 +1,7 @@
 {
     "AUTHOR" : "Bobloy",
     "INSTALL_MSG" : "Thank you for installing hangman. Run with [p]hangman",
-    "NAME" : "hangman",
+    "NAME" : "Hangman",
     "SHORT" : "Play a game of hangman",
     "DESCRIPTION" : "Play a game of hangman",
     "TAGS" : ["game", "fun", "hangman"],
