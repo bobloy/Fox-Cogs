@@ -148,7 +148,7 @@ class hangman:
                 self._stopgame()
                 
             if self.the_data["hangman"] >= 7:
-                await self.bot.say("You Lose!/nThe Answer was: **"+self.the_data["answer"]+"**")
+                await self.bot.say("You Lose!\nThe Answer was: **"+self.the_data["answer"]+"**")
                 self._stopgame()
                 
         """
