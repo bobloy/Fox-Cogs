@@ -7,11 +7,12 @@ from random import randint
 from .utils.dataIO import dataIO
 from .utils import checks
 
-try: # check if BeautifulSoup4 is installed
-    from bs4 import BeautifulSoup
-    soupAvailable = True
-except:
-    soupAvailable = False
+#Don't need BeautifulSoup4 anymore
+#try: # check if BeautifulSoup4 is installed
+#    from bs4 import BeautifulSoup
+#    soupAvailable = True
+#except:
+#    soupAvailable = False
     
 #class hangtest:
 #    def __init__(self, bot):
@@ -22,6 +23,8 @@ except:
 #        os.remove("data/Fox-Cogs/hangman/hanganswers.txt")
 
 class hangman:
+    """Lets anyone play a game of hangman with custom phrases"""
+    
     def __init__(self, bot):
         self.bot = bot
         self.path = "data/Fox-Cogs/hangman"
@@ -124,11 +127,12 @@ class hangman:
             |\___           
             HANGMAN""")
     def save_data(self):
+        """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
        
         
         
-    @commands.command(aliases=['h','H'], pass_context=True)
+    @commands.command(aliases=['hang'], pass_context=True)
     async def hangman(self, ctx, guess : str=None):
         """Play a game of hangman against the bot!"""
         if guess is None:
@@ -151,21 +155,8 @@ class hangman:
                 await self.bot.say("You Lose!\nThe Answer was: **"+self.the_data["answer"]+"**")
                 self._stopgame()
                 
-        """
-        #self.the_data["WOAH"]["knarly"] = "Biiiiiitch"
-        if "Yeah dude" not in self.the_data:
-            self.the_data["Yeah dude"]={}
-        self.the_data["Yeah dude"]["knarly"]= {"ur lyin" : True,
-                                               "kick-ass" : { "no way!!!" : "Biiiiiitch" },
-                                               "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                                               }
-        
-        #self.the_data["Yeah dude"]["knarly"] = "ur lyin"
-        #self.the_data["Yeah dude"]["knarly"]["kick-ass"]["no way!!!"] = "Biiiiiitch"
-        self.save_data()
-        """
-        
     def _startgame(self):
+        """Starts a new game of hangman"""
         self.the_data["answer"] = self._getphrase().upper()
         self.the_data["hangman"] = 0
         self.the_data["guesses"] = []
@@ -174,11 +165,12 @@ class hangman:
         self.save_data()
         
     def _stopgame(self):
+        """Stops the game in current state"""
         self.the_data["running"] = False
         self.save_data()
     
     def _getphrase(self):
-        '''Get a new phrase for the game and returns it'''
+        """Get a new phrase for the game and returns it"""
         phrasefile = open(self.answer_path,'r')
         phrases = phrasefile.readlines()
         
@@ -189,7 +181,7 @@ class hangman:
         return outphrase
    
     def _hideanswer(self):
-        '''Returns the obscured answer'''
+        """Returns the obscured answer"""
         out_str = ""
         
         self.winbool = True
@@ -205,7 +197,7 @@ class hangman:
         return out_str
         
     def _guesslist(self):
-        '''Returns the current letter list'''
+        """Returns the current letter list"""
         out_str = ""
         for i in self.the_data["guesses"]:
             out_str += str(i) + ","
@@ -214,7 +206,7 @@ class hangman:
         return out_str
         
     async def _guessletter(self, guess : chr = None):
-        '''Checks the guess on a letter and prints game'''
+        """Checks the guess on a letter and prints game if acceptable guess"""
         if not guess.upper() in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or not len(guess)==1:
             await self.bot.say("Invalid guess. Only A-Z is accepted")
             return
@@ -235,7 +227,7 @@ class hangman:
             
     
     async def _printgame(self):
-        '''Print the current state of game'''
+        """Print the current state of game"""
         cSay = ("Guess this: "+str(self._hideanswer())+"\n"
                 +"Used Letters: "+str(self._guesslist())+"\n"
                 +self.hanglist[self.the_data["hangman"]])
@@ -256,17 +248,14 @@ def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
         dataIO.save_json("data/Fox-Cogs/hangman/hangman.json" ,{"running" : False, "hangman" : 0 })
     
-    #if not os.path.isfile("data/Fox-Cogs/hangman/hanganswers.txt"): #don't need this?
-    #    f = open("data/Fox-Cogs/hangman/hanganswers.txt",'w+')
-    #    f = None
+
         
 
         
 def setup(bot):
     check_folders()
     check_files()
-    if soupAvailable:
+    if True: #soupAvailable: No longer need Soup
         bot.add_cog(hangman(bot))
-        #bot.agg_cog(hangtest(bot))
     else:
         raise RuntimeError("You need to run `pip3 install beautifulsoup4`")

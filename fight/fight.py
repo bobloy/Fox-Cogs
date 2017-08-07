@@ -6,7 +6,7 @@ from .utils.dataIO import dataIO
 from .utils import checks
 
 class Fight:
-    """My custom cog that does stuff!"""
+    """Cog for organizing tournaments"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -14,6 +14,7 @@ class Fight:
         self.file_path = "data/Fox-Cogs/fight/fight.json"
         self.the_data = dataIO.load__json(self.file_path)
         self.fights = 
+        
     @commands.group(pass_context=True)
     async def fight(self, ctx):
         """This does stuff!"""
@@ -21,7 +22,7 @@ class Fight:
         #Your code will go here
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-        #await self.bot.say("I can do stuff!")
+            #await self.bot.say("I can do stuff!")
 
 
     @fight.command()
@@ -59,11 +60,12 @@ class Fight:
 
     @bracket.command()
     async def full(self, ctag):
-         """Shows the full bracket"""
+        """Shows the full bracket"""
         await self.bot.say("Todo")
 
-
-     @commands.group(pass_context=True)
+    
+    @commands.group(pass_context=True)
+    @checks.mod_or_permissions(administrator=True)
      async def setfight(self, ctx):
         """Admin command for starting or managing tournaments"""
 
