@@ -5,6 +5,6 @@
     "SHORT" : "Test cog",
     "DESCRIPTION" : "Test cog",
     "TAGS" : ["example", "test", "cog"],
-    "HIDDEN" : false,
-	"DISABLED" : false
+    "HIDDEN" : true,
+	"DISABLED" : true
 }
