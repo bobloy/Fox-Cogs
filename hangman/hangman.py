@@ -148,7 +148,7 @@ class hangman:
                 self._stopgame()
                 
             if self.the_data["hangman"] >= 7:
-                await self.bot.say("You Lose!")
+                await self.bot.say("You Lose!/nThe Answer was: **"+self.the_data["answer"]+"**")
                 self._stopgame()
                 
         """
@@ -184,8 +184,8 @@ class hangman:
         
         outphrase = ""
         while outphrase == "":
-            #outphrase = phrases[randint(0,len(phrases)-1)].partition(" (")[0]
-            outphrase = phrases[randint(0,10)].partition(" (")[0]
+            outphrase = phrases[randint(0,len(phrases)-1)].partition(" (")[0]
+            #outphrase = phrases[randint(0,10)].partition(" (")[0]
         return outphrase
    
     def _hideanswer(self):
