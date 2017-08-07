@@ -14,7 +14,9 @@ class Fight:
         self.file_path = "data/Fox-Cogs/fight/fight.json"
         self.the_data = dataIO.load__json(self.file_path)
         self.fights = 
-        
+
+
+#**********************Fight command group start*********************        
     @commands.group(pass_context=True)
     async def fight(self, ctx):
         """This does stuff!"""
@@ -23,7 +25,6 @@ class Fight:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
             #await self.bot.say("I can do stuff!")
-
 
     @fight.command()
     async def join(self, ctx):
@@ -50,7 +51,7 @@ class Fight:
 
     @fight.group(pass_context=True)
     async def bracket(self, ctag):
-        """Shows your current match your next opponent"""
+        """Shows your current match your next opponent, run bracket full to see all matches"""
         await self.bot.say("Todo")
 
         #Your code will go here
@@ -62,11 +63,12 @@ class Fight:
     async def full(self, ctag):
         """Shows the full bracket"""
         await self.bot.say("Todo")
+#**********************Fight command group end**************************    
 
-    
+#**********************Fightset command group start*********************       
     @commands.group(pass_context=True)
     @checks.mod_or_permissions(administrator=True)
-     async def setfight(self, ctx):
+     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
 
         #Your code will go here
@@ -75,11 +77,13 @@ class Fight:
         #await self.bot.say("I can do stuff!")
 
 
-     @setfight.command()
+     @fightset.command()
      async def score(self):
         """Prints low trophy users for all registered clans"""
         await self.bot.say("Todo")
+#**********************Fightset command group end*********************    
 
+      
     async def _activefight(self):
         """Checks if there is an active tournament already"""
         await self.bot.say("Getclanstats Todo")
@@ -93,6 +97,7 @@ class Fight:
         await self.bot.say("Parseclanstats Todo")
 
     async def _comparescores(self):
+        """Checks user submitted scores for inconsistancies"""
         await self.bot.say("")
 
     async def _parsemember(self):
