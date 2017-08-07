@@ -5,6 +5,7 @@ from discord.ext import commands
 from .utils.dataIO import dataIO
 from .utils import checks
 
+
 class Fight:
     """Cog for organizing tournaments"""
 
@@ -15,7 +16,7 @@ class Fight:
         self.the_data = dataIO.load__json(self.file_path)
 
 
-#**********************Fight command group start*********************        
+#**********************Fight command group start*********************
     @commands.group(pass_context=True, no_pm=True)
     async def fight(self, ctx):
         """Participate in active tournaments!"""
@@ -26,7 +27,7 @@ class Fight:
             #await self.bot.say("I can do stuff!")
 
     @fight.command(name="join")
-    async def fight_join(self, ctx, user : discord.Member):
+    async def fight_join(self, ctx, user: discord.Member):
         """Join the active brawl"""
         #Your code will go here
         if not user:
@@ -44,7 +45,7 @@ class Fight:
         await self.bot.say("Todo Leave")
 
     @fight.command()
-    async def leaderboard(self, ctag, ckind = "Unranked", irank = 0):
+    async def leaderboard(self, ctag, ckind="Unranked", irank=0):
         """Adds clan to grab-list"""
         await self.bot.say("Todo Leaderboard")
 
@@ -62,12 +63,12 @@ class Fight:
     async def full(self, ctag):
         """Shows the full bracket"""
         await self.bot.say("Todo Bracket Full")
-#**********************Fight command group end**************************    
+#**********************Fight command group end**************************
 
-#**********************Fightset command group start*********************       
+#**********************Fightset command group start*********************
     @commands.group(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
-     async def fightset(self, ctx):
+    async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
 
         #Your code will go here
@@ -75,19 +76,17 @@ class Fight:
             await self.bot.send_cmd_help(ctx)
         #await self.bot.say("I can do stuff!")
 
-
-     @fightset.command()
-     async def score(self):
+    @fightset.command()
+    async def score(self):
         """Prints low trophy users for all registered clans"""
         await self.bot.say("Todo Fightset Score")
-#**********************Fightset command group end*********************    
+#**********************Fightset command group end*********************
 
-      
     async def _activefight(self):
         """Checks if there is an active tournament already"""
         await self.bot.say("_activefight Todo")
 
-    async def _infight(self, user : discord.Member):
+    async def _infight(self, user: discord.Member):
         """Checks if passed member is already in the tournament"""
         await self.bot.say("_infight Todo")
 
@@ -101,7 +100,8 @@ class Fight:
 
     async def _parsemember(self):
         await self.bot.say("Parsemember Todo")
-    
+
+
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")
@@ -114,8 +114,8 @@ def check_folders():
 
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/fight/fight.json"):
-        dataIO.save_json("data/Fox-Cogs/fight/fight.json" ,{})
-    
+        dataIO.save_json("data/Fox-Cogs/fight/fight.json", {})
+
 
 def setup(bot):
     check_folders()
