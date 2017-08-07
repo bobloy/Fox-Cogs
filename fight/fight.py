@@ -13,7 +13,7 @@ class Fight:
         self.bot = bot
         self.path = "data/Fox-Cogs/fight/"
         self.file_path = "data/Fox-Cogs/fight/fight.json"
-        self.the_data = dataIO.load__json(self.file_path)
+        self.the_data = dataIO.load_json(self.file_path)
 
 
 #**********************Fight command group start*********************
