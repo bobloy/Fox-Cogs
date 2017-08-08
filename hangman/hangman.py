@@ -134,6 +134,8 @@ class hangman:
             await self.bot.add_reaction(message, theface)
             self.the_data["theface"] = str(theface)
             self.save_data()
+            self._updateHanglist()
+            await self.bot.say("Face has been updated!")
 
         except discord.errors.HTTPException:
             await self.bot.say("That's not an emoji I recognize. ")
