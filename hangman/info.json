@@ -4,5 +4,7 @@
     "NAME" : "Hangman",
     "SHORT" : "Play a game of hangman",
     "DESCRIPTION" : "Play a game of hangman",
-    "TAGS" : ["game", "fun", "hangman"]
+    "TAGS" : ["game", "fun", "hangman", "fox", "fox-cogs", "fox-cog", "bobloy"],
+    "HIDDEN" : true,
+	"DISABLED" : false
 }
