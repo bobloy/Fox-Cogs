@@ -125,7 +125,7 @@ class hangman:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
             
-    @hangset.command()
+    @hangset.command(pass_context=True)
     async def face(self, ctx, theface):
         message = ctx.message
         #Borrowing FlapJack's emoji validation
