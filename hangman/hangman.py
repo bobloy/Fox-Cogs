@@ -18,6 +18,9 @@ class hangman:
         self.answer_path = "data/hangman/hanganswers.txt"
         self.the_data = dataIO.load_json(self.file_path)
         self.winbool = False
+        self._updateHanglist()
+        
+    def _updateHanglist(self):
         self.hanglist = (
             """>
                \_________
@@ -44,7 +47,7 @@ class hangman:
             """>
                \_________       
                 |/   |              
-                |   <:never:336861463446814720>
+                |   """+self.the_data["theface"]+"""
                 |                         
                 |                       
                 |                         
@@ -55,7 +58,7 @@ class hangman:
             """>
                \________               
                 |/   |                   
-                |   <:never:336861463446814720>                   
+                |   """+self.the_data["theface"]+"""                   
                 |    |                     
                 |    |                    
                 |                           
@@ -67,7 +70,7 @@ class hangman:
             """>
                \_________             
                 |/   |               
-                |   <:never:336861463446814720>                    
+                |   """+self.the_data["theface"]+"""                    
                 |   /|                     
                 |     |                    
                 |                        
@@ -79,7 +82,7 @@ class hangman:
             """>
                \_________              
                 |/   |                     
-                |   <:never:336861463446814720>                      
+                |   """+self.the_data["theface"]+"""                      
                 |   /|\                    
                 |     |                       
                 |                             
@@ -92,7 +95,7 @@ class hangman:
             """>
                \________                   
                 |/   |                         
-                |   <:never:336861463446814720>                       
+                |   """+self.the_data["theface"]+"""                       
                 |   /|\                             
                 |     |                          
                 |   /                            
@@ -104,18 +107,37 @@ class hangman:
             """>
                \________
                 |/   |     
-                |   <:never:336861463446814720>     
+                |   """+self.the_data["theface"]+"""     
                 |   /|\           
                 |     |        
                 |   / \        
                 |               
                 |\___           
                 HANGMAN""")
-
+              
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
+    @commands.group(aliases=['sethang'], pass_context=True)
+    async def hangset(self, ctx):
+        """Adjust hangman settings"""
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+            
+    @hangset.command()
+    async def face(self, ctx, theface):
+        message= ctx.message
+        #Borrowing FlapJack's emoji validation
+        try:
+            # Use the reaction to see if it's valid
+            await self.bot.add_reaction(message, emoji)
+            self.the_data["theface"] = str(emoji)
+            self.save_data()
 
+        except discord.errors.HTTPException:
+            await self.bot.say("That's not an emoji I recognize. "
+                               "(might be custom!)")
+            
     @commands.command(aliases=['hang'], pass_context=True)
     async def hangman(self, ctx, guess: str=None):
         """Play a game of hangman against the bot!"""
@@ -172,7 +194,7 @@ class hangman:
         for i in self.the_data["answer"]:
             if i == " " or i == "-":
                 out_str += i*2
-            elif i in self.the_data["guesses"]:
+            elif i in self.the_data["guesses"] or not i in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
                 out_str += "__"+i+"__ "
             else:
                 out_str += "**\_** "
@@ -227,7 +249,7 @@ def check_folders():
         
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
-        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0})
+        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0, "theface": "<:never:336861463446814720>"})
     
 
 def setup(bot):
