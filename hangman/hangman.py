@@ -19,7 +19,7 @@ class hangman:
         self.the_data = dataIO.load_json(self.file_path)
         self.winbool = False
         self._updateHanglist()
-        
+
     def _updateHanglist(self):
         self.hanglist = (
             """>
@@ -118,6 +118,7 @@ class hangman:
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
+        
     @commands.group(aliases=['sethang'], pass_context=True)
     async def hangset(self, ctx):
         """Adjust hangman settings"""
@@ -126,7 +127,7 @@ class hangman:
             
     @hangset.command()
     async def face(self, ctx, theface):
-        message= ctx.message
+        message = ctx.message
         #Borrowing FlapJack's emoji validation
         try:
             # Use the reaction to see if it's valid
@@ -135,8 +136,7 @@ class hangman:
             self.save_data()
 
         except discord.errors.HTTPException:
-            await self.bot.say("That's not an emoji I recognize. "
-                               "(might be custom!)")
+            await self.bot.say("That's not an emoji I recognize. ")
             
     @commands.command(aliases=['hang'], pass_context=True)
     async def hangman(self, ctx, guess: str=None):
@@ -194,7 +194,7 @@ class hangman:
         for i in self.the_data["answer"]:
             if i == " " or i == "-":
                 out_str += i*2
-            elif i in self.the_data["guesses"] or not i in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            elif i in self.the_data["guesses"] or i not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
                 out_str += "__"+i+"__ "
             else:
                 out_str += "**\_** "
