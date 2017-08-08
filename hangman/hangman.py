@@ -263,6 +263,6 @@ def setup(bot):
     check_folders()
     check_files()
     if True:  # soupAvailable: No longer need Soup
-        bot.add_cog(hangman(bot))
+        bot.add_cog(Hangman(bot))
     else:
         raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
