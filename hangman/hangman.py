@@ -8,7 +8,7 @@ from .utils.dataIO import dataIO
 from .utils import checks
 
 
-class hangman:
+class Hangman:
     """Lets anyone play a game of hangman with custom phrases"""
 
     def __init__(self, bot):
@@ -120,6 +120,7 @@ class hangman:
         dataIO.save_json(self.file_path, self.the_data)
         
     @commands.group(aliases=['sethang'], pass_context=True)
+    @checks.mod_or_permissions(administrator=True)
     async def hangset(self, ctx):
         """Adjust hangman settings"""
         if ctx.invoked_subcommand is None:
@@ -152,7 +153,11 @@ class hangman:
                 await self.bot.say("Starting a game of hangman!")
                 self._startgame()
                 await self._printgame()
-        else:
+        elif not self.the_data["running"]:
+            await self.bot.say("Game of hangman is not yet running!\nStarting a game of hangman!")
+            self._startgame()
+            await self._printgame()
+        else:    
             await self._guessletter(guess)
             
             if self.winbool:
