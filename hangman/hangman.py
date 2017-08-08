@@ -131,8 +131,8 @@ class hangman:
         #Borrowing FlapJack's emoji validation
         try:
             # Use the reaction to see if it's valid
-            await self.bot.add_reaction(message, emoji)
-            self.the_data["theface"] = str(emoji)
+            await self.bot.add_reaction(message, theface)
+            self.the_data["theface"] = str(theface)
             self.save_data()
 
         except discord.errors.HTTPException:
