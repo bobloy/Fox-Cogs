@@ -256,7 +256,7 @@ def check_folders():
         
 def check_files():
     #if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
-    dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0, "theface": "<:never:336861463446814720>"})
+    dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0, "guesses"=[], "theface": "<:never:336861463446814720>"})
     
 
 def setup(bot):
