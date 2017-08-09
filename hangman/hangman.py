@@ -130,7 +130,7 @@ class Hangman:
     async def face(self, ctx, theface):
         message = ctx.message
         #Borrowing FlapJack's emoji validation (https://github.com/flapjax/FlapJack-Cogs/blob/master/smartreact/smartreact.py)
-        if theface[:2] != "<:":
+        if theface[:2] == "<:":
             theface = [r for server in self.bot.servers for r in server.emojis if r.id == theface.split(':')[2][:-1]][0]
         
         try:
