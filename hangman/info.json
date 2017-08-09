@@ -6,5 +6,5 @@
     "DESCRIPTION" : "Play a game of hangman",
     "TAGS" : ["game", "fun", "hangman", "fox", "fox-cogs", "fox-cog", "bobloy"],
     "HIDDEN" : true,
-	"DISABLED" : false
+    "DISABLED" : false
 }
