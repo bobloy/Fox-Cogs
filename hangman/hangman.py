@@ -129,9 +129,12 @@ class Hangman:
     @hangset.command(pass_context=True)
     async def face(self, ctx, theface):
         message = ctx.message
-        #Borrowing FlapJack's emoji validation
+        #Borrowing FlapJack's emoji validation (https://github.com/flapjax/FlapJack-Cogs/blob/master/smartreact/smartreact.py)
+        if theface[:2] != "<:":
+            return [r for server in self.bot.servers for r in server.emojis if r.id == theface.split(':')[2][:-1]][0]
+        
         try:
-            # Use the reaction to see if it's valid
+            # Use the face as reaction to see if it's valid (THANKS FLAPJACK <3)
             await self.bot.add_reaction(message, theface)
             self.the_data["theface"] = str(theface)
             self.save_data()
@@ -139,7 +142,7 @@ class Hangman:
             await self.bot.say("Face has been updated!")
 
         except discord.errors.HTTPException:
-            await self.bot.say("That's not an emoji I recognize. ")
+            await self.bot.say("That's not an emoji I recognize.")
             
     @commands.command(aliases=['hang'], pass_context=True)
     async def hangman(self, ctx, guess: str=None):
