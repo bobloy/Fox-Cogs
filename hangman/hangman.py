@@ -131,7 +131,7 @@ class Hangman:
         message = ctx.message
         #Borrowing FlapJack's emoji validation (https://github.com/flapjax/FlapJack-Cogs/blob/master/smartreact/smartreact.py)
         if theface[:2] != "<:":
-            return [r for server in self.bot.servers for r in server.emojis if r.id == theface.split(':')[2][:-1]][0]
+            theface = [r for server in self.bot.servers for r in server.emojis if r.id == theface.split(':')[2][:-1]][0]
         
         try:
             # Use the face as reaction to see if it's valid (THANKS FLAPJACK <3)
