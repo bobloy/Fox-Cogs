@@ -1,10 +1,10 @@
 {
     "AUTHOR" : "Bobloy",
-    "INSTALL_MSG" : "Placeholder Install MSG",
+    "INSTALL_MSG" : "Thank you for installing test cog. Please uninstall this now",
     "NAME" : "Test",
-    "SHORT" : "Test cog",
-    "DESCRIPTION" : "Test cog",
-    "TAGS" : ["example", "test", "cog"],
-    "HIDDEN" : true,
-	"DISABLED" : true
+    "SHORT" : "Test short",
+    "DESCRIPTION" : "Test description is longer",
+    "TAGS" : ["fox-cogs", "bobloy"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : true
 }

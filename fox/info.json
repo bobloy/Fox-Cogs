@@ -1,10 +1,10 @@
 {
     "AUTHOR" : "Bobloy",
-    "INSTALL_MSG" : "Placeholder Install MSG",
+    "INSTALL_MSG" : "Thank you for installing fox. This is a beta program for interacting with fox.exe",
     "NAME" : "Fox",
     "SHORT" : "Cog to interact with Fox",
     "DESCRIPTION" : "Cog to interact with Fox",
-    "TAGS" : ["example", "tags", "list"],
-    "HIDDEN" : true,
-    "DISABLED" : false
+    "TAGS" : ["fox", "fox-cogs", "bobloy"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : true
 }

@@ -1,10 +1,10 @@
 {
     "AUTHOR" : "Bobloy",
-    "INSTALL_MSG" : "Thank you for installing hangman. Run with [p]hangman",
+    "INSTALL_MSG" : "Thank you for installing hangman. Run with [p]hangman or [p]hangset",
     "NAME" : "Hangman",
     "SHORT" : "Play a game of hangman",
     "DESCRIPTION" : "Play a game of hangman",
-    "TAGS" : ["game", "fun", "hangman", "fox", "fox-cogs", "fox-cog", "bobloy"],
-    "HIDDEN" : true,
-    "DISABLED" : false
+    "TAGS" : ["game", "fun", "hangman", "fox", "fox-cogs", "bobloy"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : false
 }

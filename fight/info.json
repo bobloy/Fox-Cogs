@@ -1,10 +1,10 @@
 {
     "AUTHOR" : "Bobloy",
-    "INSTALL_MSG" : "Placeholder Install MSG",
+    "INSTALL_MSG" : "Thank you for installing hangman. Run with [p]fight or [p]fightset",
     "NAME" : "Fight",
     "SHORT" : "Cog to organize tournaments",
     "DESCRIPTION" : "Cog to organize tournaments within Discord",
-    "TAGS" : ["fight", "tournament", "tourney", "tourny", "elimination", "fox", "fox-cogs", "fox-cog", "bobloy"],
-    "HIDDEN" : true,
-    "DISABLED" : false
+    "TAGS" : ["game", "fun", "fight", "tournament", "tourney", "tourny", "elimination", "bracket", "fox", "fox-cogs", "bobloy"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : true
 }
