@@ -41,7 +41,7 @@ class Leaver:
         self.the_data[server.id]['channel'] = ctx.message.channel.id
         self.save_data()
 
-    async def on_member_leave(self, member):
+    async def _when_leave(self, member):
         server = member.server
         if server.id not in self.the_data:
             return
@@ -70,4 +70,4 @@ def setup(bot):
     check_files()
     q = Leaver(bot)
     bot.add_cog(q)
-    bot.add_listener(q.on_member_leave, "on_member_remove")
+    bot.add_listener(q._when_leave, "on_member_remove")
