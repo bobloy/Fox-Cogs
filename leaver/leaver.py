@@ -21,40 +21,36 @@ class Leaver:
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
-        
+
     @commands.group(aliases=['setleaver'], pass_context=True)
     @checks.mod_or_permissions(administrator=True)
     async def leaverset(self, ctx):
         server = ctx.message.server
-        if not server.id in self.the_data:
+        if server.id not in self.the_data:
             self.the_data[server.id] = {}
             self.save_data()
-            
+
         """Adjust leaver settings"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-            
+
     @leaverset.command(pass_context=True)
     async def channel(self, ctx):
-        if not 'channel' in self.the_data[server.id]:
+        if 'channel' not in self.the_data[server.id]:
             self.the_data[server.id]['channel'] = ''
-        
+
         self.the_data[server.id]['channel'] = ctx.message.channel.id
         self.save_data()
-        
-        
-     async def on_member_leave(self, member):
+
+    async def on_member_leave(self, member):
         server = member.server
         if server.id not in self.the_data:
             return
 
         await self.bot.say("YOU LEFT ME "+member.mention)
 #        self.the_data[server.id]
-        
 
-            
-        
-    
+
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")
@@ -64,11 +60,11 @@ def check_folders():
         print("Creating data/Fox-Cogs/leaver folder...")
         os.makedirs("data/Fox-Cogs/leaver")
 
-        
+
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/leaver/leaver.json"):
         dataIO.save_json("data/Fox-Cogs/leaver/leaver.json", {})
-    
+
 
 def setup(bot):
     check_folders()
@@ -76,4 +72,3 @@ def setup(bot):
     q = Leaver(bot)
     bot.add_cog(q)
     bot.add_listener(n.on_member_leave, "on_member_remove")
-   
