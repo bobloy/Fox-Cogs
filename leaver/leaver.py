@@ -70,4 +70,4 @@ def setup(bot):
     check_files()
     q = Leaver(bot)
     bot.add_cog(q)
-    bot.add_listener(n.on_member_leave, "on_member_remove")
+    bot.add_listener(q.on_member_leave, "on_member_remove")
