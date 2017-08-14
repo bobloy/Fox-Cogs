@@ -15,8 +15,7 @@ class Leaver:
         self.path = "data/Fox-Cogs/leaver"
         self.file_path = "data/Fox-Cogs/leaver/leaver.json"
         self.the_data = dataIO.load_json(self.file_path)
-        self.winbool = False
-        self._updateHanglist()
+
 
     def save_data(self):
         """Saves the json"""
