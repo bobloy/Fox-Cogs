@@ -16,7 +16,6 @@ class Leaver:
         self.file_path = "data/Fox-Cogs/leaver/leaver.json"
         self.the_data = dataIO.load_json(self.file_path)
 
-
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
@@ -35,6 +34,7 @@ class Leaver:
 
     @leaverset.command(pass_context=True)
     async def channel(self, ctx):
+        server = ctx.message.server
         if 'channel' not in self.the_data[server.id]:
             self.the_data[server.id]['channel'] = ''
 
