@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "Bobloy",
+    "INSTALL_MSG" : "Thank you for installing Immortal Family Cog",
+    "NAME" : "Immortal",
+    "SHORT" : "Sends message on leave",
+    "DESCRIPTION" : "Cog specificall for the Immortal Family discord server. I do not recommend installing it",
+    "TAGS" : ["fox-cogs", "bobloy", "utilities", "tools"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : false
+}
