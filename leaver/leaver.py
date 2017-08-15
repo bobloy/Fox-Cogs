@@ -23,12 +23,14 @@ class Leaver:
     @commands.group(aliases=['setleaver'], pass_context=True)
     @checks.mod_or_permissions(administrator=True)
     async def leaverset(self, ctx):
+        """Adjust leaver settings"""
+        
         server = ctx.message.server
         if server.id not in self.the_data:
             self.the_data[server.id] = {}
             self.save_data()
 
-        """Adjust leaver settings"""
+        
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
