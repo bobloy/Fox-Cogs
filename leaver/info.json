@@ -4,7 +4,7 @@
     "NAME" : "Leaver",
     "SHORT" : "Sends message on leave",
     "DESCRIPTION" : "Keeps track of when people leave the server, and posts a message notifying",
-    "TAGS" : ["fox-cogs", "bobloy", "utilities"],
+    "TAGS" : ["fox", "bobloy", "utilities"],
     "REQUIREMENTS" : [],
     "HIDDEN" : false
 }

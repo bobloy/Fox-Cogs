@@ -4,7 +4,7 @@
     "NAME" : "Fox",
     "SHORT" : "Cog to interact with Fox",
     "DESCRIPTION" : "Cog to interact with Fox",
-    "TAGS" : ["fox", "fox-cogs", "bobloy"],
+    "TAGS" : ["fox", "bobloy"],
     "REQUIREMENTS" : [],
     "HIDDEN" : true
 }

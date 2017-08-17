@@ -4,7 +4,7 @@
     "NAME" : "Test",
     "SHORT" : "Test short",
     "DESCRIPTION" : "Test description is longer",
-    "TAGS" : ["fox-cogs", "bobloy"],
+    "TAGS" : ["fox", "bobloy"],
     "REQUIREMENTS" : [],
     "HIDDEN" : true
 }
