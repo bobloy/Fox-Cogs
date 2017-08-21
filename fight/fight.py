@@ -16,7 +16,7 @@ class Fight:
         self.the_data = dataIO.load_json(self.file_path)
 
 
-#**********************Fight command group start*********************
+#************************Fight command group start************************
     @commands.group(pass_context=True, no_pm=True)
     async def fight(self, ctx):
         """Participate in active tournaments!"""
@@ -78,11 +78,17 @@ class Fight:
         #await self.bot.say("I can do stuff!")
 
     @fightset.command()
-    async def score(self):
-        """Prints low trophy users for all registered clans"""
+    async def bestof(self, incount):
+        """Adjust # of games played per match. Must be an odd number"""
+        await self.bot.say("Todo Fightset Bestof")
+        
+    @fightset.command()
+    async def bestoffinal(self):
+        """Adjust # of games played in semi-finals and finals. Must be an odd number"""
         await self.bot.say("Todo Fightset Score")
-#**********************Fightset command group end*********************
+#**********************Fightset command group end**********************
 
+#**********************Private command group start*********************
     async def _activefight(self):
         """Checks if there is an active tournament already"""
         await self.bot.say("_activefight Todo")
@@ -101,7 +107,7 @@ class Fight:
 
     async def _parsemember(self):
         await self.bot.say("Parsemember Todo")
-
+#**********************Private command group end*********************
 
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
