@@ -32,14 +32,14 @@ class Immortal:
             server = ctx.message.server
             author = ctx.message.author
             try:
-                self.bot.add_roles(member, discord.utils.get(server.roles, name="Resort"))
-                self.bot.remove_roles(member, discord.utils.get(server.roles, name="Member"))
-                self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
-                self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
-                self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))
-                self.bot.remove_roles(member, discord.utils.get(server.roles, name="Revenant"))
-                self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
-                self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
+                await self.bot.add_roles(member, discord.utils.get(server.roles, name="Resort"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Member"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Revenant"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
 
             except discord.Forbidden:
                 await self.bot.say(
