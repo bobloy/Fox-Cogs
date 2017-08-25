@@ -42,6 +42,7 @@ class Leaver:
 
         self.the_data[server.id]['channel'] = ctx.message.channel.id
         self.save_data()
+        await self.bot.say("Channel set to "+ctx.message.channel.name)
 
     async def _when_leave(self, member):
         server = member.server
