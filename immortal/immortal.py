@@ -27,19 +27,22 @@ class Immortal:
         """Sends someone on vacation!"""
 # Thank you SML for the addrole code
 # https://github.com/smlbiobot/SML-Cogs/tree/master/mm
+
         if member is None:
             await self.bot.send_cmd_help(ctx)
         else:
             server = ctx.message.server
             author = ctx.message.author
-            rroles = [
-                discord.utils.get(server.roles, name="Member"),
-                discord.utils.get(server.roles, name="Immortal"),
-                discord.utils.get(server.roles, name="Eternal"),
-                discord.utils.get(server.roles, name="Phantom"),
-                discord.utils.get(server.roles, name="Undead"),
-                discord.utils.get(server.roles, name="Revenant"),
-                discord.utils.get(server.roles, name="Crypt")]
+            role_names = ["Member", "Immortal", "Eternal", "Phantom", "Undead", "Revenant", "Crypt", "Relocate"]
+            rroles = [r for r in server.roles if r.name in role_names]
+            #rroles = [
+            #    discord.utils.get(server.roles, name="Member"),
+            #    discord.utils.get(server.roles, name="Immortal"),
+            #    discord.utils.get(server.roles, name="Eternal"),
+            #    discord.utils.get(server.roles, name="Phantom"),
+            #    discord.utils.get(server.roles, name="Undead"),
+            #    discord.utils.get(server.roles, name="Revenant"),
+            #    discord.utils.get(server.roles, name="Crypt")]
             try:
                 await self.bot.add_roles(member, discord.utils.get(server.roles, name="Resort"))
                 await asyncio.sleep(0.5)
@@ -66,7 +69,7 @@ class Immortal:
             else:
                 await self.bot.say("You are being sent on Vacation! :tada:" +
                                    "Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
-                await self.bot.send_message(member, "You are being sent on Vacation! :tada: Please relocate" +
+                await self.bot.send_message(member, "You are being sent on Vacation! :tada: Please relocate " +
                                                     "to Immortal Resort (#889L92UQ) when you find the time.\n" +
                                                     "You'll have limited access to the server until you rejoin a main clan")
 
