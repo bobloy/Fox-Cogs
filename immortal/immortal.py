@@ -33,7 +33,7 @@ class Immortal:
         else:
             server = ctx.message.server
             author = ctx.message.author
-            role_names = ["Member", "Immortal", "Eternal", "Phantom", "Undead", "Revenant", "Crypt", "Relocate"]
+            role_names = ["Member", "Immortal", "Eternal", "Phantom", "Ghost", "Undead", "Revenant", "Crypt", "Relocate"]
             rroles = [r for r in server.roles if r.name in role_names]
             #rroles = [
             #    discord.utils.get(server.roles, name="Member"),
