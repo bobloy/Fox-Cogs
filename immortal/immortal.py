@@ -19,20 +19,21 @@ class Immortal:
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
-    
+
     @commands.command(pass_context=True)
     async def iresort(self, ctx, member: discord.Member=None):
         """Sends someone on vacation!"""
-        # Thank you SML for the addrole code https://github.com/smlbiobot/SML-Cogs/tree/master/mm
+# Thank you SML for the addrole code
+# https://github.com/smlbiobot/SML-Cogs/tree/master/mm
         if member is None:
             await self.bot.send_cmd_help(ctx)
-        else:        
+        else:
             server = ctx.message.server
             role = discord.utils.get(server.roles, name="Resort")
             if role is None:
                 await self.bot.say("Cannot find that role on this server.")
-                return    
-                
+                return
+
             await self.bot.add_roles(member, role)
             await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Member"))
             await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
@@ -41,14 +42,17 @@ class Immortal:
             await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Revenant"))
             await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
             await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
-            
+
             await self.bot.say("Congrats, you are going on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
-        
+            await self.bot.send_message(member, "You are being send on Vacation! :tada: Please relocate" +
+                                                "to Immortal Resort (#889L92UQ) when you find the time.\n" +
+                                                "You'll have limited access to the server until you rejoin a main clan")
+
     @commands.group(aliases=['setimmortal'], pass_context=True)
     @checks.mod_or_permissions(administrator=True)
     async def immortalset(self, ctx):
         """Adjust immortal settings"""
-        
+
         server = ctx.message.server
         if server.id not in self.the_data:
             self.the_data[server.id] = {}
@@ -56,8 +60,8 @@ class Immortal:
 
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-    
-    
+
+
 #    @immortalset.command(pass_context=True)
 #    async def channel(self, ctx):
 #        server = ctx.message.server
@@ -96,4 +100,3 @@ def setup(bot):
     check_files()
     q = Immortal(bot)
     bot.add_cog(q)
-  
