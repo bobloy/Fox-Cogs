@@ -28,7 +28,7 @@ class Immortal:
             await self.bot.send_cmd_help(ctx)
         else:        
             server = ctx.message.server
-            role = discord.utils.get(server.roles, name="resort")
+            role = discord.utils.get(server.roles, name="Resort")
             if role is None:
                 await self.bot.say("Cannot find that role on this server.")
                 return    
