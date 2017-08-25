@@ -37,20 +37,19 @@ class Leaver:
     @leaverset.command(pass_context=True)
     async def channel(self, ctx):
         server = ctx.message.server
-        if 'channel' not in self.the_data[server.id]:
-            self.the_data[server.id]['channel'] = ''
+        if 'CHANNEL' not in self.the_data[server.id]:
+            self.the_data[server.id]['CHANNEL'] = ''
+        
 
-        self.the_data[server.id]['channel'] = ctx.message.channel.id
+        self.the_data[server.id]['CHANNEL'] = ctx.message.channel.id
         self.save_data()
         await self.bot.say("Channel set to "+ctx.message.channel.name)
 
     async def _when_leave(self, member):
         server = member.server
-        if server.id not in self.the_data:
-            return
-
-        await self.bot.say("YOU LEFT ME "+member.mention)
-#        self.the_data[server.id]
+        if server.id in self.the_data:
+            await self.bot.send_message(self.the_data[server.id]['CHANNEL'],
+                                        member.mention + " has left us!")
 
 
 def check_folders():
@@ -72,5 +71,6 @@ def setup(bot):
     check_folders()
     check_files()
     q = Leaver(bot)
-    bot.add_cog(q)
     bot.add_listener(q._when_leave, "on_member_remove")
+    bot.add_cog(q)
+    
