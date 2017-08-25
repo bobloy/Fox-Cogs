@@ -27,7 +27,7 @@ class Immortal:
         if member is None:
             await self.bot.send_cmd_help(ctx)
         else:        
-            roles = server.roles
+            roles = ctx.messsage.server.roles
             roles = [r for r in roles if r is not None]
             role = discord.utils.find(lambda r: r.name.lower() == "resort",
                                       roles)
