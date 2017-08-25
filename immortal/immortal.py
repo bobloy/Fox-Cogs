@@ -23,19 +23,15 @@ class Immortal:
     @commands.command(pass_context=True)
     async def iresort(self, ctx, member: discord.Member=None):
         """Sends someone on vacation!"""
-        # Thank you tekulvw for the addrole code! https://github.com/tekulvw/Squid-Plugins/blob/master/admin/admin.py
+        # Thank you SML for the addrole code https://github.com/smlbiobot/SML-Cogs/tree/master/mm
         if member is None:
             await self.bot.send_cmd_help(ctx)
         else:        
-            roles = ctx.messsage.server.roles
-            roles = [r for r in roles if r is not None]
-            role = discord.utils.find(lambda r: r.name.lower() == "resort",
-                                      roles)
-            try:
-                log.debug("Role {} found from rolename {}".format(
-                    role.name, "resort"))
-            except:
-                log.debug("Role not found for rolename {}".format("resort"))
+            server = ctx.message.server
+            role = discord.utils.get(server.roles, name="resort")
+            if role is None:
+                await self.bot.say("Cannot find that role on this server.")
+                return    
                 
             await self.bot.add_roles(member, role)
             await self.bot.say("Congrats, you are going on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
