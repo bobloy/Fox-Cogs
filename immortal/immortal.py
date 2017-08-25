@@ -1,4 +1,5 @@
 import discord
+import asyncio
 import os
 from datetime import datetime
 from discord.ext import commands
@@ -41,7 +42,9 @@ class Immortal:
                 discord.utils.get(server.roles, name="Crypt")]
             try:
                 await self.bot.add_roles(member, discord.utils.get(server.roles, name="Resort"))
+                await asyncio.sleep(0.5)
                 await self.bot.remove_roles(member, *rroles)
+                await asyncio.sleep(0.5)
 #                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
 #                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
 #                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))

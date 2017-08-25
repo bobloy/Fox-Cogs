@@ -48,7 +48,7 @@ class Leaver:
     async def when_leave(self, member):
         server = member.server
         if server.id in self.the_data:
-            await self.bot.send_message(self.the_data[server.id]['CHANNEL'],
+            await self.bot.send_message(server.get_channel(self.the_data[server.id]['CHANNEL']),
                                         member.mention + " has left us!")
         else:
             await self.bot.send_message(server.default_channel.id, member.mention + " has left us!")
