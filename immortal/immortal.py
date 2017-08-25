@@ -43,8 +43,8 @@ class Immortal:
             await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
             await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
 
-            await self.bot.say("Congrats, you are going on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
-            await self.bot.send_message(member, "You are being send on Vacation! :tada: Please relocate" +
+            await self.bot.say("You are being sent on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
+            await self.bot.send_message(member, "You are being sent on Vacation! :tada: Please relocate" +
                                                 "to Immortal Resort (#889L92UQ) when you find the time.\n" +
                                                 "You'll have limited access to the server until you rejoin a main clan")
 
