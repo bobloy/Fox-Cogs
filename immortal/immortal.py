@@ -41,7 +41,7 @@ class Immortal:
                 discord.utils.get(server.roles, name="Crypt")]
             try:
                 await self.bot.add_roles(member, discord.utils.get(server.roles, name="Resort"))
-                await self.bot.remove_roles(member, rroles)
+                await self.bot.remove_roles(member, *rroles)
 #                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
 #                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
 #                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))
