@@ -31,15 +31,23 @@ class Immortal:
         else:
             server = ctx.message.server
             author = ctx.message.author
+            rroles = [
+                discord.utils.get(server.roles, name="Member")),
+                discord.utils.get(server.roles, name="Immortal")),
+                discord.utils.get(server.roles, name="Eternal")),
+                discord.utils.get(server.roles, name="Phantom")),
+                discord.utils.get(server.roles, name="Undead")),
+                discord.utils.get(server.roles, name="Revenant")),
+                discord.utils.get(server.roles, name="Crypt"))]
             try:
                 await self.bot.add_roles(member, discord.utils.get(server.roles, name="Resort"))
-                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Member"))
-                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
-                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
-                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))
-                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Revenant"))
-                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
-                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
+                await self.bot.remove_roles(member, rroles)
+#                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
+#                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
+#                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))
+#                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Revenant"))
+#                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
+#                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
 
             except discord.Forbidden:
                 await self.bot.say(
@@ -49,6 +57,9 @@ class Immortal:
             except discord.HTTPException:
                 await self.bot.say(
                     "Failed to adjust roles.")
+            except:
+                await self.bot.say("Unknown Exception")
+                
             else:
                 await self.bot.say("You are being sent on Vacation! :tada:" +
                                    "Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
