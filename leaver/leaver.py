@@ -50,6 +50,8 @@ class Leaver:
         if server.id in self.the_data:
             await self.bot.send_message(self.the_data[server.id]['CHANNEL'],
                                         member.mention + " has left us!")
+        else:
+            self.bot.send_message(server.default_channel.id, member.mention + " has left us!")
 
 
 def check_folders():
