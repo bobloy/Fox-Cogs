@@ -20,11 +20,14 @@ class Fight:
     @commands.group(pass_context=True, no_pm=True)
     async def fight(self, ctx):
         """Participate in active tournaments!"""
-
-        #Your code will go here
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
             #await self.bot.say("I can do stuff!")
+            
+        currTourny = self.the_data[server.id][TOURNEYS][self.the_data[server.id][CURRENT]]
+        
+        if currTourny is None:
+            await self.bot.say("No tournament currently running!")
 
     @fight.command(name="join")
     async def fight_join(self, ctx, user: discord.Member):
@@ -35,7 +38,10 @@ class Fight:
         await self.bot.say("ONE PUNCH! And " + user.mention + " is out! ლ(ಠ益ಠლ)")
 
     @fight.command()
-    async def score(self, ctx):
+    async def score(self, ctx, gameID):
+        if gameID is None:
+            if ctx.message.author not in self.the_data[server.id][TOURNEYS][self.the_data[server.id][CURRENT]]:
+                await self.bot.say("You are not in a current tournament")
         """Enters score for current match, or for passed game ID"""
         await self.bot.say("Todo Score")
 
@@ -72,11 +78,15 @@ class Fight:
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
 
-        #Your code will go here
+        if server.id not in self.the_data:
+            self.the_data[server.id] = {
+                "CURRENT": None,
+                "TOURNEYS": []
+            }
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
         #await self.bot.say("I can do stuff!")
-
+    
     @fightset.command()
     async def bestof(self, incount):
         """Adjust # of games played per match. Must be an odd number"""
@@ -86,6 +96,16 @@ class Fight:
     async def bestoffinal(self):
         """Adjust # of games played in semi-finals and finals. Must be an odd number"""
         await self.bot.say("Todo Fightset Score")
+        
+    @fightset.command()
+    async def start(self):
+        """Starts a new tournament"""
+        await self.bot.say("Todo Fightset Start")
+        
+    @fightset.command()
+    async def stop(self):
+        """Stops current tournament"""
+        await self.bot.say("Todo Fightset Stop")
 #**********************Fightset command group end**********************
 
 #**********************Private command group start*********************
@@ -107,6 +127,9 @@ class Fight:
 
     async def _parsemember(self):
         await self.bot.say("Parsemember Todo")
+        
+    def _get_server_from_id(self, serverid):
+        return discord.utils.get(self.bot.servers, id=serverid)
 #**********************Private command group end*********************
 
 def check_folders():
