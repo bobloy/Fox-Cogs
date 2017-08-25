@@ -23,8 +23,10 @@ class Immortal:
     @commands.command(pass_context=True)
     async def iresort(self, ctx, member):
         """Sends someone on vacation!"""
-        
-        self.bot.say("Congrats, you are going on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time. Tag a leader in here once you've moved")
+        if member is None:
+            await self.bot.send_cmd_help(ctx)
+        else:    
+            await self.bot.say("Congrats, you are going on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
     
     @commands.group(aliases=['setimmortal'], pass_context=True)
     @checks.mod_or_permissions(administrator=True)
