@@ -34,6 +34,14 @@ class Immortal:
                 return    
                 
             await self.bot.add_roles(member, role)
+            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Member"))
+            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
+            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
+            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))
+            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Revenant"))
+            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
+            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
+            
             await self.bot.say("Congrats, you are going on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
         
     @commands.group(aliases=['setimmortal'], pass_context=True)
