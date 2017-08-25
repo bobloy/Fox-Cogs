@@ -23,6 +23,7 @@ class Immortal:
     @commands.command(pass_context=True)
     async def iresort(self, ctx, member: discord.Member=None):
         """Sends someone on vacation!"""
+        # Thank you tekulvw for the addrole code! https://github.com/tekulvw/Squid-Plugins/blob/master/admin/admin.py
         if member is None:
             await self.bot.send_cmd_help(ctx)
         else:        
