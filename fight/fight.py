@@ -14,6 +14,10 @@ class Fight:
         self.path = "data/Fox-Cogs/fight/"
         self.file_path = "data/Fox-Cogs/fight/fight.json"
         self.the_data = dataIO.load_json(self.file_path)
+    
+    def save_data(self):
+        """Saves the json"""
+        dataIO.save_json(self.file_path, self.the_data)
 
 
 #************************Fight command group start************************
@@ -83,6 +87,7 @@ class Fight:
                 "CURRENT": None,
                 "TOURNEYS": []
             }
+            self.save_data()
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
         #await self.bot.say("I can do stuff!")
