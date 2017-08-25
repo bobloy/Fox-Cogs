@@ -21,13 +21,24 @@ class Immortal:
         dataIO.save_json(self.file_path, self.the_data)
     
     @commands.command(pass_context=True)
-    async def iresort(self, ctx, member):
+    async def iresort(self, ctx, member: discord.Member=None):
         """Sends someone on vacation!"""
         if member is None:
             await self.bot.send_cmd_help(ctx)
-        else:    
+        else:        
+            roles = server.roles
+            roles = [r for r in roles if r is not None]
+            role = discord.utils.find(lambda r: r.name.lower() == "resort",
+                                      roles)
+            try:
+                log.debug("Role {} found from rolename {}".format(
+                    role.name, "resort"))
+            except:
+                log.debug("Role not found for rolename {}".format("resort"))
+                
+            await self.bot.add_roles(member, role)
             await self.bot.say("Congrats, you are going on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
-    
+        
     @commands.group(aliases=['setimmortal'], pass_context=True)
     @checks.mod_or_permissions(administrator=True)
     async def immortalset(self, ctx):
@@ -40,7 +51,8 @@ class Immortal:
 
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-
+    
+    
 #    @immortalset.command(pass_context=True)
 #    async def channel(self, ctx):
 #        server = ctx.message.server
