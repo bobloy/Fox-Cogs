@@ -21,6 +21,7 @@ class Immortal:
         dataIO.save_json(self.file_path, self.the_data)
 
     @commands.command(pass_context=True)
+    @checks.mod_or_permissions(manage_roles=True)
     async def iresort(self, ctx, member: discord.Member=None):
         """Sends someone on vacation!"""
 # Thank you SML for the addrole code
