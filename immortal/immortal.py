@@ -29,24 +29,31 @@ class Immortal:
             await self.bot.send_cmd_help(ctx)
         else:
             server = ctx.message.server
-            role = discord.utils.get(server.roles, name="Resort")
-            if role is None:
-                await self.bot.say("Cannot find that role on this server.")
-                return
+            author = ctx.message.author
+            try:
+                await self.bot.add_roles(member, discord.utils.get(server.roles, name="Resort"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Member"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Revenant"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
+                await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
 
-            await self.bot.add_roles(member, role)
-            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Member"))
-            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Immortal"))
-            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Eternal"))
-            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Phantom"))
-            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Revenant"))
-            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Undead"))
-            await self.bot.remove_roles(member, discord.utils.get(server.roles, name="Crypt"))
+            except discord.Forbidden:
+                await self.bot.say(
+                    "{} does not have permission to edit {}’s roles.".format(
+                        author.display_name, member.display_name))
 
-            await self.bot.say("You are being sent on Vacation! :tada: Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
-            await self.bot.send_message(member, "You are being sent on Vacation! :tada: Please relocate" +
-                                                "to Immortal Resort (#889L92UQ) when you find the time.\n" +
-                                                "You'll have limited access to the server until you rejoin a main clan")
+            except discord.HTTPException:
+                await self.bot.say(
+                    "Failed to adjust roles.")
+            else:
+                await self.bot.say("You are being sent on Vacation! :tada:" +
+                                   "Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
+                await self.bot.send_message(member, "You are being sent on Vacation! :tada: Please relocate" +
+                                                    "to Immortal Resort (#889L92UQ) when you find the time.\n" +
+                                                    "You'll have limited access to the server until you rejoin a main clan")
 
     @commands.group(aliases=['setimmortal'], pass_context=True)
     @checks.mod_or_permissions(administrator=True)
