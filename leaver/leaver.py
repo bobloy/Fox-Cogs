@@ -45,7 +45,7 @@ class Leaver:
         self.save_data()
         await self.bot.say("Channel set to "+ctx.message.channel.name)
 
-    async def _when_leave(self, member):
+    async def when_leave(self, member):
         server = member.server
         if server.id in self.the_data:
             await self.bot.send_message(self.the_data[server.id]['CHANNEL'],
@@ -71,6 +71,6 @@ def setup(bot):
     check_folders()
     check_files()
     q = Leaver(bot)
-    bot.add_listener(q._when_leave, "on_member_remove")
+    bot.add_listener(q.when_leave, "on_member_remove")
     bot.add_cog(q)
     
