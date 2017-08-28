@@ -87,7 +87,7 @@ class Fight:
         
         if server.id not in self.the_data:
             self.the_data[server.id] = {
-                "CURRENT": -1,
+                "CURRENT": None,
                 "TOURNEYS": []
             }
             self.save_data()
@@ -95,7 +95,7 @@ class Fight:
         currServ = self.the_data[server.id]
         
         if currServ["CURRENT"] == 0:
-            currServ["CURRENT"] = -1
+            currServ["CURRENT"] = None
             self.save_data()
          
         if ctx.invoked_subcommand is None:
