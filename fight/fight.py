@@ -85,14 +85,19 @@ class Fight:
         """Admin command for starting or managing tournaments"""
         server = ctx.message.server
         
-        #if server.id not in self.the_data:
-        self.the_data[server.id] = {
-            "CURRENT": 0,
-            "TOURNEYS": []
-        }
-        self.save_data()
-            
+        if server.id not in self.the_data:
+            self.the_data[server.id] = {
+                "CURRENT": 0,
+                "TOURNEYS": []
+            }
+            self.save_data()
+                 
         currServ = self.the_data[server.id]
+        
+        if currServ["CURRENT"] is None:
+            currServ["CURRENT"] = 0
+            self.save_data()
+         
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
         #await self.bot.say("I can do stuff!")
