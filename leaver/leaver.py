@@ -20,7 +20,7 @@ class Leaver:
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
 
-    @commands.group(aliases=['setleaver'], pass_context=True)
+    @commands.group(aliases=['setleaver'], pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
     async def leaverset(self, ctx):
         """Adjust leaver settings"""
@@ -34,7 +34,7 @@ class Leaver:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
-    @leaverset.command(pass_context=True)
+    @leaverset.command(pass_context=True, no_pm=True)
     async def channel(self, ctx):
         server = ctx.message.server
         if 'CHANNEL' not in self.the_data[server.id]:

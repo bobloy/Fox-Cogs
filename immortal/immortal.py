@@ -21,7 +21,7 @@ class Immortal:
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
     async def iresort(self, ctx, member: discord.Member=None):
         """Sends someone on vacation!"""
@@ -73,7 +73,7 @@ class Immortal:
                                                     "to Immortal Resort (#889L92UQ) when you find the time.\n" +
                                                     "You'll have limited access to the server until you rejoin a main clan")
 
-    @commands.group(aliases=['setimmortal'], pass_context=True)
+    @commands.group(aliases=['setimmortal'], pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
     async def immortalset(self, ctx):
         """Adjust immortal settings"""

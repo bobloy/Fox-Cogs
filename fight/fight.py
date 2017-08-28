@@ -29,7 +29,7 @@ class Fight:
             #await self.bot.say("I can do stuff!")
         
         server = ctx.message.server
-        currTourny = self.the_data[server.id][TOURNEYS][self.the_data[server.id][CURRENT]]
+        currTourny = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
         
         if currTourny is None:
             await self.bot.say("No tournament currently running!")
@@ -45,7 +45,7 @@ class Fight:
     @fight.command()
     async def score(self, ctx, gameID):
         if gameID is None:
-            if ctx.message.author not in self.the_data[server.id][TOURNEYS][self.the_data[server.id][CURRENT]]:
+            if ctx.message.author not in currTourny["PLAYERS"]:
                 await self.bot.say("You are not in a current tournament")
         """Enters score for current match, or for passed game ID"""
         await self.bot.say("Todo Score")
@@ -82,13 +82,16 @@ class Fight:
     @checks.mod_or_permissions(administrator=True)
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
-
+        server = ctx.message.server
+        
         if server.id not in self.the_data:
             self.the_data[server.id] = {
                 "CURRENT": None,
                 "TOURNEYS": []
             }
             self.save_data()
+            
+        currServ = self.the_data[server.id]
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
         #await self.bot.say("I can do stuff!")
@@ -106,6 +109,7 @@ class Fight:
     @fightset.command()
     async def start(self):
         """Starts a new tournament"""
+        tourID = len(currServ["TOURNEYS"])+1
         await self.bot.say("Todo Fightset Start")
         
     @fightset.command()
