@@ -30,10 +30,12 @@ class Fight:
         
         server = ctx.message.server
         
-        currTourny = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
+        currCheck = self.the_data[server.id]["CURRENT"]
         
-        if currTourny is None:
+        if currCheck is None:
             await self.bot.say("No tournament currently running!")
+        else:
+            currTourny = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
 
     @fight.command(name="join")
     async def fight_join(self, ctx, user: discord.Member):
