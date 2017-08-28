@@ -27,7 +27,8 @@ class Fight:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
             #await self.bot.say("I can do stuff!")
-            
+        
+        server = ctx.message.server
         currTourny = self.the_data[server.id][TOURNEYS][self.the_data[server.id][CURRENT]]
         
         if currTourny is None:
