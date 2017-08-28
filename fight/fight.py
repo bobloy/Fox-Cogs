@@ -5,6 +5,8 @@ from discord.ext import commands
 from .utils.dataIO import dataIO
 from .utils import checks
 
+#0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
+T_TYPES = ["Round Robin", "Single Elimination", "Double Elimination", "Triple Elimination", "3 Game Guarentee", "Compass Draw"]
 
 class Fight:
     """Cog for organizing tournaments"""
@@ -86,20 +88,16 @@ class Fight:
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
         server = ctx.message.server
-        
+
         if server.id not in self.the_data:
             self.the_data[server.id] = {
                 "CURRENT": None,
                 "TOURNEYS": []
             }
             self.save_data()
-                 
+
         currServ = self.the_data[server.id]
-        
-        if currServ["CURRENT"] == 0:
-            currServ["CURRENT"] = None
-            self.save_data()
-         
+
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
         #await self.bot.say("I can do stuff!")
@@ -117,12 +115,14 @@ class Fight:
     @fightset.command()
     async def start(self):
         """Starts a new tournament"""
-        tourID = len(currServ["TOURNEYS"])+1
-        await self.bot.say("Todo Fightset Start")
+        tourID = len(currServ["TOURNEYS"]) #Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
+        currServ["CURRENT"] = tourID
+        currServ["TOURNEYS"].append(["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 1])
         
     @fightset.command()
     async def stop(self):
         """Stops current tournament"""
+        currServ["CURRENT"] = None
         await self.bot.say("Todo Fightset Stop")
 #**********************Fightset command group end**********************
 
@@ -150,6 +150,13 @@ class Fight:
         return discord.utils.get(self.bot.servers, id=serverid)
 #**********************Private command group end*********************
 
+#**********************Single Elimination command group start********
+    async def _elim_start(self):
+        await self.bot.say("Elim start todo")
+
+    async def _elim_update(self, matchID, ):
+        await self.bot.say("Elim update todo")
+#**********************Single Elimination command group end**********
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")
