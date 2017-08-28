@@ -29,6 +29,7 @@ class Fight:
             #await self.bot.say("I can do stuff!")
         
         server = ctx.message.server
+        
         currTourny = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
         
         if currTourny is None:
@@ -86,7 +87,7 @@ class Fight:
         
         if server.id not in self.the_data:
             self.the_data[server.id] = {
-                "CURRENT": None,
+                "CURRENT": 0,
                 "TOURNEYS": []
             }
             self.save_data()
