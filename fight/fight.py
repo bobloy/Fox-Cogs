@@ -80,7 +80,6 @@ class Fight:
     async def full(self, ctag):
         """Shows the full bracket"""
         await self.bot.say("Todo Bracket Full")
-#**********************Fight command group end**************************
 
 #**********************Fightset command group start*********************
     @commands.group(pass_context=True, no_pm=True)
@@ -117,14 +116,16 @@ class Fight:
         """Starts a new tournament"""
         tourID = len(currServ["TOURNEYS"]) #Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
-        currServ["TOURNEYS"].append(["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 1])
+        currServ["TOURNEYS"][tourID] = ["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0] ]
+        
+        self._rr.start(tourID)
+        
         
     @fightset.command()
     async def stop(self):
         """Stops current tournament"""
         currServ["CURRENT"] = None
         await self.bot.say("Todo Fightset Stop")
-#**********************Fightset command group end**********************
 
 #**********************Private command group start*********************
     async def _activefight(self):
@@ -148,15 +149,24 @@ class Fight:
         
     def _get_server_from_id(self, serverid):
         return discord.utils.get(self.bot.servers, id=serverid)
-#**********************Private command group end*********************
 
-#**********************Single Elimination command group start********
+#**********************Single Elimination***************************
     async def _elim_start(self):
         await self.bot.say("Elim start todo")
 
     async def _elim_update(self, matchID, ):
         await self.bot.say("Elim update todo")
-#**********************Single Elimination command group end**********
+        
+        
+#**********************Round-Robin**********************************
+    async def _rr_start(self, tID):
+        theT = self.the_data["TOURNEYS"]
+        await self.bot.say("RR start todo")
+    
+    async def _rr_update(self, matchID, ):
+        await self.bot.say("rr update todo")
+        
+        
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")
