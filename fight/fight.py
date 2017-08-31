@@ -4,6 +4,8 @@ from discord.ext import commands
 
 from .utils.dataIO import dataIO
 from .utils import checks
+from random import randint
+
 
 #0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
 T_TYPES = ["Round Robin", "Single Elimination", "Double Elimination", "Triple Elimination", "3 Game Guarentee", "Compass Draw"]
@@ -32,9 +34,8 @@ class Fight:
         
         server = ctx.message.server
         
-        currCheck = self.the_data[server.id]["CURRENT"]
-        
-        if currCheck is None:
+               
+        if self._currTourny(server):
             await self.bot.say("No tournament currently running!")
         else:
             currTourny = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
@@ -108,17 +109,28 @@ class Fight:
         
     @fightset.command()
     async def bestoffinal(self):
-        """Adjust # of games played in semi-finals and finals. Must be an odd number"""
+        """Adjust # of games played in finals. Must be an odd number
+        (Does not apply to tournament types without finals, such as Round Robin)"""
         await self.bot.say("Todo Fightset Score")
         
     @fightset.command()
-    async def start(self):
-        """Starts a new tournament"""
+    async def setup(self):
+        """Setup a new tournament!
+        Default settings are as follows
+        Name: Tourny # (counts from 0)
+        Best of: 1
+        Best of (final): 1
+        Self Report: True
+        Type: 0 (Round Robin)"""
+        
+        
         tourID = len(currServ["TOURNEYS"]) #Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
-        currServ["TOURNEYS"][tourID] = ["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0] ]
+        currServ["TOURNEYS"][tourID] = ["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0], "TYPEDATA": [] ]
         
-        self._rr.start(tourID)
+        self.save_data()
+        
+        self._rr_setup(tourID)
         
         
     @fightset.command()
@@ -149,9 +161,15 @@ class Fight:
         
     def _get_server_from_id(self, serverid):
         return discord.utils.get(self.bot.servers, id=serverid)
+        
+    def _currTourny(self, server):
+        return self.the_data[server.id]["CURRENT"] == None
 
 #**********************Single Elimination***************************
-    async def _elim_start(self):
+    async def _elim_setup(self, tID):
+        await self.bot.say("Elim setup todo")
+    
+    async def _elim_start(self, tID):
         await self.bot.say("Elim start todo")
 
     async def _elim_update(self, matchID, ):
@@ -159,12 +177,62 @@ class Fight:
         
         
 #**********************Round-Robin**********************************
+    async def _rr_setup(self, tID):
+    
+        theT = self.the_data["TOURNEYS"][tID]
+        
+        theD = theT["TYPEDATA"]
+        
+        theD = []
+        
+        await self.bot.say("RR setup todo")
+    
     async def _rr_start(self, tID):
         theT = self.the_data["TOURNEYS"]
         await self.bot.say("RR start todo")
     
     async def _rr_update(self, matchID, ):
         await self.bot.say("rr update todo")
+        
+    def _rr_schedule(list):
+    """ Create a schedule for the teams in the list and return it"""
+        s = []
+        
+        if len(list) % 2 == 1: list = list + ["BYE"]
+
+        for i in range(len(list)-1):
+
+            mid = int(len(list) / 2)
+            l1 = list[:mid]
+            l2 = list[mid:]
+            l2.reverse()
+            
+            matchID=""
+            firstID = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+            if j
+            while j >= 25:
+            
+                matchID += firstID[int(j)%26-1]
+                
+                j = j / 26
+                
+                
+                
+            
+            for ix in range(len(l1)-1)
+                
+                matchID = matchID + [+]
+            
+            # Switch sides after each round
+            if(i % 2 == 1):
+                s = s + [ list(zip(l1, l2)) + [matchID] ]
+            else:
+                s = s + [ list(zip(l2, l1)) + [matchID] ]
+            
+            list.insert(1, list.pop())
+            matchID += 1
+            
+        return s
         
         
 def check_folders():
