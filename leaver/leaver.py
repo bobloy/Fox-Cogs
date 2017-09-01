@@ -49,7 +49,7 @@ class Leaver:
         server = member.server
         if server.id in self.the_data:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['CHANNEL']),
-                                        str(member) + " has left the server!")
+                                        str(member) + "(*" + str(member.nick) +"*) has left the server!")
         else:
             await self.bot.send_message(server.default_channel.id, str(member) + "(*" + str(member.nick) +"*) has left the server!")
 
