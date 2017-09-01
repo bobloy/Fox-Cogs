@@ -8,7 +8,9 @@ from random import randint
 
 
 # 0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
-T_TYPES = ["Round Robin", "Single Elimination", "Double Elimination", "Triple Elimination", "3 Game Guarentee", "Compass Draw"]
+T_TYPES = ["Round Robin", "Single Elimination",
+           "Double Elimination", "Triple Elimination",
+           "3 Game Guarentee", "Compass Draw"]
 
 
 class Fight:
@@ -19,7 +21,7 @@ class Fight:
         self.path = "data/Fox-Cogs/fight/"
         self.file_path = "data/Fox-Cogs/fight/fight.json"
         self.the_data = dataIO.load_json(self.file_path)
-    
+
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
@@ -32,9 +34,9 @@ class Fight:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
             # await self.bot.say("I can do stuff!")
-        
+
         server = ctx.message.server
-        
+
         if self._currTourny(server):
             await self.bot.say("No tournament currently running!")
         else:
@@ -46,7 +48,8 @@ class Fight:
         # Your code will go here
         if not user:
             user = ctx.message.author
-        await self.bot.say("ONE PUNCH! And " + user.mention + " is out! ლ(ಠ益ಠლ)")
+        await self.bot.say("ONE PUNCH! And " +
+                           user.mention + " is out! ლ(ಠ益ಠლ)")
 
     @fight.command()
     async def score(self, ctx, gameID):
@@ -101,18 +104,18 @@ class Fight:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
         # await self.bot.say("I can do stuff!")
-    
+
     @fightset.command()
     async def bestof(self, incount):
         """Adjust # of games played per match. Must be an odd number"""
         await self.bot.say("Todo Fightset Bestof")
-        
+
     @fightset.command()
     async def bestoffinal(self):
         """Adjust # of games played in finals. Must be an odd number
         (Does not apply to tournament types without finals, such as Round Robin)"""
         await self.bot.say("Todo Fightset Score")
-        
+
     @fightset.command()
     async def setup(self):
         """Setup a new tournament!
@@ -122,15 +125,15 @@ class Fight:
         Best of (final): 1
         Self Report: True
         Type: 0 (Round Robin)"""
-        
+
         tourID = len(currServ["TOURNEYS"])  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
         currServ["TOURNEYS"][tourID] = ["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0], "TYPEDATA": []]
-        
+
         self.save_data()
-        
+
         self._rr_setup(tourID)
-        
+
     @fightset.command()
     async def stop(self):
         """Stops current tournament"""
@@ -172,31 +175,31 @@ class Fight:
 
     async def _elim_update(self, matchID, ):
         await self.bot.say("Elim update todo")
-        
-        
+
+
 # **********************Round-Robin**********************************
     async def _rr_setup(self, tID):
     
         theT = self.the_data["TOURNEYS"][tID]
-        
+
         theD = theT["TYPEDATA"]
-        
+
         theD = []
-        
+
         await self.bot.say("RR setup todo")
     
     async def _rr_start(self, tID):
         theT = self.the_data["TOURNEYS"]
         await self.bot.say("RR start todo")
-    
+
     async def _rr_update(self, matchID, ):
         await self.bot.say("rr update todo")
         
     def _rr_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
         s = []
-        
-        if len(inlist) % 2 == 1: 
+
+        if len(inlist) % 2 == 1:
             inlist = inlist + ["BYE"]
 
         for i in range(len(inlist)-1):
@@ -205,24 +208,28 @@ class Fight:
             l1 = inlist[:mid]
             l2 = inlist[mid:]
             l2.reverse()
-            
-            matchLetter=""
-            firstID = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+
+            matchLetter = ""
+            firstID = ["A", "B", "C", "D", "E", "F",
+                       "G", "H", "I", "J", "K", "L",
+                       "M", "N", "O", "P", "Q", "R",
+                       "S", "T", "U", "V", "W", "X",
+                       "Y", "Z"]
 
             j = i
-            
+
             while j+1 > 26:
-            
+
                 matchLetter += firstID[int(j + 1) % 26 - 1]
-                
+
                 j = (j + 1) / 26 - 1
-                
+
             matchLetter += firstID[int(j+1) % 26-1]
-            
+
             matchLetter = matchLetter[::-1]
-                
-            matchID = []    
-                
+
+            matchID = []
+
             for ix in range(len(l1)-1):
 
                 matchID += [matchLetter+str(ix)]
