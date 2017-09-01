@@ -194,44 +194,46 @@ class Fight:
     async def _rr_update(self, matchID, ):
         await self.bot.say("rr update todo")
         
-    def _rr_schedule(list):
-    """ Create a schedule for the teams in the list and return it"""
+    def _rr_schedule(inlist):
+    def create_schedule(inlist):
+        """ Create a schedule for the teams in the list and return it"""
         s = []
         
-        if len(list) % 2 == 1: list = list + ["BYE"]
+        if len(inlist) % 2 == 1: inlist = inlist + ["BYE"]
 
-        for i in range(len(list)-1):
+        for i in range(len(inlist)-1):
 
-            mid = int(len(list) / 2)
-            l1 = list[:mid]
-            l2 = list[mid:]
+            mid = int(len(inlist) / 2)
+            l1 = inlist[:mid]
+            l2 = inlist[mid:]
             l2.reverse()
             
-            matchID=""
+            matchLetter=""
             firstID = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-            if j
-            while j >= 25:
+
+            j=i
             
-                matchID += firstID[int(j)%26-1]
-                
-                j = j / 26
-                
-                
-                
+            while j+1 > 26:
             
-            for ix in range(len(l1)-1)
+                matchLetter += firstID[int(j+1)%26-1]
                 
-                matchID = matchID + [+]
+                j = (j+1)/26 -1
+                
+            matchLetter += firstID[int(j+1)%26-1]
             
-            # Switch sides after each round
-            if(i % 2 == 1):
-                s = s + [ list(zip(l1, l2)) + [matchID] ]
-            else:
-                s = s + [ list(zip(l2, l1)) + [matchID] ]
+            matchLetter = matchLetter[::-1]
+                
+            matchID = []    
+                
+            for ix in range(len(l1)-1):
+                
+                matchID += [matchLetter+str(ix)]
             
-            list.insert(1, list.pop())
-            matchID += 1
+            s = s + [ list(zip(l1, l2, matchID)) ]
             
+            
+            inlist.insert(1, inlist.pop())
+                    
         return s
         
         
