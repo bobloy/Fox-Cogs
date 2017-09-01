@@ -126,7 +126,7 @@ class Fight:
         Self Report: True
         Type: 0 (Round Robin)"""
 
-        tourID = len(currServ["TOURNEYS"])  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
+        tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
         currServ["TOURNEYS"][tourID] = ["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0], "TYPEDATA": []]
 
