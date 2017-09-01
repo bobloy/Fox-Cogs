@@ -91,7 +91,10 @@ class Fight:
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
         server = ctx.message.server
-
+        self.the_data[server.id] = {
+            "CURRENT": None,
+            "TOURNEYS": {}
+        }
         if server.id not in self.the_data:
             self.the_data[server.id] = {
                 "CURRENT": None,
