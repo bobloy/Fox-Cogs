@@ -7,8 +7,9 @@ from .utils import checks
 from random import randint
 
 
-#0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
+# 0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
 T_TYPES = ["Round Robin", "Single Elimination", "Double Elimination", "Triple Elimination", "3 Game Guarentee", "Compass Draw"]
+
 
 class Fight:
     """Cog for organizing tournaments"""
@@ -24,17 +25,16 @@ class Fight:
         dataIO.save_json(self.file_path, self.the_data)
 
 
-#************************Fight command group start************************
+# ************************Fight command group start************************
     @commands.group(pass_context=True, no_pm=True)
     async def fight(self, ctx):
         """Participate in active tournaments!"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-            #await self.bot.say("I can do stuff!")
+            # await self.bot.say("I can do stuff!")
         
         server = ctx.message.server
         
-               
         if self._currTourny(server):
             await self.bot.say("No tournament currently running!")
         else:
@@ -43,7 +43,7 @@ class Fight:
     @fight.command(name="join")
     async def fight_join(self, ctx, user: discord.Member):
         """Join the active brawl"""
-        #Your code will go here
+        # Your code will go here
         if not user:
             user = ctx.message.author
         await self.bot.say("ONE PUNCH! And " + user.mention + " is out! ლ(ಠ益ಠლ)")
@@ -72,17 +72,17 @@ class Fight:
             run [p]fight bracket full to see all matches"""
         await self.bot.say("Todo Bracket")
 
-        #Your code will go here
+        # Your code will go here
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-        #await self.bot.say("I can do stuff!")
+        # await self.bot.say("I can do stuff!")
 
     @bracket.command()
     async def full(self, ctag):
         """Shows the full bracket"""
         await self.bot.say("Todo Bracket Full")
 
-#**********************Fightset command group start*********************
+# **********************Fightset command group start*********************
     @commands.group(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
     async def fightset(self, ctx):
@@ -100,7 +100,7 @@ class Fight:
 
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-        #await self.bot.say("I can do stuff!")
+        # await self.bot.say("I can do stuff!")
     
     @fightset.command()
     async def bestof(self, incount):
@@ -123,15 +123,13 @@ class Fight:
         Self Report: True
         Type: 0 (Round Robin)"""
         
-        
-        tourID = len(currServ["TOURNEYS"]) #Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
+        tourID = len(currServ["TOURNEYS"])  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
-        currServ["TOURNEYS"][tourID] = ["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0], "TYPEDATA": [] ]
+        currServ["TOURNEYS"][tourID] = ["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": ["BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0], "TYPEDATA": []]
         
         self.save_data()
         
         self._rr_setup(tourID)
-        
         
     @fightset.command()
     async def stop(self):
@@ -139,7 +137,7 @@ class Fight:
         currServ["CURRENT"] = None
         await self.bot.say("Todo Fightset Stop")
 
-#**********************Private command group start*********************
+# **********************Private command group start*********************
     async def _activefight(self):
         """Checks if there is an active tournament already"""
         await self.bot.say("_activefight Todo")
@@ -163,9 +161,9 @@ class Fight:
         return discord.utils.get(self.bot.servers, id=serverid)
         
     def _currTourny(self, server):
-        return self.the_data[server.id]["CURRENT"] == None
+        return self.the_data[server.id]["CURRENT"] is None
 
-#**********************Single Elimination***************************
+# **********************Single Elimination***************************
     async def _elim_setup(self, tID):
         await self.bot.say("Elim setup todo")
     
@@ -176,7 +174,7 @@ class Fight:
         await self.bot.say("Elim update todo")
         
         
-#**********************Round-Robin**********************************
+# **********************Round-Robin**********************************
     async def _rr_setup(self, tID):
     
         theT = self.the_data["TOURNEYS"][tID]
@@ -195,11 +193,11 @@ class Fight:
         await self.bot.say("rr update todo")
         
     def _rr_schedule(inlist):
-    def create_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
         s = []
         
-        if len(inlist) % 2 == 1: inlist = inlist + ["BYE"]
+        if len(inlist) % 2 == 1: 
+            inlist = inlist + ["BYE"]
 
         for i in range(len(inlist)-1):
 
@@ -211,32 +209,31 @@ class Fight:
             matchLetter=""
             firstID = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 
-            j=i
+            j = i
             
             while j+1 > 26:
             
-                matchLetter += firstID[int(j+1)%26-1]
+                matchLetter += firstID[int(j + 1) % 26 - 1]
                 
-                j = (j+1)/26 -1
+                j = (j + 1) / 26 - 1
                 
-            matchLetter += firstID[int(j+1)%26-1]
+            matchLetter += firstID[int(j+1) % 26-1]
             
             matchLetter = matchLetter[::-1]
                 
             matchID = []    
                 
             for ix in range(len(l1)-1):
-                
+
                 matchID += [matchLetter+str(ix)]
-            
-            s = s + [ list(zip(l1, l2, matchID)) ]
-            
-            
+
+            s = s + [list(zip(l1, l2, matchID))]
+
             inlist.insert(1, inlist.pop())
-                    
+
         return s
-        
-        
+
+
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")
