@@ -21,7 +21,7 @@ class Immortal:
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
 
-    def adj_roles(self, server, author, member: discord.Member=None, rrole_names=[], arole_name=[]):
+    def adj_roles(self, server, author, member: discord.Member=None, rrole_names=[], arole_names=[]):
         # Thank you SML for the addrole code
         # https://github.com/smlbiobot/SML-Cogs/tree/master/mm
         adj_sucess = False
