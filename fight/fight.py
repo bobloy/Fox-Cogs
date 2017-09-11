@@ -131,7 +131,10 @@ class Fight:
 
         tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
-        currServ["TOURNEYS"][tourID] = ["PLAYERS": [], "NAME": "Tourney "+str(tourID), "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0}, "TYPEDATA": {}]
+        currServ["TOURNEYS"][tourID] = {"PLAYERS": [],
+                                        "NAME": "Tourney "+str(tourID),
+                                        "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0},
+                                        "TYPEDATA": {}}
 
         self.save_data()
 
@@ -162,17 +165,17 @@ class Fight:
 
     async def _parsemember(self):
         await self.bot.say("Parsemember Todo")
-        
+
     def _get_server_from_id(self, serverid):
         return discord.utils.get(self.bot.servers, id=serverid)
-        
+
     def _currTourny(self, server):
         return self.the_data[server.id]["CURRENT"] is None
 
 # **********************Single Elimination***************************
     async def _elim_setup(self, tID):
         await self.bot.say("Elim setup todo")
-    
+
     async def _elim_start(self, tID):
         await self.bot.say("Elim start todo")
 
@@ -182,7 +185,7 @@ class Fight:
 
 # **********************Round-Robin**********************************
     async def _rr_setup(self, tID):
-    
+
         theT = self.the_data["TOURNEYS"][tID]
 
         theD = theT["TYPEDATA"]
@@ -190,14 +193,14 @@ class Fight:
         theD = []
 
         await self.bot.say("RR setup todo")
-    
+
     async def _rr_start(self, tID):
         theT = self.the_data["TOURNEYS"]
         await self.bot.say("RR start todo")
 
     async def _rr_update(self, matchID, ):
         await self.bot.say("rr update todo")
-        
+
     def _rr_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
         s = []
