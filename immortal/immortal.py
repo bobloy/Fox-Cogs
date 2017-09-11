@@ -20,8 +20,8 @@ class Immortal:
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
-        
-    def adj_roles(self, server, author, member: discord.Member=None, rrole_names = [], arole_names = []):
+
+    def adj_roles(self, server, author, member: discord.Member=None, rrole_names=[], arole_name=[]):
         # Thank you SML for the addrole code
         # https://github.com/smlbiobot/SML-Cogs/tree/master/mm
         adj_sucess = False
@@ -46,7 +46,7 @@ class Immortal:
 
         else:
             adj_sucess = True
-        
+
         return adj_sucess
 
     @commands.command(pass_context=True, no_pm=True)
@@ -67,7 +67,7 @@ class Immortal:
                 await self.bot.send_message(member, "You are being sent on Vacation! :tada: Please relocate " +
                                                     "to Immortal Resort (#889L92UQ) when you find the time.\n" +
                                                     "You'll have limited access to the server until you rejoin a main clan")
-                                                    
+
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
     async def iphantom(self, ctx, member: discord.Member=None):
@@ -82,7 +82,7 @@ class Immortal:
             arole_names = ["Member", "Phantom"]
             if self.adj_roles(server, author, member, role_names, arole_names):
                 self.send_welcome(member)
-    
+
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
     async def ieternal(self, ctx, member: discord.Member=None):
@@ -131,7 +131,7 @@ class Immortal:
         server = ctx.message.server
         if 'WELCOMECHANNEL' not in self.the_data[server.id]:
             self.the_data[server.id]['WELCOMECHANNEL'] = ''
-        
+
         self.the_data[server.id]['WELCOMECHANNEL'] = ctx.message.channel.id
         self.save_data()
         await self.bot.say("Welcome Channel set to "+ctx.message.channel.name)
@@ -140,12 +140,12 @@ class Immortal:
         server = member.server
         if server.id in self.the_data:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['WELCOMECHANNEL']),
-                                        "You now have access to the server, "+ member.mention + "\n"
-                                        +"Check #information & #announcements for clan rules etc.\n"
-                                        +"We recommend turning all message notifications on for #announcements"
-                                        +" if you want to know when tourneys are posted and other important info.\n"
-                                        +"You can also type `!help` for a list of bot commands/features.")
-        
+                                        "You now have access to the server, " + member.mention + "\n" +
+                                        "Check #information & #announcements for clan rules etc.\n" +
+                                        "We recommend turning all message notifications on for #announcements" +
+                                        " if you want to know when tourneys are posted and other important info.\n" +
+                                        "You can also type `!help` for a list of bot commands/features.")
+
 #    @immortalset.command(pass_context=True)
 #    async def channel(self, ctx):
 #        server = ctx.message.server
