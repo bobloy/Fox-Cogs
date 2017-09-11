@@ -146,8 +146,9 @@ class Immortal:
         if server.id in self.the_data:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['WELCOMECHANNEL']),
                                         "You now have access to the server, " + member.mention + "\n" +
-                                        "Check #information & #announcements for clan rules etc.\n" +
-                                        "We recommend turning all message notifications on for #announcements" +
+                                        "Check " + server.get_channel("257557008662790145").mention + " & " +
+                                        server.get_channel("257560603093106688").mention+" for clan rules etc.\n" +
+                                        "We recommend turning all message notifications on for " + server.get_channel("257560603093106688").mention +
                                         " if you want to know when tourneys are posted and other important info.\n" +
                                         "You can also type `!help` for a list of bot commands/features.")
 
