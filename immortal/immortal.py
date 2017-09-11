@@ -81,7 +81,8 @@ class Immortal:
             arole_names = ["Member", "Phantom"]
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Phantom" in [r.name for r in member.roles]:
-                self.send_welcome(member)
+                await self.bot.say("Success")
+                await self.send_welcome(member)
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
@@ -97,7 +98,8 @@ class Immortal:
             arole_names = ["Member", "Eternal"]
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Eternal" in [r.name for r in member.roles]:
-                self.send_welcome(member)
+                await self.bot.say("Success")
+                await self.send_welcome(member)
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
@@ -113,7 +115,8 @@ class Immortal:
             arole_names = ["Member", "Immortal"]
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Immortal" in [r.name for r in member.roles]:
-                self.send_welcome(member)
+                await self.bot.say("Success")
+                await self.send_welcome(member)
 
     @commands.group(aliases=['setimmortal'], pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
