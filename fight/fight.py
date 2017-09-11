@@ -128,7 +128,8 @@ class Fight:
         Best of (final): 1
         Self Report: True
         Type: 0 (Round Robin)"""
-
+        
+        currServ = self.the_data[server.id]
         tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
         currServ["TOURNEYS"][tourID] = {"PLAYERS": [],
@@ -143,7 +144,12 @@ class Fight:
     @fightset.command()
     async def stop(self):
         """Stops current tournament"""
+        
+        currServ = self.the_data[server.id]
         currServ["CURRENT"] = None
+        
+        self.save_data()
+        
         await self.bot.say("Todo Fightset Stop")
 
 # **********************Private command group start*********************
