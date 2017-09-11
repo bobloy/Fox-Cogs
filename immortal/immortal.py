@@ -24,7 +24,7 @@ class Immortal:
     async def adj_roles(self, server, author, member: discord.Member=None, rrole_names=[], arole_names=[]):
         # Thank you SML for the addrole code
         # https://github.com/smlbiobot/SML-Cogs/tree/master/mm
-        adj_sucess = False
+        
         rroles = [r for r in server.roles if r.name in rrole_names]
         aroles = [r for r in server.roles if r.name in arole_names]
         try:
@@ -44,10 +44,8 @@ class Immortal:
         except:
             await self.bot.say("Unknown Exception")
 
-        else:
-            adj_sucess = True
+        
 
-        return adj_sucess
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
@@ -61,7 +59,8 @@ class Immortal:
             author = ctx.message.author
             role_names = ["Member", "Immortal", "Eternal", "Phantom", "Ghost", "Undead", "Revenant", "Crypt", "Relocate", "Guest"]
             arole_names = ["Resort"]
-            if self.adj_roles(server, author, member, role_names, arole_names):
+            await self.adj_roles(server, author, member, role_names, arole_names)
+            if "Resort" in [r.name for r in member.roles]:
                 await self.bot.say("You are being sent on Vacation! :tada:" +
                                    "Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
                 await self.bot.send_message(member, "You are being sent on Vacation! :tada: Please relocate " +
@@ -80,7 +79,8 @@ class Immortal:
             author = ctx.message.author
             role_names = ["Immortal", "Eternal", "Ghost", "Undead", "Revenant", "Crypt", "Relocate", "Guest", "Resort"]
             arole_names = ["Member", "Phantom"]
-            if self.adj_roles(server, author, member, role_names, arole_names):
+            await self.adj_roles(server, author, member, role_names, arole_names)
+            if "Phantom" in [r.name for r in member.roles]:
                 self.send_welcome(member)
 
     @commands.command(pass_context=True, no_pm=True)
@@ -95,7 +95,8 @@ class Immortal:
             author = ctx.message.author
             role_names = ["Immortal", "Phantom", "Ghost", "Undead", "Revenant", "Crypt", "Relocate", "Guest", "Resort"]
             arole_names = ["Member", "Eternal"]
-            if self.adj_roles(server, author, member, role_names, arole_names):
+            await self.adj_roles(server, author, member, role_names, arole_names)
+            if "Eternal" in [r.name for r in member.roles]:
                 self.send_welcome(member)
 
     @commands.command(pass_context=True, no_pm=True)
@@ -110,7 +111,8 @@ class Immortal:
             author = ctx.message.author
             role_names = ["Eternal", "Phantom", "Ghost", "Undead", "Revenant", "Crypt", "Relocate", "Guest", "Resort"]
             arole_names = ["Member", "Immortal"]
-            if self.adj_roles(server, author, member, role_names, arole_names):
+            await self.adj_roles(server, author, member, role_names, arole_names)
+            if "Immortal" in [r.name for r in member.roles]:
                 self.send_welcome(member)
 
     @commands.group(aliases=['setimmortal'], pass_context=True, no_pm=True)
