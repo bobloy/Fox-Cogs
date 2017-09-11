@@ -70,7 +70,7 @@ class Immortal:
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
     async def iphantom(self, ctx, member: discord.Member=None):
-        """Sends someone on vacation!"""
+        """Sends someone to Phantom!"""
 
         if member is None:
             await self.bot.send_cmd_help(ctx)
@@ -87,7 +87,7 @@ class Immortal:
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
     async def ieternal(self, ctx, member: discord.Member=None):
-        """Sends someone on vacation!"""
+        """Sends someone to Eternal!"""
 
         if member is None:
             await self.bot.send_cmd_help(ctx)
@@ -104,7 +104,7 @@ class Immortal:
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
     async def iimmortal(self, ctx, member: discord.Member=None):
-        """Sends someone on vacation!"""
+        """Sends someone to Immortal!"""
 
         if member is None:
             await self.bot.send_cmd_help(ctx)
