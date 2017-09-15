@@ -37,40 +37,48 @@ class Fight:
 
         server = ctx.message.server
 
-        if self._currTourny(server):
+        if self._isrunningFight(server):
             await self.bot.say("No tournament currently running!")
         else:
-            currTourny = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
+            await self.bot.say("Current tournament ID: " + self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]])
 
-    @fight.command(name="join")
+    @fight.command(name="join", pass_context=True)
     async def fight_join(self, ctx, user: discord.Member):
         """Join the active brawl"""
         # Your code will go here
         if not user:
             user = ctx.message.author
-        await self.bot.say("ONE PUNCH! And " +
-                           user.mention + " is out! ლ(ಠ益ಠლ)")
 
-    @fight.command()
-    async def score(self, ctx, gameID):
+        server = ctx.message.server
+
+        if self._isrunningFight(server):
+            await self.bot.say("No tournament currently running!")
+        else:
+            currFight = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
+            
+            
+        
+
+    @fight.command(name="score", pass_context=True)
+    async def fight_score(self, ctx, gameID):
         if gameID is None:
-            if ctx.message.author not in currTourny["PLAYERS"]:
+            if ctx.message.author not in currFight["PLAYERS"]:
                 await self.bot.say("You are not in a current tournament")
         """Enters score for current match, or for passed game ID"""
         await self.bot.say("Todo Score")
 
-    @fight.command()
-    async def leave(self):
+    @fight.command(name="leave", pass_context=True)
+    async def fight_leave(self, ctx):
         """Forfeit your match and all future matches"""
         await self.bot.say("Todo Leave")
 
-    @fight.command()
-    async def leaderboard(self, ctag, ckind="Unranked", irank=0):
+    @fight.command(name="leaderboard", pass_context=True)
+    async def fight_leaderboard(self, ctx, ctag, ckind="Unranked", irank=0):
         """Adds clan to grab-list"""
         await self.bot.say("Todo Leaderboard")
 
-    @fight.group(pass_context=True)
-    async def bracket(self, ctx, ctag):
+    @fight.group(name="bracket", pass_context=True)
+    async def fight_bracket(self, ctx, ctag):
         """Shows your current match your next opponent,
             run [p]fight bracket full to see all matches"""
         await self.bot.say("Todo Bracket")
@@ -80,13 +88,20 @@ class Fight:
             await self.bot.send_cmd_help(ctx)
         # await self.bot.say("I can do stuff!")
 
-    @bracket.command()
-    async def full(self, ctag):
+    @bracket.command(name="full")
+    async def fight_bracket_full(self, ctag):
         """Shows the full bracket"""
         await self.bot.say("Todo Bracket Full")
 
 # **********************Fightset command group start*********************
-    @commands.group(pass_context=True, no_pm=True)
+    def fightsetdec(func):
+        async def decorated(self, ctx, *args, **kwargs):
+            server = ctx.message.server
+            await func(self, ctx, server, *args, **kwargs)
+        return decorated
+
+    
+    @commands.group(pass_context=True, no_pm=True, aliases=['setfight'])
     @checks.mod_or_permissions(administrator=True)
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
@@ -102,25 +117,32 @@ class Fight:
             }
             self.save_data()
 
-        currServ = self.the_data[server.id]
 
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
         # await self.bot.say("I can do stuff!")
 
-    @fightset.command()
-    async def bestof(self, incount):
+    @fightset.command(name="bestof")
+    async def fightset_bestof(self, incount):
         """Adjust # of games played per match. Must be an odd number"""
         await self.bot.say("Todo Fightset Bestof")
 
-    @fightset.command()
-    async def bestoffinal(self):
+    @fightset.command(name="bestoffinal")
+    async def fightset_bestoffinal(self):
         """Adjust # of games played in finals. Must be an odd number
         (Does not apply to tournament types without finals, such as Round Robin)"""
         await self.bot.say("Todo Fightset Score")
-
-    @fightset.command()
-    async def setup(self):
+    
+    @fightset.command(name="toggleopen")
+    async def fightset_toggleopen(self, ctx):
+        """Toggles the open status of current tournament"""
+        
+        
+        await self.bot.say("Tournament Open status: " + str())
+        
+        
+    @fightset.command(name="setup", pass_context=True)
+    async def fightset_setup(self, ctx):
         """Setup a new tournament!
         Default settings are as follows
         Name: Tourny # (counts from 0)
@@ -135,14 +157,17 @@ class Fight:
         currServ["TOURNEYS"][tourID] = {"PLAYERS": [],
                                         "NAME": "Tourney "+str(tourID),
                                         "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0},
-                                        "TYPEDATA": {}}
-
+                                        "TYPEDATA": {},
+                                        "OPEN": False }
+        
         self.save_data()
+        
+        await self.bot.say("Tournament has been created!\n\n" + str(currServ["TOURNEYS"][tourID]))
+        
+        await self.bot.say("Adjust settings as necessary, then open the tournament with [p]fightset toggleopen")
 
-        self._rr_setup(tourID)
-
-    @fightset.command()
-    async def stop(self):
+    @fightset.command(name="stop")
+    async def fightset_stop(self):
         """Stops current tournament"""
         
         currServ = self.the_data[server.id]
@@ -175,7 +200,7 @@ class Fight:
     def _get_server_from_id(self, serverid):
         return discord.utils.get(self.bot.servers, id=serverid)
 
-    def _currTourny(self, server):
+    def _isrunningFight(self, server):
         return self.the_data[server.id]["CURRENT"] is None
 
 # **********************Single Elimination***************************
@@ -190,27 +215,54 @@ class Fight:
 
 
 # **********************Round-Robin**********************************
-    async def _rr_setup(self, tID):
+    def _rr_setup(self, tID):
 
         theT = self.the_data["TOURNEYS"][tID]
-
         theD = theT["TYPEDATA"]
 
-        theD = []
+        theD = {"SCHEDULE": _rr_schedule(theT["PLAYERS"]), "RESULTS": {} }
 
-        await self.bot.say("RR setup todo")
-
+        
+    await def _rr_printround(self, tID, rID):
+        
+        theT = self.the_data["TOURNEYS"][tID]
+        theD = theT["TYPEDATA"]
+        
+        await self.bot.say("Round "+str(rID))
+       
+        for match in theD["SCHEDULE"][rID]:
+            await self.bot.say(match[0] + " vs " + match[1] + " || Match ID: " + match[2])
+            
+        
     async def _rr_start(self, tID):
-        theT = self.the_data["TOURNEYS"]
-        await self.bot.say("RR start todo")
+        
+        self._rr_setup(tID)
+        
+        await self.bot.say("**Tournament is Starting**")
+        
+        await self._rr_printround(tID)
 
-    async def _rr_update(self, matchID, ):
-        await self.bot.say("rr update todo")
+      
+    async def _rr_update(self, matchID):
+    
+        await self.bot.say("Entering scores for match ID: " + matchID + "\n\n")
+        
+        theT = self.the_data["TOURNEYS"][tID]
+        theD = theT["TYPEDATA"]
+        
+        
+        await self.bot.say("How many points did " + theD["SCHEDULE"])
 
     def _rr_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
         s = []
-
+        
+        firstID = ["A", "B", "C", "D", "E", "F",
+                       "G", "H", "I", "J", "K", "L",
+                       "M", "N", "O", "P", "Q", "R",
+                       "S", "T", "U", "V", "W", "X",
+                       "Y", "Z"]
+                       
         if len(inlist) % 2 == 1:
             inlist = inlist + ["BYE"]
 
@@ -222,12 +274,7 @@ class Fight:
             l2.reverse()
 
             matchLetter = ""
-            firstID = ["A", "B", "C", "D", "E", "F",
-                       "G", "H", "I", "J", "K", "L",
-                       "M", "N", "O", "P", "Q", "R",
-                       "S", "T", "U", "V", "W", "X",
-                       "Y", "Z"]
-
+            
             j = i
 
             while j+1 > 26:
@@ -246,11 +293,15 @@ class Fight:
 
                 matchID += [matchLetter+str(ix)]
 
-            s = s + [list(zip(l1, l2, matchID))]
+            s += [list(zip(l1, l2, matchID))]
 
             inlist.insert(1, inlist.pop())
-
-        return s
+        
+        t = {}
+        for iix in s:
+            t[iix[2]] = iix[:2]
+            
+        return t
 
 
 def check_folders():
