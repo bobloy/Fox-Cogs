@@ -85,7 +85,7 @@ class Fight:
             await self.bot.send_cmd_help(ctx)
         # await self.bot.say("I can do stuff!")
 
-    @bracket.command(name="full")
+    @fight_bracket.command(name="full")
     async def fight_bracket_full(self, ctag):
         """Shows the full bracket"""
         await self.bot.say("Todo Bracket Full")
