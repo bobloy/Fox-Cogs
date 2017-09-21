@@ -55,9 +55,6 @@ class Fight:
             await self.bot.say("No tournament currently running!")
         else:
             currFight = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
-            
-            
-        
 
     @fight.command(name="score", pass_context=True)
     async def fight_score(self, ctx, gameID):
@@ -100,7 +97,6 @@ class Fight:
             await func(self, ctx, server, *args, **kwargs)
         return decorated
 
-    
     @commands.group(pass_context=True, no_pm=True, aliases=['setfight'])
     @checks.mod_or_permissions(administrator=True)
     async def fightset(self, ctx):
@@ -116,7 +112,6 @@ class Fight:
                 "TOURNEYS": {}
             }
             self.save_data()
-
 
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
@@ -136,11 +131,9 @@ class Fight:
     @fightset.command(name="toggleopen")
     async def fightset_toggleopen(self, ctx):
         """Toggles the open status of current tournament"""
-        
-        
+
         await self.bot.say("Tournament Open status: " + str())
-        
-        
+
     @fightset.command(name="setup", pass_context=True)
     async def fightset_setup(self, ctx):
         """Setup a new tournament!
@@ -150,7 +143,7 @@ class Fight:
         Best of (final): 1
         Self Report: True
         Type: 0 (Round Robin)"""
-        
+
         currServ = self.the_data[server.id]
         tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
@@ -158,7 +151,7 @@ class Fight:
                                         "NAME": "Tourney "+str(tourID),
                                         "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0},
                                         "TYPEDATA": {},
-                                        "OPEN": False }
+                                        "OPEN": False}
         
         self.save_data()
         
@@ -220,36 +213,32 @@ class Fight:
         theT = self.the_data["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
 
-        theD = {"SCHEDULE": _rr_schedule(theT["PLAYERS"]), "RESULTS": {} }
+        theD = {"SCHEDULE": _rr_schedule(theT["PLAYERS"]), "RESULTS": {}}
 
-        
     await def _rr_printround(self, tID, rID):
-        
+
         theT = self.the_data["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
-        
+
         await self.bot.say("Round "+str(rID))
-       
+
         for match in theD["SCHEDULE"][rID]:
             await self.bot.say(match[0] + " vs " + match[1] + " || Match ID: " + match[2])
-            
-        
+
     async def _rr_start(self, tID):
-        
+
         self._rr_setup(tID)
-        
+
         await self.bot.say("**Tournament is Starting**")
-        
+
         await self._rr_printround(tID)
 
-      
     async def _rr_update(self, matchID):
-    
+
         await self.bot.say("Entering scores for match ID: " + matchID + "\n\n")
         
         theT = self.the_data["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
-        
         
         await self.bot.say("How many points did " + theD["SCHEDULE"])
 
@@ -258,10 +247,10 @@ class Fight:
         s = []
         
         firstID = ["A", "B", "C", "D", "E", "F",
-                       "G", "H", "I", "J", "K", "L",
-                       "M", "N", "O", "P", "Q", "R",
-                       "S", "T", "U", "V", "W", "X",
-                       "Y", "Z"]
+                   "G", "H", "I", "J", "K", "L",
+                   "M", "N", "O", "P", "Q", "R",
+                   "S", "T", "U", "V", "W", "X",
+                   "Y", "Z"]
                        
         if len(inlist) % 2 == 1:
             inlist = inlist + ["BYE"]
