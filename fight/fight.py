@@ -143,7 +143,8 @@ class Fight:
         Best of (final): 1
         Self Report: True
         Type: 0 (Round Robin)"""
-
+        
+        server = ctx.message.server
         currServ = self.the_data[server.id]
         tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
@@ -159,10 +160,11 @@ class Fight:
         
         await self.bot.say("Adjust settings as necessary, then open the tournament with [p]fightset toggleopen")
 
-    @fightset.command(name="stop")
-    async def fightset_stop(self):
+    @fightset.command(name="stop", pass_context=True)
+    async def fightset_stop(self,ctx):
         """Stops current tournament"""
         
+        server = ctx.message.server
         currServ = self.the_data[server.id]
         currServ["CURRENT"] = None
         
