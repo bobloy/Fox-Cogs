@@ -215,7 +215,7 @@ class Fight:
 
         theD = {"SCHEDULE": _rr_schedule(theT["PLAYERS"]), "RESULTS": {}}
 
-    await def _rr_printround(self, tID, rID):
+    async def _rr_printround(self, tID, rID):
 
         theT = self.the_data["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
