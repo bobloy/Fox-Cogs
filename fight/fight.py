@@ -38,10 +38,10 @@ class Fight:
 
         self.server = ctx.message.server
 
-        if self._isrunningFight(server):
+        if self._isrunningFight(self.server):
             await self.bot.say("No tournament currently running!")
         else:
-            await self.bot.say("Current tournament ID: " + self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]])
+            await self.bot.say("Current tournament ID: " + self.the_data[self.server.id]["TOURNEYS"][self.the_data[self.server.id]["CURRENT"]])
 
     @fight.command(name="join", pass_context=True)
     async def fight_join(self, ctx, user: discord.Member):
@@ -50,12 +50,10 @@ class Fight:
         if not user:
             user = ctx.message.author
 
-        server = ctx.message.server
-
-        if self._isrunningFight(server):
+        if self._isrunningFight(self.server):
             await self.bot.say("No tournament currently running!")
         else:
-            currFight = self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
+            currFight = self.the_data[self.server.id]["TOURNEYS"][self.the_data[self.server.id]["CURRENT"]]
 
     @fight.command(name="score", pass_context=True)
     async def fight_score(self, ctx, gameID):
@@ -92,11 +90,11 @@ class Fight:
         await self.bot.say("Todo Bracket Full")
 
 # **********************Fightset command group start*********************
-    def fightsetdec(func):
-        async def decorated(self, ctx, *args, **kwargs):
-            server = ctx.message.server
-            await func(self, ctx, server, *args, **kwargs)
-        return decorated
+    # def fightsetdec(func):
+        # async def decorated(self, ctx, *args, **kwargs):
+            # server = ctx.message.server
+            # await func(self, ctx, server, *args, **kwargs)
+        # return decorated
 
     @commands.group(pass_context=True, no_pm=True, aliases=['setfight'])
     @checks.mod_or_permissions(administrator=True)
@@ -124,38 +122,60 @@ class Fight:
         if not _activefight:
             await self.bot.say("No active fight to adjust")
             return
-           
-        server = ctx.message.server
+
         try:
             num = int(incount)
         except:
             await self.bot.say("That is not a number")
             return
-        
-        
+
+
         await self.bot.say("Todo Fightset Bestof")
 
     @fightset.command(name="bestoffinal")
-    async def fightset_bestoffinal(self):
+    async def fightset_bestoffinal(self, gamenum):
         """Adjust # of games played in finals. Must be an odd number
         (Does not apply to tournament types without finals, such as Round Robin)"""
         if not _activefight:
             await self.bot.say("No active fight to adjust")
             return
+        
+        try:
+            gamenum = int(gamenum)
+        except:
+            await self.bot.say("Must be a number")
+            return
+        
+        
+        if gamenum%2 >= 1:
+            await self.bot.say("Must be an odd number")
+            return
             
-        await self.bot.say("Todo Fightset Score")
-    
+        currFight = _getcurrentFight(self.server)
+        
+        currFight["RULES"]["BESTOF"] = gamenum
+        
+        self.save_data()
+        
+        await self.bot.say("Tournament BestOf is now set to:" + str(currFight["RULES"]["BESTOF"]))
+
     @fightset.command(name="toggleopen")
     async def fightset_toggleopen(self, ctx):
         """Toggles the open status of current tournament"""
         if not _activefight:
             await self.bot.say("No active fight to adjust")
             return
+        
+        currFight = _getcurrentFight(self.server)
+        
+        currFight["OPEN"] = not currFight["OPEN"]
+        
+        self.save_data()
+        
+        await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
 
-        await self.bot.say("Tournament Open status: " + str())
-
-    @fightset.command(name="setup", pass_context=True)
-    async def fightset_setup(self, ctx):
+    @fightset.command(name="setup")
+    async def fightset_setup(self):
         """Setup a new tournament!
         Default settings are as follows
         Name: Tourny # (counts from 0)
@@ -163,21 +183,21 @@ class Fight:
         Best of (final): 1
         Self Report: True
         Type: 0 (Round Robin)"""
-        
-        server = ctx.message.server
-        currServ = self.the_data[server.id]
+
+        currServ = self.the_data[self.server.id]
         tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
         currServ["CURRENT"] = tourID
         currServ["TOURNEYS"][tourID] = {"PLAYERS": [],
                                         "NAME": "Tourney "+str(tourID),
                                         "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0},
                                         "TYPEDATA": {},
-                                        "OPEN": False}
-        
+                                        "OPEN": False,
+                                        "WINNER": None}
+
         self.save_data()
-        
+
         await self.bot.say("Tournament has been created!\n\n" + str(currServ["TOURNEYS"][tourID]))
-        
+
         await self.bot.say("Adjust settings as necessary, then open the tournament with [p]fightset toggleopen")
 
     @fightset.command(name="stop", pass_context=True)
@@ -186,25 +206,24 @@ class Fight:
         if not _activefight:
             await self.bot.say("No active fight to adjust")
             return
-        
-        server = ctx.message.server
+
         author = ctx.message.author
-        currServ = self.the_data[server.id]
-        
+        currServ = self.the_data[self.server.id]
+
         await self.bot.say("Current fight ID is "+str(currServ["CURRENT"])+"\nOKay to stop? yes/no")
-        
+
         answer = await self.bot.wait_for_message(timeout=120, author=author)
-        
+
         if not answer.upper() in ["YES", "Y"]:
             await self.bot.say("Cancelled")
             return
-            
+
         currServ["CURRENT"] = None
-        
+
         self.save_data()
         await self.bot.say("Fight has been stopped")
-        
-        
+
+
 
 # **********************Private command group start*********************
     async def _activefight(self):
@@ -231,6 +250,12 @@ class Fight:
 
     def _isrunningFight(self, server):
         return self.the_data[server.id]["CURRENT"] is None
+        
+    def _getcurrentFight(self, server):
+        if not _isrunningFight(server):
+            return None
+
+        return self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
 
 # **********************Single Elimination***************************
     async def _elim_setup(self, tID):
