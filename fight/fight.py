@@ -14,14 +14,15 @@ T_TYPES = ["Round Robin", "Single Elimination",
 
 
 class Fight:
-    """Cog for organizing tournaments"""
+    """Cog for organizing fights"""
 
     def __init__(self, bot):
         self.bot = bot
         self.path = "data/Fox-Cogs/fight/"
         self.file_path = "data/Fox-Cogs/fight/fight.json"
         self.the_data = dataIO.load_json(self.file_path)
-
+        self.server = None
+        
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
@@ -30,12 +31,12 @@ class Fight:
 # ************************Fight command group start************************
     @commands.group(pass_context=True, no_pm=True)
     async def fight(self, ctx):
-        """Participate in active tournaments!"""
+        """Participate in active fights!"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
             # await self.bot.say("I can do stuff!")
 
-        server = ctx.message.server
+        self.server = ctx.message.server
 
         if self._isrunningFight(server):
             await self.bot.say("No tournament currently running!")
@@ -101,13 +102,13 @@ class Fight:
     @checks.mod_or_permissions(administrator=True)
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
-        server = ctx.message.server
-        self.the_data[server.id] = {
+        self.server = ctx.message.server
+        self.the_data[self.server.id] = {
             "CURRENT": None,
             "TOURNEYS": {}
         }
-        if server.id not in self.the_data:
-            self.the_data[server.id] = {
+        if self.server.id not in self.the_data:
+            self.the_data[self.server.id] = {
                 "CURRENT": None,
                 "TOURNEYS": {}
             }
@@ -117,20 +118,36 @@ class Fight:
             await self.bot.send_cmd_help(ctx)
         # await self.bot.say("I can do stuff!")
 
-    @fightset.command(name="bestof")
-    async def fightset_bestof(self, incount):
+    @fightset.command(name="bestof", pass_context=True)
+    async def fightset_bestof(self, ctx, incount):
         """Adjust # of games played per match. Must be an odd number"""
+        if not _activefight:
+            await self.bot.say("No active fight to adjust")
+            return
+           
+        server = ctx.message.server
+        try:
+            num = int(incount)
+            
+            
         await self.bot.say("Todo Fightset Bestof")
 
     @fightset.command(name="bestoffinal")
     async def fightset_bestoffinal(self):
         """Adjust # of games played in finals. Must be an odd number
         (Does not apply to tournament types without finals, such as Round Robin)"""
+        if not _activefight:
+            await self.bot.say("No active fight to adjust")
+            return
+            
         await self.bot.say("Todo Fightset Score")
     
     @fightset.command(name="toggleopen")
     async def fightset_toggleopen(self, ctx):
         """Toggles the open status of current tournament"""
+        if not _activefight:
+            await self.bot.say("No active fight to adjust")
+            return
 
         await self.bot.say("Tournament Open status: " + str())
 
@@ -163,14 +180,28 @@ class Fight:
     @fightset.command(name="stop", pass_context=True)
     async def fightset_stop(self,ctx):
         """Stops current tournament"""
+        if not _activefight:
+            await self.bot.say("No active fight to adjust")
+            return
         
         server = ctx.message.server
+        author = ctx.message.author
         currServ = self.the_data[server.id]
+        
+        await self.bot.say("Current fight ID is "+str(currServ["CURRENT"])+"\nOKay to stop? yes/no")
+        
+        answer = await self.bot.wait_for_message(timeout=120, author=author)
+        
+        if not answer.upper() in ["YES", "Y"]:
+            await self.bot.say("Cancelled")
+            return
+            
         currServ["CURRENT"] = None
         
         self.save_data()
+        await self.bot.say("Fight has been stopped")
         
-        await self.bot.say("Todo Fightset Stop")
+        
 
 # **********************Private command group start*********************
     async def _activefight(self):
@@ -182,7 +213,7 @@ class Fight:
         await self.bot.say("_infight Todo")
 
     async def _openregistration(self):
-        """Checks if tournament is accepting joins"""
+        """Checks if fight is accepting joins"""
         await self.bot.say("_openregistration Todo")
 
     async def _comparescores(self):
