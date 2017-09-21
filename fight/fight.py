@@ -128,8 +128,11 @@ class Fight:
         server = ctx.message.server
         try:
             num = int(incount)
-            
-            
+        except:
+            await self.bot.say("That is not a number")
+            return
+        
+        
         await self.bot.say("Todo Fightset Bestof")
 
     @fightset.command(name="bestoffinal")
