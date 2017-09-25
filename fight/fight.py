@@ -351,7 +351,6 @@ class Fight:
         
         t = {}
         for iix in s:
-            print(iix)
             t[iix[2]] = iix[:2]
             
         return t
