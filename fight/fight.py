@@ -275,6 +275,8 @@ class Fight:
         theD = theT["TYPEDATA"]
 
         theD = {"SCHEDULE": _rr_schedule(theT["PLAYERS"]), "RESULTS": {}}
+        
+        self.save_data()
 
     async def _rr_printround(self, tID, rID):
 
@@ -294,9 +296,9 @@ class Fight:
 
         await self._rr_printround(tID)
 
-    async def _rr_update(self, matchID):
+    async def _rr_update(self, tID):
 
-        await self.bot.say("Entering scores for match ID: " + matchID + "\n\n")
+        await self.bot.say("Entering scores for match ID: " + tID + "\n\n")
         
         theT = self.the_data["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
@@ -343,12 +345,13 @@ class Fight:
 
                 matchID += [matchLetter+str(ix)]
 
-            s += [list(zip(l1, l2, matchID))]
+            s += [list(zip(l1, l2))]
 
             inlist.insert(1, inlist.pop())
         
         t = {}
         for iix in s:
+            print(iix)
             t[iix[2]] = iix[:2]
             
         return t
