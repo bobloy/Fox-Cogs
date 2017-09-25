@@ -69,6 +69,57 @@ class Immortal:
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
+    async def icrypt(self, ctx, member: discord.Member=None):
+        """Sends someone to Crypt!"""
+
+        if member is None:
+            await self.bot.send_cmd_help(ctx)
+        else:
+            server = ctx.message.server
+            author = ctx.message.author
+            role_names = ["Immortal", "Eternal", "Ghost", "Phantom", "Revenant", "Undead", "Relocate", "Guest", "Resort"]
+            arole_names = ["Member", "Crypt"]
+            await self.adj_roles(server, author, member, role_names, arole_names)
+            if "Crypt" in [r.name for r in member.roles]:
+                await self.bot.say("Success")
+                await self.send_welcome(member)
+                
+    @commands.command(pass_context=True, no_pm=True)
+    @checks.mod_or_permissions(manage_roles=True)
+    async def irevenant(self, ctx, member: discord.Member=None):
+        """Sends someone to Revenant!"""
+
+        if member is None:
+            await self.bot.send_cmd_help(ctx)
+        else:
+            server = ctx.message.server
+            author = ctx.message.author
+            role_names = ["Immortal", "Eternal", "Ghost", "Phantom", "Undead", "Crypt", "Relocate", "Guest", "Resort"]
+            arole_names = ["Member", "Revenant"]
+            await self.adj_roles(server, author, member, role_names, arole_names)
+            if "Revenant" in [r.name for r in member.roles]:
+                await self.bot.say("Success")
+                await self.send_welcome(member)
+                
+    @commands.command(pass_context=True, no_pm=True)
+    @checks.mod_or_permissions(manage_roles=True)
+    async def iundead(self, ctx, member: discord.Member=None):
+        """Sends someone to Undead!"""
+
+        if member is None:
+            await self.bot.send_cmd_help(ctx)
+        else:
+            server = ctx.message.server
+            author = ctx.message.author
+            role_names = ["Immortal", "Eternal", "Ghost", "Phantom", "Revenant", "Crypt", "Relocate", "Guest", "Resort"]
+            arole_names = ["Member", "Undead"]
+            await self.adj_roles(server, author, member, role_names, arole_names)
+            if "Undead" in [r.name for r in member.roles]:
+                await self.bot.say("Success")
+                await self.send_welcome(member)
+                
+    @commands.command(pass_context=True, no_pm=True)
+    @checks.mod_or_permissions(manage_roles=True)
     async def iphantom(self, ctx, member: discord.Member=None):
         """Sends someone to Phantom!"""
 
