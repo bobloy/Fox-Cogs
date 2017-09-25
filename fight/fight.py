@@ -326,21 +326,16 @@ class Fight:
             l2.reverse()
 
             matchLetter = ""
-            
             j = i
-
             while j+1 > 26:
 
                 matchLetter += firstID[int(j + 1) % 26 - 1]
 
                 j = (j + 1) / 26 - 1
-
             matchLetter += firstID[int(j+1) % 26-1]
-
             matchLetter = matchLetter[::-1]
 
             matchID = []
-
             for ix in range(len(l1)-1):
 
                 matchID += [matchLetter+str(ix)]
