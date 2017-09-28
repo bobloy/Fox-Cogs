@@ -154,8 +154,23 @@ class Fight:
         self.save_data()
         
         await self.bot.say("Tournament BestOf is now set to:" + str(currFight["RULES"]["BESTOF"]))
-
-    @fightset.command(name="toggleopen")
+    
+    @fightset.command(name="current")
+    async def fightset_current(self, tID):
+        """Sets the current tournament to passed ID"""
+        try:
+            getFight = self.the_data[self.server.id]["TOURNEYS"][tID]
+            
+        except:
+            await self.bot.say("No tourny found with that ID")
+         
+        self.the_data[self.server.id]["CURRENT"] = tID
+        self.save_data()
+        
+        await self.bot.say("Current tournament set to "+tID)
+        
+        
+    @fightset.command(name="toggleopen", pass_context = True )
     async def fightset_toggleopen(self, ctx):
         """Toggles the open status of current tournament"""
         if not self._activefight():
