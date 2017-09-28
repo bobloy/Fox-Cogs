@@ -91,11 +91,11 @@ class Fight:
         await self.bot.say("Todo Bracket Full")
 
 # **********************Fightset command group start*********************
-    # def fightsetdec(func):
-        # async def decorated(self, ctx, *args, **kwargs):
-            # server = ctx.message.server
-            # await func(self, ctx, server, *args, **kwargs)
-        # return decorated
+#    def fightsetdec(func):
+#        async def decorated(self, ctx, *args, **kwargs):
+#            server = ctx.message.server
+#            await func(self, ctx, server, *args, **kwargs)
+#        return decorated
 
     @commands.group(pass_context=True, no_pm=True, aliases=['setfight'])
     @checks.mod_or_permissions(administrator=True)
@@ -130,7 +130,6 @@ class Fight:
             await self.bot.say("That is not a number")
             return
 
-
         await self.bot.say("Todo Fightset Bestof")
 
     @fightset.command(name="bestoffinal")
@@ -146,9 +145,8 @@ class Fight:
         except:
             await self.bot.say("Must be a number")
             return
-        
-        
-        if gamenum%2 >= 1:
+
+        if gamenum % 2 >= 1:
             await self.bot.say("Must be an odd number")
             return
             
@@ -202,7 +200,7 @@ class Fight:
         await self.bot.say("Adjust settings as necessary, then open the tournament with [p]fightset toggleopen")
 
     @fightset.command(name="stop", pass_context=True)
-    async def fightset_stop(self,ctx):
+    async def fightset_stop(self, ctx):
         """Stops current tournament"""
         if not _activefight:
             await self.bot.say("No active fight to adjust")
@@ -223,8 +221,6 @@ class Fight:
 
         self.save_data()
         await self.bot.say("Fight has been stopped")
-
-
 
 # **********************Private command group start*********************
     async def _activefight(self):
@@ -311,7 +307,7 @@ class Fight:
             return
         
         await self.bot.say("Entering scores for match ID: " + tID + "\n\n")
-        await self.bot.say("How many points did " + theD["MATCHES"][tID]["TEAM1"] + " get?"))
+        await self.bot.say("How many points did " + theD["MATCHES"][tID]["TEAM1"] + " get?")
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         try:
             t1points = int(answer.content)
@@ -319,7 +315,7 @@ class Fight:
             await self.bot.say("That's not a number!")
             return
             
-        await self.bot.say("How many points did " + theD["MATCHES"][tID]["TEAM2"] + " get?"))
+        await self.bot.say("How many points did " + theD["MATCHES"][tID]["TEAM2"] + " get?")
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         try:
             t2points = int(answer.content)
@@ -338,8 +334,8 @@ class Fight:
         
     def _rr_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
-        s = [] # Schedule list
-        outID = {} # Matches
+        s = []  # Schedule list
+        outID = {}  # Matches
         
         firstID = ["A", "B", "C", "D", "E", "F",
                    "G", "H", "I", "J", "K", "L",
@@ -371,7 +367,7 @@ class Fight:
             for ix in range(len(l1)-1):
                 matchID += [matchLetter+str(ix)]
 
-            rPlayers = list(zip(l1,l2))
+            rPlayers = list(zip(l1, l2))
             TeamCnt = 0
             for ID in matchID:
                 outID[ID] = {"TEAM1": rPlayers[TeamCnt][0], "TEAM2": rPlayers[TeamCnt][1], "SCORE1": 0, "SCORE2": 0}
@@ -379,9 +375,8 @@ class Fight:
                 
             # List of match ID's is now done
 
-            s += [matchID] # Schedule of matches
+            s += [matchID]  # Schedule of matches
             inlist.insert(1, inlist.pop())
-        
 
         outlist = [[], {}]
         outlist[0] = s
