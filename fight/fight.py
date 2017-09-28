@@ -1,5 +1,6 @@
 import discord
 import os
+import math
 from discord.ext import commands
 
 from .utils.dataIO import dataIO
@@ -274,7 +275,7 @@ class Fight:
         theT = self.the_data["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
         
-        get_schedule = rr_schedule(theT["PLAYERS"])
+        get_schedule = self._rr_schedule(theT["PLAYERS"])
         
         theD = {"SCHEDULE": get_schedule[0], "MATCHES": get_schedule[1]}
         
@@ -288,7 +289,7 @@ class Fight:
         await self.bot.say("Round "+str(rID))
 
         for match in theD["SCHEDULE"][rID]:
-            await self.bot.say(match[0] + " vs " + match[1] + " || Match ID: " + match[2])
+            await self.bot.say(theD["MATCHES"][match]["TEAM1"] + " vs " + theD["MATCHES"][match]["TEAM2"] + " || Match ID: " + match)
 
     async def _rr_start(self, tID):
 
@@ -298,18 +299,47 @@ class Fight:
 
         await self._rr_printround(tID)
 
-    async def _rr_update(self, tID):
-
-        await self.bot.say("Entering scores for match ID: " + tID + "\n\n")
+    async def _rr_update(self, tID, t1points=0, t2points=0):
         
         theT = self.the_data["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
         
-        await self.bot.say("How many points did " + theD["SCHEDULE"])
-
+        if t1points != 0 or t2points != 0:
+            theD["MATCHES"][tID]["TEAM1"] = t1points
+            theD["MATCHES"][tID]["TEAM2"] = t2points
+            self.save_data()
+            return
+        
+        await self.bot.say("Entering scores for match ID: " + tID + "\n\n")
+        await self.bot.say("How many points did " + theD["MATCHES"][tID]["TEAM1"] + " get?"))
+        answer = await self.bot.wait_for_message(timeout=120, author=author)
+        try:
+            t1points = int(answer.content)
+        except:
+            await self.bot.say("That's not a number!")
+            return
+            
+        await self.bot.say("How many points did " + theD["MATCHES"][tID]["TEAM2"] + " get?"))
+        answer = await self.bot.wait_for_message(timeout=120, author=author)
+        try:
+            t2points = int(answer.content)
+        except:
+            await self.bot.say("That's not a number!")
+            return
+        
+        if t1points == math.ceil(theD["RULES"]["BESTOF"]/2) or t2points == math.ceil(theD["RULES"]["BESTOF"]/2):
+            theD["MATCHES"][tID]["TEAM1"] = t1points
+            theD["MATCHES"][tID]["TEAM2"] = t2points
+            self.save_data()
+            return
+        else:
+            await self.bot.say("Invalid scores, nothing will be updated")
+            return
+        
     def _rr_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
         s = [] # Schedule list
+        outID = {} # Matches
         
         firstID = ["A", "B", "C", "D", "E", "F",
                    "G", "H", "I", "J", "K", "L",
@@ -341,10 +371,11 @@ class Fight:
             for ix in range(len(l1)-1):
                 matchID += [matchLetter+str(ix)]
 
-            outID = {}
-            roundPlayers = list(zip(l1,l2))
+            rPlayers = list(zip(l1,l2))
+            TeamCnt = 0
             for ID in matchID:
-                outID[ID] = {"TEAM1": "", "TEAM2": "", "SCORE1": 0, "SCORE2": 0}
+                outID[ID] = {"TEAM1": rPlayers[TeamCnt][0], "TEAM2": rPlayers[TeamCnt][1], "SCORE1": 0, "SCORE2": 0}
+                TeamCnt += 1
                 
             # List of match ID's is now done
 
@@ -353,7 +384,7 @@ class Fight:
         
 
         outlist = [[], {}]
-        
+        outlist[0] = s
         outlist[1] = outID
         # outlist[0] is list schedule of matches
         # outlist[1] is dict data of matches
