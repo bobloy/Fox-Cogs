@@ -273,8 +273,10 @@ class Fight:
 
         theT = self.the_data["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
-
-        theD = {"SCHEDULE": _rr_schedule(theT["PLAYERS"]), "RESULTS": {}}
+        
+        get_schedule = rr_schedule(theT["PLAYERS"])
+        
+        theD = {"SCHEDULE": get_schedule[0], "MATCHES": get_schedule[1]}
         
         self.save_data()
 
@@ -307,7 +309,7 @@ class Fight:
 
     def _rr_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
-        s = []
+        s = [] # Schedule list
         
         firstID = ["A", "B", "C", "D", "E", "F",
                    "G", "H", "I", "J", "K", "L",
@@ -337,18 +339,26 @@ class Fight:
 
             matchID = []
             for ix in range(len(l1)-1):
-
                 matchID += [matchLetter+str(ix)]
 
-            s += [list(zip(l1, l2))]
+            outID = {}
+            roundPlayers = list(zip(l1,l2))
+            for ID in matchID:
+                outID[ID] = {"TEAM1": "", "TEAM2": "", "SCORE1": 0, "SCORE2": 0}
+                
+            # List of match ID's is now done
 
+            s += [matchID] # Schedule of matches
             inlist.insert(1, inlist.pop())
         
-        t = {}
-        for iix in s:
-            t[iix[2]] = iix[:2]
-            
-        return t
+
+        outlist = [[], {}]
+        
+        outlist[1] = outID
+        # outlist[0] is list schedule of matches
+        # outlist[1] is dict data of matches
+        
+        return outlist
 
 
 def check_folders():
