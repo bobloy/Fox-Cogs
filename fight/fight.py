@@ -120,7 +120,7 @@ class Fight:
     @fightset.command(name="bestof", pass_context=True)
     async def fightset_bestof(self, ctx, incount):
         """Adjust # of games played per match. Must be an odd number"""
-        if not _activefight:
+        if not self._activefight():
             await self.bot.say("No active fight to adjust")
             return
 
@@ -136,7 +136,7 @@ class Fight:
     async def fightset_bestoffinal(self, gamenum):
         """Adjust # of games played in finals. Must be an odd number
         (Does not apply to tournament types without finals, such as Round Robin)"""
-        if not _activefight:
+        if not self._activefight():
             await self.bot.say("No active fight to adjust")
             return
         
@@ -161,7 +161,7 @@ class Fight:
     @fightset.command(name="toggleopen")
     async def fightset_toggleopen(self, ctx):
         """Toggles the open status of current tournament"""
-        if not _activefight:
+        if not self._activefight():
             await self.bot.say("No active fight to adjust")
             return
         
@@ -202,7 +202,7 @@ class Fight:
     @fightset.command(name="stop", pass_context=True)
     async def fightset_stop(self, ctx):
         """Stops current tournament"""
-        if not _activefight:
+        if not self._activefight():
             await self.bot.say("No active fight to adjust")
             return
 
@@ -223,9 +223,9 @@ class Fight:
         await self.bot.say("Fight has been stopped")
 
 # **********************Private command group start*********************
-    async def _activefight(self):
+    def _activefight(self):
         """Checks if there is an active tournament already"""
-        await self.bot.say("_activefight Todo")
+        return self._isrunningFight(self.server)
 
     async def _infight(self, user: discord.Member):
         """Checks if passed member is already in the tournament"""
@@ -241,7 +241,10 @@ class Fight:
 
     async def _parsemember(self):
         await self.bot.say("Parsemember Todo")
-
+        
+    def _get_user_from_id(self, userid):
+        return discord.utils.get(self.server.members, id=userid)
+        
     def _get_server_from_id(self, serverid):
         return discord.utils.get(self.bot.servers, id=serverid)
 
