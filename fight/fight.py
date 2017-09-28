@@ -209,11 +209,11 @@ class Fight:
         author = ctx.message.author
         currServ = self.the_data[self.server.id]
 
-        await self.bot.say("Current fight ID is "+str(currServ["CURRENT"])+"\nOKay to stop? yes/no")
+        await self.bot.say("Current fight ID is "+str(currServ["CURRENT"])+"\nOkay to stop? yes/no")
 
         answer = await self.bot.wait_for_message(timeout=120, author=author)
 
-        if not answer.upper() in ["YES", "Y"]:
+        if not answer.content.upper() in ["YES", "Y"]:
             await self.bot.say("Cancelled")
             return
 
