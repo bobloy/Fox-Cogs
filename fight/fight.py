@@ -39,7 +39,7 @@ class Fight:
 
         self.server = ctx.message.server
 
-        if self._activeFight(self.server):
+        if self._activefight(self.server):
             await self.bot.say("No tournament currently running!")
         else:
             await self.bot.say("Current tournament ID: " + self.the_data[self.server.id]["TOURNEYS"][self.the_data[self.server.id]["CURRENT"]])
@@ -51,7 +51,7 @@ class Fight:
         if not user:
             user = ctx.message.author
 
-        if self._activeFight(self.server):
+        if self._activefight(self.server):
             await self.bot.say("No tournament currently running!")
         else:
             currFight = self.the_data[self.server.id]["TOURNEYS"][self.the_data[self.server.id]["CURRENT"]]
