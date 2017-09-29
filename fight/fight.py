@@ -182,7 +182,7 @@ class Fight:
     async def fightset_toggleopen(self):
         """Toggles the open status of current tournament"""
         
-        await self.bot.say(self.server.id)
+       await self.bot.say(self.server.id)
        isActive = self._activefight()
        await self.bot.say(isActive)
         if isActive:
