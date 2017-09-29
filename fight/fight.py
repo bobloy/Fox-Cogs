@@ -275,7 +275,7 @@ class Fight:
         return discord.utils.get(self.bot.servers, id=serverid)
 
     def _getcurrentFight(self, server):
-        if not self._activeFight(server):
+        if not self._activefight(server):
             return None
 
         return self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
