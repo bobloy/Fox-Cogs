@@ -114,47 +114,62 @@ class Fight:
             await self.bot.send_cmd_help(ctx)
         # await self.bot.say("I can do stuff!")
 
-    @fightset.command(name="bestof", pass_context=True)
-    async def fightset_bestof(self, ctx, incount):
+    @fightset.command(name="bestof")
+    async def fightset_bestof(self, incount, tID = None):
         """Adjust # of games played per match. Must be an odd number"""
-        if not self._activefight():
+        
+        if not tID and not self._activefight():
             await self.bot.say("No active fight to adjust")
             return
 
+        if not tID:
+            tID = self._activefight():
+        
         try:
             num = int(incount)
         except:
             await self.bot.say("That is not a number")
             return
-
-        await self.bot.say("Todo Fightset Bestof")
+        
+        if num%2 != 1:
+            await self.bot.say("Must be an odd number")
+        
+        if num<1:
+            await self.bot.say("Must be greater than 0, idiot")
+            
+        self._getfight(tID)["RULES"]["BESTOF"] = num
+        self.save_data()
+        await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
 
     @fightset.command(name="bestoffinal")
-    async def fightset_bestoffinal(self, gamenum):
+    async def fightset_bestoffinal(self, incount, tID = None):
         """Adjust # of games played in finals. Must be an odd number
         (Does not apply to tournament types without finals, such as Round Robin)"""
-        if not self._activefight():
+        if not tID and not self._activefight():
             await self.bot.say("No active fight to adjust")
             return
         
+        if not tID:
+            tID = self._activefight():
+        
         try:
-            gamenum = int(gamenum)
+            num = int(incount)
         except:
-            await self.bot.say("Must be a number")
+            await self.bot.say("That is not a number")
             return
-
-        if gamenum % 2 >= 1:
+        
+        if num%2 != 1:
             await self.bot.say("Must be an odd number")
-            return
+        
+        if num<1:
+            await self.bot.say("Must be greater than 0, idiot")
             
-        currFight = self._getcurrentFight(self.server)
-        
-        currFight["RULES"]["BESTOF"] = gamenum
-        
+        self._getfight(tID)["RULES"]["BESTOFFINAL"] = num
         self.save_data()
+        await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
         
-        await self.bot.say("Tournament BestOf is now set to:" + str(currFight["RULES"]["BESTOF"]))
-    
+        
+        
     @fightset.command(name="current")
     async def fightset_current(self, tID):
         """Sets the current tournament to passed ID"""
@@ -169,14 +184,14 @@ class Fight:
         
         await self.bot.say("Current tournament set to "+tID)
         
-    @fightset.command(name="list", pass_context = True )
-    async def fightset_list(self, ctx):
+    @fightset.command(name="list")
+    async def fightset_list(self):
         """Lists all current and past fights"""
         
         for fight in self.the_data[self.server.id]["TOURNEYS"]:
             await self.bot.say(fight)
             for y in fight:
-                print(y, ':', fight[y]) 
+                await self.bot.say(y) 
         
         await self.bot.say("Done")
         
@@ -271,12 +286,15 @@ class Fight:
         
     def _get_server_from_id(self, serverid):
         return discord.utils.get(self.bot.servers, id=serverid)
-
+    
+    def _getfight(self, server, tID):
+        return self.the_data[server.id]["TOURNEYS"][tID]
+    
     def _getcurrentFight(self, server):
         if not self._activefight(server):
             return None
 
-        return self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]]
+        return self._getfight(self._activefight(server))
 
 # **********************Single Elimination***************************
     async def _elim_setup(self, tID):
