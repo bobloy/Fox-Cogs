@@ -137,7 +137,7 @@ class Fight:
         if num<1:
             await self.bot.say("Must be greater than 0, idiot")
             
-        self._getfight(tID)["RULES"]["BESTOF"] = num
+        self._getfight(self.server, tID)["RULES"]["BESTOF"] = num
         self.save_data()
         await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
 
@@ -164,7 +164,7 @@ class Fight:
         if num<1:
             await self.bot.say("Must be greater than 0, idiot")
             
-        self._getfight(tID)["RULES"]["BESTOFFINAL"] = num
+        self._getfight(self.server, tID)["RULES"]["BESTOFFINAL"] = num
         self.save_data()
         await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
         
@@ -174,7 +174,7 @@ class Fight:
     async def fightset_current(self, tID):
         """Sets the current tournament to passed ID"""
         try:
-            getFight = self.the_data[self.server.id]["TOURNEYS"][tID]
+            aFight = self.the_data[self.server.id]["TOURNEYS"][tID]
             
         except:
             await self.bot.say("No tourney found with that ID")
