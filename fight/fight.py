@@ -247,7 +247,7 @@ class Fight:
 # **********************Private command group start*********************
     def _activefight(self):
         """Checks if there is an active tournament already"""
-        return self.the_data[server.id]["CURRENT"] is None
+        return self.the_data[self.server.id]["CURRENT"] is None
 
     async def _infight(self, user: discord.Member):
         """Checks if passed member is already in the tournament"""
