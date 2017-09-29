@@ -247,7 +247,9 @@ class Fight:
         await self.bot.say("Fight has been stopped")
 
 # **********************Private command group start*********************
-    def _activefight(self, inserv = self.server):
+    def _activefight(self, inserv = None):
+        if inserv == None:
+            inserv = self.server
         """Returns id for active fight, or None if no active fight"""
         return self.the_data[inserv.id]["CURRENT"]
 
