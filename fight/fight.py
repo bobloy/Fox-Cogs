@@ -147,7 +147,7 @@ class Fight:
             await self.bot.say("Must be an odd number")
             return
             
-        currFight = _getcurrentFight(self.server)
+        currFight = self._getcurrentFight(self.server)
         
         currFight["RULES"]["BESTOF"] = gamenum
         
