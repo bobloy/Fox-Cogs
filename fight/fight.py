@@ -178,9 +178,11 @@ class Fight:
         
         await self.bot.say("Done")
         
-    @fightset.command(name="toggleopen", pass_context = True )
-    async def fightset_toggleopen(self, ctx):
+    @fightset.command(name="toggleopen")
+    async def fightset_toggleopen(self):
         """Toggles the open status of current tournament"""
+        
+        await self.bot.say(self.server.id)
         if not self._activefight():
             await self.bot.say("No active fight to adjust")
             return
