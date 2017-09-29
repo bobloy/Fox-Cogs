@@ -183,7 +183,8 @@ class Fight:
         """Toggles the open status of current tournament"""
         
         await self.bot.say(self.server.id)
-        if not self._activefight():
+       isActive = await self._activefight()
+        if isActive:
             await self.bot.say("No active fight to adjust")
             return
         
@@ -245,8 +246,9 @@ class Fight:
         await self.bot.say("Fight has been stopped")
 
 # **********************Private command group start*********************
-    def _activefight(self):
+    async def _activefight(self):
         """Checks if there is an active tournament already"""
+        await self.bot.say(self.the_data[self.server.id]["CURRENT"])
         return self.the_data[self.server.id]["CURRENT"] is None
 
     async def _infight(self, user: discord.Member):
