@@ -45,9 +45,8 @@ class Fight:
             await self.bot.say("Current tournament ID: " + self.the_data[self.server.id]["TOURNEYS"][self.the_data[self.server.id]["CURRENT"]])
 
     @fight.command(name="join", pass_context=True)
-    async def fight_join(self, ctx, user: discord.Member):
-        """Join the active brawl"""
-        # Your code will go here
+    async def fight_join(self, ctx, user: discord.Member = None):
+        """Join the active fight"""
         if not user:
             user = ctx.message.author
 
