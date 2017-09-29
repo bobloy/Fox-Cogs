@@ -175,26 +175,24 @@ class Fight:
         
         for fight in self.the_data[self.server.id]["TOURNEYS"]:
             await self.bot.say(fight)
+            for y in fight:
+                print(y, ':', fight[y]) 
         
         await self.bot.say("Done")
         
     @fightset.command(name="toggleopen")
     async def fightset_toggleopen(self):
         """Toggles the open status of current tournament"""
-        
-        await self.bot.say(self.server.id)
-        isActive = self._activefight()
-        await self.bot.say(isActive)
-        if not isActive:
+
+        if not self._activefight():
             await self.bot.say("No active fight to adjust")
             return
         
         currFight = self._getcurrentFight(self.server)
-        
         currFight["OPEN"] = not currFight["OPEN"]
-        
+
         self.save_data()
-        
+
         await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
 
     @fightset.command(name="setup")
