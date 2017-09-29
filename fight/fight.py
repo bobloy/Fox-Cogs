@@ -189,7 +189,7 @@ class Fight:
             await self.bot.say("No active fight to adjust")
             return
         
-        currFight = _getcurrentFight(self.server)
+        currFight = self._getcurrentFight(self.server)
         
         currFight["OPEN"] = not currFight["OPEN"]
         
