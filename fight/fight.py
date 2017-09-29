@@ -188,11 +188,7 @@ class Fight:
     async def fightset_list(self):
         """Lists all current and past fights"""
         
-        for fight in self.the_data[self.server.id]["TOURNEYS"]:
-            await self.bot.say(fight)
-            for y in fight:
-                await self.bot.say(fight[y]) 
-        
+        await self.bot.say(self.the_data[self.server.id]["TOURNEYS"])
         await self.bot.say("Done")
         
     @fightset.command(name="toggleopen")
