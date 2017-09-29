@@ -49,11 +49,16 @@ class Fight:
         """Join the active fight"""
         if not user:
             user = ctx.message.author
-
-        if self._activefight(self.server):
+        
+        currFight = self._activefight(self.server)
+        if not currFight:
             await self.bot.say("No tournament currently running!")
-        else:
-            currFight = self.the_data[self.server.id]["TOURNEYS"][self.the_data[self.server.id]["CURRENT"]]
+            return
+        
+        if not currFight["OPEN"]:
+            await self.bot.say("Tournament currently not accepting new players")
+            return
+            
 
     @fight.command(name="score", pass_context=True)
     async def fight_score(self, ctx, gameID):
