@@ -69,10 +69,10 @@ class Fight:
         """Forfeit your match and all future matches"""
         await self.bot.say("Todo Leave")
 
-    @fight.command(name="leaderboard", pass_context=True)
-    async def fight_leaderboard(self, ctx, ctag, ckind="Unranked", irank=0):
-        """Adds clan to grab-list"""
-        await self.bot.say("Todo Leaderboard")
+#    @fight.command(name="leaderboard", pass_context=True)
+#    async def fight_leaderboard(self, ctx, ctag, ckind="Unranked", irank=0):
+#        """Adds clan to grab-list"""
+#        await self.bot.say("Todo Leaderboard")
 
     @fight.group(name="bracket", pass_context=True)
     async def fight_bracket(self, ctx, ctag):
@@ -162,7 +162,7 @@ class Fight:
             getFight = self.the_data[self.server.id]["TOURNEYS"][tID]
             
         except:
-            await self.bot.say("No tourny found with that ID")
+            await self.bot.say("No tourney found with that ID")
          
         self.the_data[self.server.id]["CURRENT"] = tID
         self.save_data()
@@ -197,14 +197,14 @@ class Fight:
     async def fightset_setup(self):
         """Setup a new tournament!
         Default settings are as follows
-        Name: Tourny # (counts from 0)
+        Name: Tourney # (counts from 0)
         Best of: 1
         Best of (final): 1
         Self Report: True
         Type: 0 (Round Robin)"""
 
         currServ = self.the_data[self.server.id]
-        tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourny 0 makes len 1, tourny 1 makes len 2, etc
+        tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourney 0 makes len 1, tourney 1 makes len 2, etc
         currServ["CURRENT"] = tourID
         currServ["TOURNEYS"][tourID] = {"PLAYERS": [],
                                         "NAME": "Tourney "+str(tourID),
