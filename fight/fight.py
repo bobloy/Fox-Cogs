@@ -123,7 +123,7 @@ class Fight:
             return
 
         if not tID:
-            tID = self._activefight():
+            tID = self._activefight()
         
         try:
             num = int(incount)
