@@ -337,12 +337,12 @@ class Fight:
 
         await self._rr_printround(tID)
 
-    async def _rr_update(self, serverid, tID, t1points=0, t2points=0):
+    async def _rr_update(self, serverid, tID=None, t1points=None, t2points=None):
         
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
         
-        if t1points != 0 or t2points != 0:
+        if t1points and t2points:
             theD["MATCHES"][tID]["TEAM1"] = t1points
             theD["MATCHES"][tID]["TEAM2"] = t2points
             self.save_data()
