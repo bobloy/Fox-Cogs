@@ -188,7 +188,7 @@ class Fight:
         await self.bot.say("Current tournament set to "+tID)
         
     @fightset.command(name="list", pass_context=True)
-    async def fightset_list(self):
+    async def fightset_list(self, ctx):
         """Lists all current and past fights"""
         server = ctx.message.server
         
@@ -196,7 +196,7 @@ class Fight:
         await self.bot.say("Done")
         
     @fightset.command(name="toggleopen", pass_context=True)
-    async def fightset_toggleopen(self):
+    async def fightset_toggleopen(self, ctx):
         """Toggles the open status of current tournament"""
         server = ctx.message.server
         if not self._activefight(server.id):
@@ -211,7 +211,7 @@ class Fight:
         await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
 
     @fightset.command(name="setup", pass_context=True)
-    async def fightset_setup(self):
+    async def fightset_setup(self, ctx):
         """Setup a new tournament!
         Default settings are as follows
         Name: Tourney # (counts from 0)
