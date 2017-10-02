@@ -22,7 +22,7 @@ class Fight:
         self.path = "data/Fox-Cogs/fight/"
         self.file_path = "data/Fox-Cogs/fight/fight.json"
         self.the_data = dataIO.load_json(self.file_path)
-        
+
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
@@ -44,7 +44,7 @@ class Fight:
             await self.bot.say("Current tournament ID: " + self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]])
 
     @fight.command(name="join", pass_context=True)
-    async def fight_join(self, ctx, user: discord.Member = None):
+    async def fight_join(self, ctx, user: discord.Member=None):
         """Join the active fight"""
         server = ctx.message.server
         if not user:
@@ -58,7 +58,6 @@ class Fight:
         if not currFight["OPEN"]:
             await self.bot.say("Tournament currently not accepting new players")
             return
-            
 
     @fight.command(name="score", pass_context=True)
     async def fight_score(self, ctx, gameID):
@@ -105,7 +104,7 @@ class Fight:
     @checks.mod_or_permissions(administrator=True)
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
-       server = ctx.message.server
+        server = ctx.message.server
         
         if server.id not in self.the_data:
             self.the_data[server.id] = {
@@ -119,7 +118,7 @@ class Fight:
         # await self.bot.say("I can do stuff!")
 
     @fightset.command(name="bestof", pass_context=True)
-    async def fightset_bestof(self, ctx, incount, tID = None):
+    async def fightset_bestof(self, ctx, incount, tID=None):
         """Adjust # of games played per match. Must be an odd number"""
         server = ctx.message.server
         if not tID and not self._activefight(server.id):
@@ -135,10 +134,10 @@ class Fight:
             await self.bot.say("That is not a number")
             return
         
-        if num%2 != 1:
+        if num % 2 != 1:
             await self.bot.say("Must be an odd number")
         
-        if num<1:
+        if num < 1:
             await self.bot.say("Must be greater than 0, idiot")
             
         self._getfight(server.id, tID)["RULES"]["BESTOF"] = num
@@ -146,7 +145,7 @@ class Fight:
         await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
 
     @fightset.command(name="bestoffinal", pass_context=True)
-    async def fightset_bestoffinal(self, ctx, incount, tID = None):
+    async def fightset_bestoffinal(self, ctx, incount, tID=None):
         """Adjust # of games played in finals. Must be an odd number
         (Does not apply to tournament types without finals, such as Round Robin)"""
         server = ctx.message.server
@@ -163,18 +162,16 @@ class Fight:
             await self.bot.say("That is not a number")
             return
         
-        if num%2 != 1:
+        if num % 2 != 1:
             await self.bot.say("Must be an odd number")
         
-        if num<1:
+        if num < 1:
             await self.bot.say("Must be greater than 0, idiot")
             
         self._getfight(server.id, tID)["RULES"]["BESTOFFINAL"] = num
         self.save_data()
         await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
-        
-        
-        
+
     @fightset.command(name="current", pass_context=True)
     async def fightset_current(self, ctx, tID):
         """Sets the current tournament to passed ID"""
@@ -367,7 +364,7 @@ class Fight:
         except:
             await self.bot.say("That's not a number!")
             return
-        
+
         if t1points == math.ceil(theD["RULES"]["BESTOF"]/2) or t2points == math.ceil(theD["RULES"]["BESTOF"]/2):
             theD["MATCHES"][tID]["TEAM1"] = t1points
             theD["MATCHES"][tID]["TEAM2"] = t2points
@@ -387,7 +384,7 @@ class Fight:
                    "M", "N", "O", "P", "Q", "R",
                    "S", "T", "U", "V", "W", "X",
                    "Y", "Z"]
-                       
+
         if len(inlist) % 2 == 1:
             inlist = inlist + ["BYE"]
 
@@ -417,7 +414,7 @@ class Fight:
             for ID in matchID:
                 outID[ID] = {"TEAM1": rPlayers[TeamCnt][0], "TEAM2": rPlayers[TeamCnt][1], "SCORE1": 0, "SCORE2": 0}
                 TeamCnt += 1
-                
+
             # List of match ID's is now done
 
             s += [matchID]  # Schedule of matches
@@ -428,7 +425,7 @@ class Fight:
         outlist[1] = outID
         # outlist[0] is list schedule of matches
         # outlist[1] is dict data of matches
-        
+
         return outlist
 
 
