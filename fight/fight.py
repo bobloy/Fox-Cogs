@@ -37,7 +37,7 @@ class Fight:
         if not self._activefight(server.id):
             await self.bot.say("No tournament currently running!")
         else:
-            await self.bot.say("Current tournament ID: " + self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]])
+            await self.bot.say("Current tournament ID: " + self.the_data[server.id]["CURRENT"])
             
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
@@ -136,9 +136,11 @@ class Fight:
         
         if num % 2 != 1:
             await self.bot.say("Must be an odd number")
+            return            
         
         if num < 1:
             await self.bot.say("Must be greater than 0, idiot")
+            return
             
         self._getfight(server.id, tID)["RULES"]["BESTOF"] = num
         self.save_data()
@@ -164,9 +166,11 @@ class Fight:
         
         if num % 2 != 1:
             await self.bot.say("Must be an odd number")
+            return
         
         if num < 1:
             await self.bot.say("Must be greater than 0, idiot")
+            return
             
         self._getfight(server.id, tID)["RULES"]["BESTOFFINAL"] = num
         self.save_data()
