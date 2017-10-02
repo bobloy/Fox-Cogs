@@ -34,9 +34,6 @@ class Fight:
         """Participate in active fights!"""
         server = ctx.message.server
         
-        self.the_data = {}
-        self.save_data()
-        
         if not self._activefight(server.id):
             await self.bot.say("No tournament currently running!")
         else:
