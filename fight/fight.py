@@ -50,7 +50,8 @@ class Fight:
         if not user:
             user = ctx.message.author
         
-        currFight = self._activefight(server.id)
+        currFight = self._getcurrentfight(server.id)
+        currID = self._activefight(server.id)
         if not currFight:
             await self.bot.say("No tournament currently running!")
             return
@@ -58,13 +59,24 @@ class Fight:
         if not currFight["OPEN"]:
             await self.bot.say("Tournament currently not accepting new players")
             return
+        
+        if _infight(user.id, server.id, currID):
+            await self.bot.say("You are already in this tournament!")
+            return
+            
+        currFight["PLAYERS"].append(user.id)
+        
+        await self.bot.say("User has been added to tournament")
+        
+        
 
     @fight.command(name="score", pass_context=True)
     async def fight_score(self, ctx, gameID):
+        """Enters score for current match, or for passed game ID"""
         if gameID is None:
             if ctx.message.author not in currFight["PLAYERS"]:
                 await self.bot.say("You are not in a current tournament")
-        """Enters score for current match, or for passed game ID"""
+        
         await self.bot.say("Todo Score")
 
     @fight.command(name="leave", pass_context=True)
@@ -207,7 +219,7 @@ class Fight:
             await self.bot.say("No active fight to adjust")
             return
         
-        currFight = self._getcurrentFight(server.id)
+        currFight = self._getcurrentfight(server.id)
         currFight["OPEN"] = not currFight["OPEN"]
 
         self.save_data()
@@ -227,12 +239,14 @@ class Fight:
         currServ = self.the_data[server.id]
         tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourney 0 makes len 1, tourney 1 makes len 2, etc
         currServ["CURRENT"] = tourID
-        currServ["TOURNEYS"][tourID] = {"PLAYERS": [],
+        currServ["TOURNEYS"][tourID] = {
+                                        "PLAYERS": [],
                                         "NAME": "Tourney "+str(tourID),
                                         "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0},
                                         "TYPEDATA": {},
                                         "OPEN": False,
-                                        "WINNER": None}
+                                        "WINNER": None
+                                        }
 
         self.save_data()
 
@@ -294,7 +308,7 @@ class Fight:
     def _getfight(self, serverid, tID):
         return self.the_data[serverid]["TOURNEYS"][tID]
     
-    def _getcurrentFight(self, serverid):
+    def _getcurrentfight(self, serverid):
         if not self._activefight(serverid):
             return None
 
@@ -319,11 +333,11 @@ class Fight:
         
         get_schedule = self._rr_schedule(theT["PLAYERS"])
         
-        theD = {"SCHEDULE": get_schedule[0], "MATCHES": get_schedule[1]}
+        theD = {"SCHEDULE": get_schedule[0], "MATCHES": get_schedule[1], "ROUND": 0}
         
         self.save_data()
-
-    async def _rr_printround(self, serverid, tID, rID):
+    
+   async def _rr_printround(self, serverid, tID, rID):
 
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
@@ -341,19 +355,19 @@ class Fight:
 
         await self._rr_printround(tID)
 
-    async def _rr_update(self, serverid, tID=None, t1points=None, t2points=None):
+    async def _rr_update(self, serverid, tID=None, mID=None, t1points=None, t2points=None):
         
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
         
         if t1points and t2points:
-            theD["MATCHES"][tID]["TEAM1"] = t1points
-            theD["MATCHES"][tID]["TEAM2"] = t2points
+            theD["MATCHES"][mID]["TEAM1"] = t1points
+            theD["MATCHES"][mID]["TEAM2"] = t2points
             self.save_data()
             return
         
-        await self.bot.say("Entering scores for match ID: " + tID + "\n\n")
-        await self.bot.say("How many points did " + theD["MATCHES"][tID]["TEAM1"] + " get?")
+        await self.bot.say("Entering scores for match ID: " + mID + "\n\n")
+        await self.bot.say("How many points did " + theD["MATCHES"][mID]["TEAM1"] + " get?")
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         try:
             t1points = int(answer.content)
@@ -361,7 +375,7 @@ class Fight:
             await self.bot.say("That's not a number!")
             return
             
-        await self.bot.say("How many points did " + theD["MATCHES"][tID]["TEAM2"] + " get?")
+        await self.bot.say("How many points did " + theD["MATCHES"][mID]["TEAM2"] + " get?")
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         try:
             t2points = int(answer.content)
@@ -370,8 +384,8 @@ class Fight:
             return
 
         if t1points == math.ceil(theD["RULES"]["BESTOF"]/2) or t2points == math.ceil(theD["RULES"]["BESTOF"]/2):
-            theD["MATCHES"][tID]["TEAM1"] = t1points
-            theD["MATCHES"][tID]["TEAM2"] = t2points
+            theD["MATCHES"][mID]["TEAM1"] = t1points
+            theD["MATCHES"][mID]["TEAM2"] = t2points
             self.save_data()
             return
         else:
@@ -387,7 +401,7 @@ class Fight:
                    "G", "H", "I", "J", "K", "L",
                    "M", "N", "O", "P", "Q", "R",
                    "S", "T", "U", "V", "W", "X",
-                   "Y", "Z"]
+                   "Y", "Z"] #God dammit this could've been a string
 
         if len(inlist) % 2 == 1:
             inlist = inlist + ["BYE"]
@@ -416,7 +430,15 @@ class Fight:
             rPlayers = list(zip(l1, l2))
             TeamCnt = 0
             for ID in matchID:
-                outID[ID] = {"TEAM1": rPlayers[TeamCnt][0], "TEAM2": rPlayers[TeamCnt][1], "SCORE1": 0, "SCORE2": 0}
+                outID[ID] = {
+                             "TEAM1": rPlayers[TeamCnt][0], 
+                             "TEAM2": rPlayers[TeamCnt][1],
+                             "SCORE1": 0, 
+                             "SCORE2": 0, 
+                             "USERSCORE1": {"SCORE1": 0, "SCORE2": 0}, 
+                             "USERSCORE2": {"SCORE1": 0, "SCORE2": 0}
+                             }
+                             
                 TeamCnt += 1
 
             # List of match ID's is now done
@@ -431,6 +453,13 @@ class Fight:
         # outlist[1] is dict data of matches
 
         return outlist
+    
+     def _rr_nextround(self, serverid, tID):
+        currFight = self._getfight(serverid, tID)
+        currRound = currFight["TYPEDATA"]["SCHEDULE"][currFight["TYPEDATA"]["ROUND"]]
+        
+        for match in currRound:
+            if currFight["TYPEDATA"]["MATCHES"][match]["SCORE1"] == currFight["RULES"]["BESTOF"] or currFight["TYPEDATA"]["MATCHES"][match]["SCORE2"] == currFight["RULES"]["BESTOF"] or 
 
 
 def check_folders():
