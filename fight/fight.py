@@ -32,16 +32,19 @@ class Fight:
     @commands.group(pass_context=True, no_pm=True)
     async def fight(self, ctx):
         """Participate in active fights!"""
-        if ctx.invoked_subcommand is None:
-            await self.bot.send_cmd_help(ctx)
-            # await self.bot.say("I can do stuff!")
-
         server = ctx.message.server
-
+        
+        self.the_data = {}
+        self.save_data()
+        
         if not self._activefight(server.id):
             await self.bot.say("No tournament currently running!")
         else:
             await self.bot.say("Current tournament ID: " + self.the_data[server.id]["TOURNEYS"][self.the_data[server.id]["CURRENT"]])
+            
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+            # await self.bot.say("I can do stuff!")
 
     @fight.command(name="join", pass_context=True)
     async def fight_join(self, ctx, user: discord.Member=None):
