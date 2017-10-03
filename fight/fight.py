@@ -281,10 +281,10 @@ class Fight:
         """Returns id for active fight, or None if no active fight"""
         return self.the_data[serverid]["CURRENT"]
 
-    async def _infight(self, userid, serverid, tID):
+    def _infight(self, userid, serverid, tID):
         """Checks if passed member is already in the tournament"""
         
-        await self.bot.say("_infight Todo")
+        return userid in self.the_data[serverid]["TOURNEYS"][tID]["PLAYERS"]
 
     async def _openregistration(self, serverid, tID):
         """Checks if fight is accepting joins"""
