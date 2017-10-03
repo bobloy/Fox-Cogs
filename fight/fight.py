@@ -60,7 +60,7 @@ class Fight:
             await self.bot.say("Tournament currently not accepting new players")
             return
         
-        if _infight(user.id, server.id, currID):
+        if self._infight(user.id, server.id, currID):
             await self.bot.say("You are already in this tournament!")
             return
             
