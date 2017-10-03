@@ -337,7 +337,7 @@ class Fight:
         
         self.save_data()
     
-   async def _rr_printround(self, serverid, tID, rID):
+    async def _rr_printround(self, serverid, tID, rID):
 
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
@@ -454,7 +454,7 @@ class Fight:
 
         return outlist
     
-     def _rr_nextround(self, serverid, tID):
+    def _rr_nextround(self, serverid, tID):
         currFight = self._getfight(serverid, tID)
         currRound = currFight["TYPEDATA"]["SCHEDULE"][currFight["TYPEDATA"]["ROUND"]]
         
