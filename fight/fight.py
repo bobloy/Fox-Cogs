@@ -457,8 +457,8 @@ class Fight:
         currRound = currFight["TYPEDATA"]["SCHEDULE"][currFight["TYPEDATA"]["ROUND"]]
 
         for match in currRound:
-            if currFight["TYPEDATA"]["MATCHES"][match]["SCORE1"] > currFight["RULES"]["BESTOF"]/2
-            or currFight["TYPEDATA"]["MATCHES"][match]["SCORE2"] > currFight["RULES"]["BESTOF"]/2:
+            if (currFight["TYPEDATA"]["MATCHES"][match]["SCORE1"] > currFight["RULES"]["BESTOF"]/2 or
+                  currFight["TYPEDATA"]["MATCHES"][match]["SCORE2"] > currFight["RULES"]["BESTOF"]/2):
                 return False
         return True
 
