@@ -67,8 +67,6 @@ class Fight:
         currFight["PLAYERS"].append(user.id)
         
         await self.bot.say("User has been added to tournament")
-        
-        
 
     @fight.command(name="score", pass_context=True)
     async def fight_score(self, ctx, gameID):
@@ -117,7 +115,7 @@ class Fight:
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
         server = ctx.message.server
-        
+
         if server.id not in self.the_data:
             self.the_data[server.id] = {
                 "CURRENT": None,
@@ -139,21 +137,21 @@ class Fight:
 
         if not tID:
             tID = self._activefight(server.id)
-        
+
         try:
             num = int(incount)
         except:
             await self.bot.say("That is not a number")
             return
-        
+
         if num % 2 != 1:
             await self.bot.say("Must be an odd number")
-            return            
-        
+            return
+
         if num < 1:
             await self.bot.say("Must be greater than 0, idiot")
             return
-            
+
         self._getfight(server.id, tID)["RULES"]["BESTOF"] = num
         self.save_data()
         await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
@@ -401,7 +399,7 @@ class Fight:
                    "G", "H", "I", "J", "K", "L",
                    "M", "N", "O", "P", "Q", "R",
                    "S", "T", "U", "V", "W", "X",
-                   "Y", "Z"] #God dammit this could've been a string
+                   "Y", "Z"]  # God dammit this could've been a string
 
         if len(inlist) % 2 == 1:
             inlist = inlist + ["BYE"]
