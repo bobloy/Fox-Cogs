@@ -429,14 +429,14 @@ class Fight:
             TeamCnt = 0
             for ID in matchID:
                 outID[ID] = {
-                             "TEAM1": rPlayers[TeamCnt][0], 
+                             "TEAM1": rPlayers[TeamCnt][0],
                              "TEAM2": rPlayers[TeamCnt][1],
-                             "SCORE1": 0, 
-                             "SCORE2": 0, 
-                             "USERSCORE1": {"SCORE1": 0, "SCORE2": 0}, 
+                             "SCORE1": 0,
+                             "SCORE2": 0,
+                             "USERSCORE1": {"SCORE1": 0, "SCORE2": 0},
                              "USERSCORE2": {"SCORE1": 0, "SCORE2": 0}
                              }
-                             
+
                 TeamCnt += 1
 
             # List of match ID's is now done
@@ -451,13 +451,16 @@ class Fight:
         # outlist[1] is dict data of matches
 
         return outlist
-    
+
     def _rr_nextround(self, serverid, tID):
         currFight = self._getfight(serverid, tID)
         currRound = currFight["TYPEDATA"]["SCHEDULE"][currFight["TYPEDATA"]["ROUND"]]
-        
+
         for match in currRound:
-            if currFight["TYPEDATA"]["MATCHES"][match]["SCORE1"] == currFight["RULES"]["BESTOF"] or currFight["TYPEDATA"]["MATCHES"][match]["SCORE2"] == currFight["RULES"]["BESTOF"] or 
+            if currFight["TYPEDATA"]["MATCHES"][match]["SCORE1"] > currFight["RULES"]["BESTOF"]/2
+            or currFight["TYPEDATA"]["MATCHES"][match]["SCORE2"] > currFight["RULES"]["BESTOF"]/2:
+                return False
+        return True
 
 
 def check_folders():
