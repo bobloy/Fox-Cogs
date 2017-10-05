@@ -5,6 +5,5 @@
     "SHORT" : "Test short",
     "DESCRIPTION" : "Test description is longer",
     "TAGS" : ["fox", "bobloy"],
-    "REQUIREMENTS" : [],
-    "HIDDEN" : true
+    "HIDDEN" : false
 }

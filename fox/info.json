@@ -5,6 +5,5 @@
     "SHORT" : "Cog to interact with Fox",
     "DESCRIPTION" : "Cog to interact with Fox",
     "TAGS" : ["fox", "bobloy"],
-    "REQUIREMENTS" : [],
-    "HIDDEN" : true
+    "HIDDEN" : false
 }

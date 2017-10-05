@@ -203,4 +203,4 @@ def check_files():
 def setup(bot):
     check_folders()
     check_files()
-    bot.add_cog(CustomCommands(bot))
+    bot.add_cog(CCRole(bot))
