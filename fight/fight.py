@@ -9,9 +9,9 @@ from random import randint
 
 
 # 0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
-T_TYPES = ["Round Robin", "Single Elimination",
-           "Double Elimination", "Triple Elimination",
-           "3 Game Guarentee", "Compass Draw"]
+T_TYPES = {0: "Round Robin", 1: "Single Elimination",
+           2: "Double Elimination", 3: "Triple Elimination",
+           4: "3 Game Guarentee", 5: "Compass Draw"}
 
 
 class Fight:
@@ -235,11 +235,11 @@ class Fight:
         Type: 0 (Round Robin)"""
         server = ctx.message.server
         currServ = self.the_data[server.id]
-        tourID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourney 0 makes len 1, tourney 1 makes len 2, etc
-        currServ["CURRENT"] = tourID
-        currServ["TOURNEYS"][tourID] = {
+        tID = str(len(currServ["TOURNEYS"]))  # Can just be len without +1, tourney 0 makes len 1, tourney 1 makes len 2, etc
+        currServ["CURRENT"] = tID
+        currServ["TOURNEYS"][tID] = {
                                         "PLAYERS": [],
-                                        "NAME": "Tourney "+str(tourID),
+                                        "NAME": "Tourney "+str(tID),
                                         "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0},
                                         "TYPEDATA": {},
                                         "OPEN": False,
@@ -248,7 +248,7 @@ class Fight:
 
         self.save_data()
 
-        await self.bot.say("Tournament has been created!\n\n" + str(currServ["TOURNEYS"][tourID]))
+        await self.bot.say("Tournament has been created!\n\n" + str(currServ["TOURNEYS"][tID]))
 
         await self.bot.say("Adjust settings as necessary, then open the tournament with [p]fightset toggleopen")
 
@@ -288,14 +288,17 @@ class Fight:
 
     async def _placeholder(self, serverid, tID,):
         """Checks if fight is accepting joins"""
-        await self.bot.say("_openregistration Todo")
+        await self.bot.say("_placeholder Todo")
 
     async def _comparescores(self):
         """Checks user submitted scores for inconsistancies"""
         await self.bot.say("_comparescores Todo")
 
-    def _parsemember(self, serverid, tID, userid):
-        if self.the_data[serverid]["TOURNEYS"][tID]["RULES"]["TYPE"]:
+    def _parseuser(self, serverid, tID, userid):
+        if self.the_data[serverid]["TOURNEYS"][tID]["RULES"]["TYPE"]==0: # RR
+            return _rr_parseuser(serverid, tID, userid)
+
+        return False
         
     def _get_user_from_id(self, serverid, userid):
         server = self._get_server_from_id(serverid)
@@ -325,6 +328,29 @@ class Fight:
 
 
 # **********************Round-Robin**********************************
+    def _rr_parseuser(self, serverid, tID, userid):
+        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        matches = theT["TYPEDATA"]["MATCHES"]
+        scheudle = theT["TYPEDATA"]["SCHEDULE"]
+
+        for round in matches:
+            for mID in round:
+                teamnum = _rr_matchperms(serverid, tID, userid, mID)
+                if teamnum:
+                    
+
+    def _rr_matchperms(self, serverid, tID, userid, mID):
+        #if self._get_user_from_id(serverid, userid) # Do an if-admin at start
+        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        if theT["TYPEDATA"]["MATCHES"][mID]["TEAM1"] == userid:            
+            return 1
+
+        if theT["TYPEDATA"]["MATCHES"][mID]["TEAM2"] == userid:
+            return 2
+
+        return False
+
+
     def _rr_setup(self, serverid, tID):
 
         theT = self.the_data[serverid]["TOURNEYS"][tID]
@@ -383,8 +409,8 @@ class Fight:
             return
 
         if t1points == math.ceil(theD["RULES"]["BESTOF"]/2) or t2points == math.ceil(theD["RULES"]["BESTOF"]/2):
-            theD["MATCHES"][mID]["TEAM1"] = t1points
-            theD["MATCHES"][mID]["TEAM2"] = t2points
+            theD["MATCHES"][mID]["SCORE1"] = t1points
+            theD["MATCHES"][mID]["SCORE2"] = t2points
             self.save_data()
         else:
             await self.bot.say("Invalid scores, nothing will be updated")
