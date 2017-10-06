@@ -60,7 +60,7 @@ class Fight:
             await self.bot.say("Tournament currently not accepting new players")
             return
         
-        if self._infight(user.id, server.id, currID):
+        if self._infight(server.id, currID, user.id):
             await self.bot.say("You are already in this tournament!")
             return
             
@@ -281,12 +281,12 @@ class Fight:
         """Returns id for active fight, or None if no active fight"""
         return self.the_data[serverid]["CURRENT"]
 
-    def _infight(self, userid, serverid, tID):
+    def _infight(self, serverid, tID, userid):
         """Checks if passed member is already in the tournament"""
         
         return userid in self.the_data[serverid]["TOURNEYS"][tID]["PLAYERS"]
 
-    async def _openregistration(self, serverid, tID):
+    async def _placeholder(self, serverid, tID,):
         """Checks if fight is accepting joins"""
         await self.bot.say("_openregistration Todo")
 
@@ -294,10 +294,11 @@ class Fight:
         """Checks user submitted scores for inconsistancies"""
         await self.bot.say("_comparescores Todo")
 
-    async def _parsemember(self):
-        await self.bot.say("Parsemember Todo")
+    def _parsemember(self, serverid, tID, userid):
+        if self.the_data[serverid]["TOURNEYS"][tID]["RULES"]["TYPE"]:
         
-    def _get_user_from_id(self, server, userid):
+    def _get_user_from_id(self, serverid, userid):
+        server = self._get_server_from_id(serverid)
         return discord.utils.get(server.members, id=userid)
         
     def _get_server_from_id(self, serverid):
@@ -385,10 +386,12 @@ class Fight:
             theD["MATCHES"][mID]["TEAM1"] = t1points
             theD["MATCHES"][mID]["TEAM2"] = t2points
             self.save_data()
-            return
         else:
             await self.bot.say("Invalid scores, nothing will be updated")
             return
+
+        # if self._rr_nextround(serverid, tID)
+
         
     def _rr_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
