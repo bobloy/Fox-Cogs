@@ -69,11 +69,13 @@ class Fight:
         await self.bot.say("User has been added to tournament")
 
     @fight.command(name="score", pass_context=True)
-    async def fight_score(self, ctx, gameID):
-        """Enters score for current match, or for passed game ID"""
-        if gameID is None:
-            if ctx.message.author not in currFight["PLAYERS"]:
-                await self.bot.say("You are not in a current tournament")
+    async def fight_score(self, ctx, tID):
+        """Enters score for current match, or for passed tournament ID"""
+        if tID is None:
+            tID = self._getcurrentfight()
+       
+        if not self._infight(ctx.message.author, ctx.message.server, tID)
+            await self.bot.say("You are not in a current tournament")
         
         await self.bot.say("Todo Score")
 
@@ -84,11 +86,11 @@ class Fight:
 
 #    @fight.command(name="leaderboard", pass_context=True)
 #    async def fight_leaderboard(self, ctx, ctag, ckind="Unranked", irank=0):
-#        """Adds clan to grab-list"""
 #        await self.bot.say("Todo Leaderboard")
+#        """Adds clan to grab-list"""
 
     @fight.group(name="bracket", pass_context=True)
-    async def fight_bracket(self, ctx, ctag):
+    async def fight_bracket(self, ctx, tID):
         """Shows your current match your next opponent,
             run [p]fight bracket full to see all matches"""
         await self.bot.say("Todo Bracket")
@@ -99,7 +101,7 @@ class Fight:
         # await self.bot.say("I can do stuff!")
 
     @fight_bracket.command(name="full")
-    async def fight_bracket_full(self, ctag):
+    async def fight_bracket_full(self, tID):
         """Shows the full bracket"""
         await self.bot.say("Todo Bracket Full")
 
@@ -223,6 +225,20 @@ class Fight:
         self.save_data()
 
         await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
+     @fightset.command(name="start", pass_context=True)
+    async def fightset_start(self, ctx):
+        """Toggles the open status of current tournament"""
+        server = ctx.message.server
+        if not self._activefight(server.id):
+            await self.bot.say("No active fight to start")
+            return
+        
+        currFight = self._getcurrentfight(server.id)
+        currFight["OPEN"] = not currFight["OPEN"]
+
+        self.save_data()
+
+        await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))                                                 
 
     @fightset.command(name="setup", pass_context=True)
     async def fightset_setup(self, ctx):
