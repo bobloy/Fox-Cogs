@@ -234,11 +234,11 @@ class Fight:
             return
         
         currFight = self._getcurrentfight(server.id)
-        currFight["OPEN"] = not currFight["OPEN"]
+        currFight["OPEN"] = False # first close the tournament
+        
+        self._rr_start
 
-        self.save_data()
-
-        await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))                                                 
+        self.save_data()                                         
 
     @fightset.command(name="setup", pass_context=True)
     async def fightset_setup(self, ctx):
@@ -315,6 +315,12 @@ class Fight:
             return _rr_parseuser(serverid, tID, userid)
 
         return False
+    def _get_team(self, serverid, teaminfo):
+        """Team info is a list of userid's. Returns a list of user objects"""
+        outlist = []
+        for player in teaminfo:
+            outlist += self._get_user_from_id(serverid, player)
+        return outlist
         
     def _get_user_from_id(self, serverid, userid):
         server = self._get_server_from_id(serverid)
@@ -332,6 +338,8 @@ class Fight:
 
         return self._getfight(serverid, self._activefight(serverid))
 
+# *********** References to "TYPEDATA" must be done per tournament mode (Below this line) *******
+       
 # **********************Single Elimination***************************
     async def _elim_setup(self, tID):
         await self.bot.say("Elim setup todo")
@@ -347,13 +355,35 @@ class Fight:
     def _rr_parseuser(self, serverid, tID, userid):
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         matches = theT["TYPEDATA"]["MATCHES"]
-        scheudle = theT["TYPEDATA"]["SCHEDULE"]
+        schedule = theT["TYPEDATA"]["SCHEDULE"]
 
-        for round in matches:
+        for round in schedule:
             for mID in round:
                 teamnum = _rr_matchperms(serverid, tID, userid, mID)
-                if teamnum:
-                    
+                if teamnum and not _rr_matchover(serverid, tID, mID): #User is in this match, check if it's done yet
+                    return mID
+    
+        return False # All matches done or not in tourney
+
+    def _rr_matchover(self, serverid, tID, mID):
+        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        match = theT["TYPEDATA"]["MATCHES"][mID]
+        
+        if (match["SCORE1"] == math.ceil(theD["RULES"]["BESTOF"]/2) or 
+            match["SCORE1"] == math.ceil(theD["RULES"]["BESTOF"]/2)):
+            return True
+        return False
+
+    def _rr_roundover(self, serverid, tID):
+        currFight = self._getfight(serverid, tID)
+        currRound = currFight["TYPEDATA"]["SCHEDULE"][currFight["TYPEDATA"]["ROUND"]]
+
+        for mID in currRound:
+            if not _rr_matchover(serverid, tID, mID):
+            # if (currFight["TYPEDATA"]["MATCHES"][match]["SCORE1"] > currFight["RULES"]["BESTOF"]/2 or
+                  # currFight["TYPEDATA"]["MATCHES"][match]["SCORE2"] > currFight["RULES"]["BESTOF"]/2):
+                return False
+        return True
 
     def _rr_matchperms(self, serverid, tID, userid, mID):
         #if self._get_user_from_id(serverid, userid) # Do an if-admin at start
@@ -384,9 +414,11 @@ class Fight:
         theD = theT["TYPEDATA"]
 
         await self.bot.say("Round "+str(rID))
-
+        
         for match in theD["SCHEDULE"][rID]:
-            await self.bot.say(theD["MATCHES"][match]["TEAM1"] + " vs " + theD["MATCHES"][match]["TEAM2"] + " || Match ID: " + match)
+            team1 = self._get_team(theD["MATCHES"][match]["TEAM1"])
+            team2 = self._get_team(theD["MATCHES"][match]["TEAM2"])
+            await self.bot.say(team1 + " vs " + team2 + " || Match ID: " + match)
 
     async def _rr_start(self, serverid, tID):
 
@@ -424,7 +456,7 @@ class Fight:
             await self.bot.say("That's not a number!")
             return
 
-        if t1points == math.ceil(theD["RULES"]["BESTOF"]/2) or t2points == math.ceil(theD["RULES"]["BESTOF"]/2):
+        if t1points == math.ceil(theT["RULES"]["BESTOF"]/2) or t2points == math.ceil(theT["RULES"]["BESTOF"]/2):
             theD["MATCHES"][mID]["SCORE1"] = t1points
             theD["MATCHES"][mID]["SCORE2"] = t2points
             self.save_data()
@@ -432,7 +464,7 @@ class Fight:
             await self.bot.say("Invalid scores, nothing will be updated")
             return
 
-        # if self._rr_nextround(serverid, tID)
+        # if self._rr_roundover(serverid, tID)
 
         
     def _rr_schedule(inlist):
@@ -474,8 +506,8 @@ class Fight:
             TeamCnt = 0
             for ID in matchID:
                 outID[ID] = {
-                             "TEAM1": rPlayers[TeamCnt][0],
-                             "TEAM2": rPlayers[TeamCnt][1],
+                             "TEAM1": [rPlayers[TeamCnt][0]],
+                             "TEAM2": [rPlayers[TeamCnt][1]],
                              "SCORE1": 0,
                              "SCORE2": 0,
                              "USERSCORE1": {"SCORE1": 0, "SCORE2": 0},
@@ -496,16 +528,6 @@ class Fight:
         # outlist[1] is dict data of matches
 
         return outlist
-
-    def _rr_nextround(self, serverid, tID):
-        currFight = self._getfight(serverid, tID)
-        currRound = currFight["TYPEDATA"]["SCHEDULE"][currFight["TYPEDATA"]["ROUND"]]
-
-        for match in currRound:
-            if (currFight["TYPEDATA"]["MATCHES"][match]["SCORE1"] > currFight["RULES"]["BESTOF"]/2 or
-                  currFight["TYPEDATA"]["MATCHES"][match]["SCORE2"] > currFight["RULES"]["BESTOF"]/2):
-                return False
-        return True
 
 
 def check_folders():
