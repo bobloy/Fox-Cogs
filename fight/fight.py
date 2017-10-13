@@ -244,7 +244,7 @@ class Fight:
         self.save_data()                                         
         
         if currFight["RULES"]["TYPE"] == 0:
-            await self._rr_start(serverid, currID)
+            await self._rr_start(server.id, currID)
 
     @fightset.command(name="setup", pass_context=True)
     async def fightset_setup(self, ctx):
