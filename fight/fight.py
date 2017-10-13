@@ -326,7 +326,7 @@ class Fight:
         """Team info is a list of userid's. Returns a list of user objects"""
         outlist = []
         for player in teaminfo:
-            outlist += self._get_user_from_id(serverid, player)
+            outlist.appen(self._get_user_from_id(serverid, player))
         return outlist
         
     def _get_user_from_id(self, serverid, userid):
