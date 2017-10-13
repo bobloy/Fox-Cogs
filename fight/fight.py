@@ -404,18 +404,20 @@ class Fight:
 
     def _rr_setup(self, serverid, tID):
 
-        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
         
         get_schedule = self._rr_schedule(theT["PLAYERS"])
         
-        theD = {"SCHEDULE": get_schedule[0], "MATCHES": get_schedule[1], "ROUND": 0}
+        theD["SCHEDULE"] = get_schedule[0]
+        theD["MATCHES"] = get_schedule[1]
+        theD["ROUND"] = 0
         
         self.save_data()
     
     async def _rr_printround(self, serverid, tID, rID):
 
-        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
 
         await self.bot.say("Round "+str(rID))
