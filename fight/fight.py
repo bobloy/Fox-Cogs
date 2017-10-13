@@ -225,21 +225,26 @@ class Fight:
         self.save_data()
 
         await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
-     @fightset.command(name="start", pass_context=True)
+        
+    @fightset.command(name="start", pass_context=True)
     async def fightset_start(self, ctx):
-        """Toggles the open status of current tournament"""
+        """Runs setup and starts the current tournament"""
         server = ctx.message.server
-        if not self._activefight(server.id):
-            await self.bot.say("No active fight to start")
+                
+        currFight = self._getcurrentfight(server.id)
+        currID = self._activefight(server.id)
+        
+        if not currID:
+            await self.bot.say("No current fight to start")
             return
         
-        currFight = self._getcurrentfight(server.id)
         currFight["OPEN"] = False # first close the tournament
-        
-        self._rr_start
-
         self.save_data()                                         
+        
+        if currFight["RULES"]["TYPE"]==0:
+            await self._rr_start(serverid, currID)
 
+        
     @fightset.command(name="setup", pass_context=True)
     async def fightset_setup(self, ctx):
         """Setup a new tournament!
@@ -415,10 +420,27 @@ class Fight:
 
         await self.bot.say("Round "+str(rID))
         
-        for match in theD["SCHEDULE"][rID]:
-            team1 = self._get_team(theD["MATCHES"][match]["TEAM1"])
-            team2 = self._get_team(theD["MATCHES"][match]["TEAM2"])
-            await self.bot.say(team1 + " vs " + team2 + " || Match ID: " + match)
+        for mID in theD["SCHEDULE"][rID]:
+            team1 = self._get_team(theD["MATCHES"][mID]["TEAM1"])
+            team2 = self._get_team(theD["MATCHES"][mID]["TEAM2"])
+            
+            for i in xrange(len(team1)):
+                team1[i] = team1[i].mention
+            
+            for i in xrange(len(team2)):
+                team2[i] = team2[i].mention
+            
+            mention1 = ", ".join(team1)
+            mention2 = ", ".join(team2)
+            
+            
+            embed=discord.Embed(title="Match ID: "+mID, color=0x0000bf)
+            embed.add_field(name="Team 1", value=mention1, inline=True)
+            embed.add_field(name="VS", value=" ", inline=True)
+            embed.add_field(name="Team 2", value=mention2, inline=True)
+            await self.bot.say(embed=embed)
+            
+            # await self.bot.say(team1 + " vs " + team2 + " || Match ID: " + match)
 
     async def _rr_start(self, serverid, tID):
 
@@ -426,7 +448,13 @@ class Fight:
 
         await self.bot.say("**Tournament is Starting**")
 
-        await self._rr_printround(tID)
+        await self._rr_printround(serverid, tID, 0)
+        
+    def _rr_checkround(self, serverid, tID):
+
+        await self.bot.say("**Todo: Checkround**")
+
+        await self._rr_printround(serverid, tID, 0)
 
     async def _rr_update(self, serverid, tID=None, mID=None, t1points=None, t2points=None):
         
@@ -464,7 +492,7 @@ class Fight:
             await self.bot.say("Invalid scores, nothing will be updated")
             return
 
-        # if self._rr_roundover(serverid, tID)
+        # if self._rr_checkround(serverid, tID)
 
         
     def _rr_schedule(inlist):
