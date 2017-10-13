@@ -427,10 +427,16 @@ class Fight:
             team2 = self._get_team(serverid, theD["MATCHES"][mID]["TEAM2"])
             
             for i in range(len(team1)):
-                team1[i] = team1[i].mention
+                if team1[i]:
+                    team1[i] = team1[i].mention
+                else:
+                    team1[i] = "BYE"
             
             for i in range(len(team2)):
-                team2[i] = team2[i].mention
+                if team2[i]:
+                    team2[i] = team2[i].mention
+                else:
+                    team2[i] = "BYE"
             
             mention1 = ", ".join(team1)
             mention2 = ", ".join(team2)
