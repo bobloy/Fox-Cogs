@@ -487,7 +487,7 @@ class Fight:
 
         # if self._rr_checkround(serverid, tID)
 
-    def _rr_schedule(inlist):
+    def _rr_schedule(self, inlist):
         """ Create a schedule for the teams in the list and return it"""
         s = []  # Schedule list
         outID = {}  # Matches
