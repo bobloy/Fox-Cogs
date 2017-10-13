@@ -508,7 +508,7 @@ class Fight:
         if len(inlist) % 2 == 1:
             inlist = inlist + ["BYE"]
 
-        for i in range(len(inlist)-1):
+        for i in range(len(inlist)):
 
             mid = int(len(inlist) / 2)
             l1 = inlist[:mid]
@@ -526,7 +526,7 @@ class Fight:
             matchLetter = matchLetter[::-1]
 
             matchID = []
-            for ix in range(len(l1)-1):
+            for ix in range(len(l1)):
                 matchID += [matchLetter+str(ix)]
 
             rPlayers = list(zip(l1, l2))
