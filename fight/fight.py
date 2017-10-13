@@ -66,6 +66,8 @@ class Fight:
             
         currFight["PLAYERS"].append(user.id)
         
+        self.save_data()
+        
         await self.bot.say("User has been added to tournament")
 
     @fight.command(name="score", pass_context=True)
