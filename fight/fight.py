@@ -441,11 +441,11 @@ class Fight:
             mention1 = ", ".join(team1)
             mention2 = ", ".join(team2)
 
-            embed=discord.Embed(title="Match ID: " + mID, color=0x0000bf)
-            embed.add_field(name="Team 1", value=mention1, inline=True)
-            embed.add_field(name="VS", value=" ", inline=True)
-            embed.add_field(name="Team 2", value=mention2, inline=True)
-            await self.bot.say(embed=embed)
+            outembed=discord.Embed(title="Match ID: " + mID, color=0x0000bf)
+            outembed.add_field(name="Team 1", value=mention1, inline=True)
+            outembed.add_field(name="VS", value=" ", inline=True)
+            outembed.add_field(name="Team 2", value=mention2, inline=True)
+            await self.bot.say(embed=outembed)
             
             # await self.bot.say(team1 + " vs " + team2 + " || Match ID: " + match)
 
