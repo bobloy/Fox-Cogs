@@ -74,7 +74,7 @@ class Fight:
         if tID is None:
             tID = self._getcurrentfight()
        
-        if not self._infight(ctx.message.author, ctx.message.server, tID)
+        if not self._infight(ctx.message.author, ctx.message.server, tID):
             await self.bot.say("You are not in a current tournament")
         
         await self.bot.say("Todo Score")
@@ -238,13 +238,12 @@ class Fight:
             await self.bot.say("No current fight to start")
             return
         
-        currFight["OPEN"] = False # first close the tournament
+        currFight["OPEN"] = False  # first close the tournament
         self.save_data()                                         
         
-        if currFight["RULES"]["TYPE"]==0:
+        if currFight["RULES"]["TYPE"] == 0:
             await self._rr_start(serverid, currID)
 
-        
     @fightset.command(name="setup", pass_context=True)
     async def fightset_setup(self, ctx):
         """Setup a new tournament!
@@ -316,10 +315,11 @@ class Fight:
         await self.bot.say("_comparescores Todo")
 
     def _parseuser(self, serverid, tID, userid):
-        if self.the_data[serverid]["TOURNEYS"][tID]["RULES"]["TYPE"]==0: # RR
+        if self._getfight(serverid, tID)["RULES"]["TYPE"] == 0:  # RR
             return _rr_parseuser(serverid, tID, userid)
 
         return False
+        
     def _get_team(self, serverid, teaminfo):
         """Team info is a list of userid's. Returns a list of user objects"""
         outlist = []
@@ -365,10 +365,10 @@ class Fight:
         for round in schedule:
             for mID in round:
                 teamnum = _rr_matchperms(serverid, tID, userid, mID)
-                if teamnum and not _rr_matchover(serverid, tID, mID): #User is in this match, check if it's done yet
+                if teamnum and not _rr_matchover(serverid, tID, mID):  # User is in this match, check if it's done yet
                     return mID
     
-        return False # All matches done or not in tourney
+        return False  # All matches done or not in tourney
 
     def _rr_matchover(self, serverid, tID, mID):
         theT = self.the_data[serverid]["TOURNEYS"][tID]
@@ -376,6 +376,7 @@ class Fight:
         
         if (match["SCORE1"] == math.ceil(theD["RULES"]["BESTOF"]/2) or 
             match["SCORE1"] == math.ceil(theD["RULES"]["BESTOF"]/2)):
+                
             return True
         return False
 
@@ -385,13 +386,11 @@ class Fight:
 
         for mID in currRound:
             if not _rr_matchover(serverid, tID, mID):
-            # if (currFight["TYPEDATA"]["MATCHES"][match]["SCORE1"] > currFight["RULES"]["BESTOF"]/2 or
-                  # currFight["TYPEDATA"]["MATCHES"][match]["SCORE2"] > currFight["RULES"]["BESTOF"]/2):
                 return False
         return True
 
     def _rr_matchperms(self, serverid, tID, userid, mID):
-        #if self._get_user_from_id(serverid, userid) # Do an if-admin at start
+        # if self._get_user_from_id(serverid, userid) # Do an if-admin at start
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         if theT["TYPEDATA"]["MATCHES"][mID]["TEAM1"] == userid:            
             return 1
@@ -400,7 +399,6 @@ class Fight:
             return 2
 
         return False
-
 
     def _rr_setup(self, serverid, tID):
 
@@ -432,9 +430,8 @@ class Fight:
             
             mention1 = ", ".join(team1)
             mention2 = ", ".join(team2)
-            
-            
-            embed=discord.Embed(title="Match ID: "+mID, color=0x0000bf)
+
+            embed=discord.Embed(title="Match ID: " + mID, color=0x0000bf)
             embed.add_field(name="Team 1", value=mention1, inline=True)
             embed.add_field(name="VS", value=" ", inline=True)
             embed.add_field(name="Team 2", value=mention2, inline=True)
@@ -494,7 +491,6 @@ class Fight:
 
         # if self._rr_checkround(serverid, tID)
 
-        
     def _rr_schedule(inlist):
         """ Create a schedule for the teams in the list and return it"""
         s = []  # Schedule list
