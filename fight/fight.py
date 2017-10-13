@@ -423,8 +423,8 @@ class Fight:
         await self.bot.say("Round "+str(rID))
         
         for mID in theD["SCHEDULE"][rID]:
-            team1 = self._get_team(theD["MATCHES"][mID]["TEAM1"])
-            team2 = self._get_team(theD["MATCHES"][mID]["TEAM2"])
+            team1 = self._get_team(serverid, theD["MATCHES"][mID]["TEAM1"])
+            team2 = self._get_team(serverid, theD["MATCHES"][mID]["TEAM2"])
             
             for i in xrange(len(team1)):
                 team1[i] = team1[i].mention
