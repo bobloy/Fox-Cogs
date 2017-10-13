@@ -446,12 +446,6 @@ class Fight:
         await self.bot.say("**Tournament is Starting**")
 
         await self._rr_printround(serverid, tID, 0)
-        
-    def _rr_checkround(self, serverid, tID):
-
-        await self.bot.say("**Todo: Checkround**")
-
-        await self._rr_printround(serverid, tID, 0)
 
     async def _rr_update(self, serverid, tID=None, mID=None, t1points=None, t2points=None):
         
