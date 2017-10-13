@@ -71,19 +71,33 @@ class Fight:
         await self.bot.say("User has been added to tournament")
 
     @fight.command(name="score", pass_context=True)
-    async def fight_score(self, ctx, tID):
+    async def fight_score(self, ctx, tID=None):
         """Enters score for current match, or for passed tournament ID"""
-        if tID is None:
-            tID = self._getcurrentfight()
+        server = ctx.message.server
+        user = ctx.message.author
+        
+        currFight = self._getcurrentfight(server.id)
+        if not currFight:
+            await self.bot.say("No tournament currently running!")
+            return
+            
+        if not tID:
+            tID = self._activefight(server.id)
        
-        if not self._infight(ctx.message.author, ctx.message.server, tID):
+        if not self._infight(server.id, tID, user.id):
             await self.bot.say("You are not in a current tournament")
         
         await self.bot.say("Todo Score")
 
     @fight.command(name="leave", pass_context=True)
-    async def fight_leave(self, ctx):
+    async def fight_leave(self, ctx, tID=None, user: discord.Member=None):
         """Forfeit your match and all future matches"""
+        server = ctx.message.server
+        if not user:
+            user = ctx.author
+        
+        if not tID:
+            tID = self._activefight(serverid)
         await self.bot.say("Todo Leave")
 
 #    @fight.command(name="leaderboard", pass_context=True)
