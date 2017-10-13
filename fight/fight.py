@@ -440,7 +440,9 @@ class Fight:
             
             mention1 = ", ".join(team1)
             mention2 = ", ".join(team2)
-
+            await self.bot.say(mID)
+            await self.bot.say(mention1)
+            await self.bot.say(mention2)
             outembed=discord.Embed(title="Match ID: " + mID, color=0x0000bf)
             outembed.add_field(name="Team 1", value=mention1, inline=True)
             outembed.add_field(name="VS", value=" ", inline=True)
