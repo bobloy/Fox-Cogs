@@ -343,7 +343,7 @@ class Fight:
 
     def _parseuser(self, serverid, tID, userid):
         if self._getfight(serverid, tID)["RULES"]["TYPE"] == 0:  # RR
-            return _rr_parseuser(serverid, tID, userid)
+            return self._rr_parseuser(serverid, tID, userid)
 
         return False
         
