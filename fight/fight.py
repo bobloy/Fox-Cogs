@@ -3,9 +3,12 @@ import os
 import math
 from discord.ext import commands
 
+from .utils.chat_formatting import pagify
+from .utils.chat_formatting import box
 from .utils.dataIO import dataIO
 from .utils import checks
 from random import randint
+
 
 
 # 0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
@@ -37,7 +40,7 @@ class Fight:
         if not self._activefight(server.id):
             await self.bot.say("No tournament currently running!")
         else:
-            await self.bot.say("Current tournament ID: " + self.the_data[server.id]["CURRENT"])
+            await self.bot.say("Current tournament ID: " + self._activefight(server.id))
             
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
@@ -92,12 +95,8 @@ class Fight:
         if not mID:
             await self.bot.say("You have no match to update!")
             return
-            
-        if mID==1:
-            await self.bot.say("equal 1 fail")
-            return
-            
-        if currFight["RULES"]["TYPE"] == 0:
+
+        if currFight["RULES"]["TYPE"] == 0: # Round-Robin
             await self._rr_score(server.id, tID, mID, user)
 
     @fight.command(name="leave", pass_context=True)
@@ -219,11 +218,11 @@ class Fight:
     async def fightset_current(self, ctx, tID):
         """Sets the current tournament to passed ID"""
         server = ctx.message.server
-        try:
-            aFight = self.the_data[server.id]["TOURNEYS"][tID]
+        aFight = self._getfight(server.id, tID)
             
-        except:
+        if not aFight:
             await self.bot.say("No tourney found with that ID")
+            return
          
         self.the_data[server.id]["CURRENT"] = tID
         self.save_data()
@@ -235,7 +234,9 @@ class Fight:
         """Lists all current and past fights"""
         server = ctx.message.server
         
-        await self.bot.say(self.the_data[server.id]["TOURNEYS"])
+        for page in pagify(self.the_data[server.id]["TOURNEYS"], shorten_by=24):
+            await self.bot.say(box(page))
+
         await self.bot.say("Done")
         
     @fightset.command(name="toggleopen", pass_context=True)
@@ -276,7 +277,7 @@ class Fight:
         currFight["OPEN"] = False  # first close the tournament
         self.save_data()                                         
         
-        if currFight["RULES"]["TYPE"] == 0:
+        if currFight["RULES"]["TYPE"] == 0: # Round-Robin
             await self._rr_start(server.id, tID)
 
     @fightset.command(name="setup", pass_context=True)
@@ -353,7 +354,7 @@ class Fight:
         if self._getfight(serverid, tID)["RULES"]["TYPE"] == 0:  # RR
             return self._rr_parseuser(serverid, tID, userid)
 
-        return 1
+        return False
         
     def _get_team(self, serverid, teaminfo):
         """Team info is a list of userid's. Returns a list of user objects"""
@@ -392,7 +393,7 @@ class Fight:
 
 # **********************Round-Robin**********************************
     def _rr_parseuser(self, serverid, tID, userid):
-        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        theT = self._getfight(serverid, tID)
         matches = theT["TYPEDATA"]["MATCHES"]
         schedule = theT["TYPEDATA"]["SCHEDULE"]
 
@@ -405,7 +406,7 @@ class Fight:
         return False  # All matches done or not in tourney
 
     def _rr_matchover(self, serverid, tID, mID):
-        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        theT = self._getfight(serverid, tID)
         match = theT["TYPEDATA"]["MATCHES"][mID]
         
         if (match["SCORE1"] == math.ceil(theD["RULES"]["BESTOF"]/2) or 
@@ -425,7 +426,7 @@ class Fight:
 
     def _rr_matchperms(self, serverid, tID, userid, mID):
         # if self._get_user_from_id(serverid, userid) # Do an if-admin at start
-        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        theT = self._getfight(serverid, tID)
         if theT["TYPEDATA"]["MATCHES"][mID]["TEAM1"] == userid:            
             return 1
 
@@ -488,7 +489,7 @@ class Fight:
 
     async def _rr_score(self, serverid, tID, mID, author, t1points=None, t2points=None):
         
-        theT = self.the_data[serverid]["TOURNEYS"][tID]
+        theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
         
         if t1points and t2points:
