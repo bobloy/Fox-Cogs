@@ -90,7 +90,7 @@ class Fight:
             
         
         if currFight["RULES"]["TYPE"] == 0:
-            await self._rr_score(server.id, tID, self._parseuser(serverid, tID, user.id))
+            await self._rr_score(server.id, tID, self._parseuser(server.id, tID, user.id))
 
     @fight.command(name="leave", pass_context=True)
     async def fight_leave(self, ctx, tID=None, user: discord.Member=None):
