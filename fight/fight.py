@@ -331,7 +331,7 @@ class Fight:
     def _infight(self, serverid, tID, userid):
         """Checks if passed member is already in the tournament"""
         
-        return (userid in self.the_data[serverid]["TOURNEYS"][tID]["PLAYERS"])
+        return userid in self.the_data[serverid]["TOURNEYS"][tID]["PLAYERS"]
 
     async def _placeholder(self, serverid, tID,):
         """Checks if fight is accepting joins"""
@@ -381,7 +381,6 @@ class Fight:
 
     async def _elim_update(self, matchID, ):
         await self.bot.say("Elim update todo")
-
 
 # **********************Round-Robin**********************************
     def _rr_parseuser(self, serverid, tID, userid):
@@ -481,14 +480,11 @@ class Fight:
 
         await self._rr_printround(serverid, tID, 0)
 
-    async def _rr_score(self, serverid, tID=None, mID, t1points=None, t2points=None):
+    async def _rr_score(self, serverid, tID, mID, t1points=None, t2points=None):
         
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
         
-        if not tID:
-            tID = self._activefight(serverid)
-
         if t1points and t2points:
             theD["MATCHES"][mID]["TEAM1"] = t1points
             theD["MATCHES"][mID]["TEAM2"] = t2points
