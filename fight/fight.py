@@ -51,7 +51,7 @@ class Fight:
             user = ctx.message.author
         
         currFight = self._getcurrentfight(server.id)
-        currID = self._activefight(server.id)
+        tID = self._activefight(server.id)
         if not currFight:
             await self.bot.say("No tournament currently running!")
             return
@@ -60,7 +60,7 @@ class Fight:
             await self.bot.say("Tournament currently not accepting new players")
             return
         
-        if self._infight(server.id, currID, user.id):
+        if self._infight(server.id, tID, user.id):
             await self.bot.say("You are already in this tournament!")
             return
             
@@ -86,8 +86,11 @@ class Fight:
        
         if not self._infight(server.id, tID, user.id):
             await self.bot.say("You are not in a current tournament")
+            return
+            
         
-        await self.bot.say("Todo Score")
+        if currFight["RULES"]["TYPE"] == 0:
+            await self._rr_score(server.id, tID, self._parseuser(serverid, tID, user.id))
 
     @fight.command(name="leave", pass_context=True)
     async def fight_leave(self, ctx, tID=None, user: discord.Member=None):
@@ -244,13 +247,13 @@ class Fight:
         
     @fightset.command(name="start", pass_context=True)
     async def fightset_start(self, ctx):
-        """Runs setup and starts the current tournament"""
+        """Starts the current tournament, must run setup first"""
         server = ctx.message.server
                 
         currFight = self._getcurrentfight(server.id)
-        currID = self._activefight(server.id)
+        tID = self._activefight(server.id)
         
-        if not currID:
+        if not tID:
             await self.bot.say("No current fight to start")
             return
             
@@ -266,7 +269,7 @@ class Fight:
         self.save_data()                                         
         
         if currFight["RULES"]["TYPE"] == 0:
-            await self._rr_start(server.id, currID)
+            await self._rr_start(server.id, tID)
 
     @fightset.command(name="setup", pass_context=True)
     async def fightset_setup(self, ctx):
@@ -478,11 +481,14 @@ class Fight:
 
         await self._rr_printround(serverid, tID, 0)
 
-    async def _rr_update(self, serverid, tID=None, mID=None, t1points=None, t2points=None):
+    async def _rr_score(self, serverid, tID=None, mID, t1points=None, t2points=None):
         
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
         
+        if not tID:
+            tID = self._activefight(serverid)
+
         if t1points and t2points:
             theD["MATCHES"][mID]["TEAM1"] = t1points
             theD["MATCHES"][mID]["TEAM2"] = t2points
