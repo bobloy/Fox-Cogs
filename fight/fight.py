@@ -94,14 +94,14 @@ class Fight:
             return
             
         if currFight["RULES"]["TYPE"] == 0:
-            await self._rr_score(server.id, tID, mID)
+            await self._rr_score(server.id, tID, mID, user)
 
     @fight.command(name="leave", pass_context=True)
     async def fight_leave(self, ctx, tID=None, user: discord.Member=None):
         """Forfeit your match and all future matches"""
         server = ctx.message.server
         if not user:
-            user = ctx.author
+            user = ctx.message.author
         
         if not tID:
             tID = self._activefight(serverid)
@@ -253,7 +253,7 @@ class Fight:
     async def fightset_start(self, ctx):
         """Starts the current tournament, must run setup first"""
         server = ctx.message.server
-                
+        author = ctx.message.author
         currFight = self._getcurrentfight(server.id)
         tID = self._activefight(server.id)
         
@@ -482,7 +482,7 @@ class Fight:
         await self.bot.say("**Tournament is Starting**")
         await self._rr_printround(serverid, tID, 0)
 
-    async def _rr_score(self, serverid, tID, mID, t1points=None, t2points=None):
+    async def _rr_score(self, serverid, tID, mID, author, t1points=None, t2points=None):
         
         theT = self.the_data[serverid]["TOURNEYS"][tID]
         theD = theT["TYPEDATA"]
