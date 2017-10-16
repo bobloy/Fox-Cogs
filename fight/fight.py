@@ -88,9 +88,13 @@ class Fight:
             await self.bot.say("You are not in a current tournament")
             return
             
-        
+        mID = self._parseuser(server.id, tID, user.id)
+        if not mID:
+            await self.bot.say("You have no match to update!")
+            return
+            
         if currFight["RULES"]["TYPE"] == 0:
-            await self._rr_score(server.id, tID, self._parseuser(server.id, tID, user.id))
+            await self._rr_score(server.id, tID, mID)
 
     @fight.command(name="leave", pass_context=True)
     async def fight_leave(self, ctx, tID=None, user: discord.Member=None):
@@ -475,9 +479,7 @@ class Fight:
     async def _rr_start(self, serverid, tID):
 
         self._rr_setup(serverid, tID)
-
         await self.bot.say("**Tournament is Starting**")
-
         await self._rr_printround(serverid, tID, 0)
 
     async def _rr_score(self, serverid, tID, mID, t1points=None, t2points=None):
