@@ -409,8 +409,8 @@ class Fight:
         theT = self._getfight(serverid, tID)
         match = theT["TYPEDATA"]["MATCHES"][mID]
         
-        if (match["SCORE1"] == math.ceil(theD["RULES"]["BESTOF"]/2) or 
-            match["SCORE1"] == math.ceil(theD["RULES"]["BESTOF"]/2)):
+        if (match["SCORE1"] == math.ceil(theT["RULES"]["BESTOF"]/2) or 
+            match["SCORE1"] == math.ceil(theT["RULES"]["BESTOF"]/2)):
                 
             return True
         return False
