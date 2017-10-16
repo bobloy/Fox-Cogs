@@ -253,6 +253,14 @@ class Fight:
         if not currID:
             await self.bot.say("No current fight to start")
             return
+            
+        if currFight["TYPEDATA"]: # Empty dicionary {} resolves to False
+            await self.bot.say("Looks like this tournament has already started.\nDo you want to delete all match data and restart? (yes/no)")
+            answer = await self.bot.wait_for_message(timeout=120, author=author)
+
+            if not answer.content and answer.content.upper() in ["YES", "Y"]:
+                await self.bot.say("Cancelled")
+                return
         
         currFight["OPEN"] = False  # first close the tournament
         self.save_data()                                         

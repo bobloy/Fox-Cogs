@@ -8,13 +8,7 @@ from .utils import checks
 from random import randint
 
 
-# 0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
-T_TYPES = ["Round Robin", "Single Elimination",
-           "Double Elimination", "Triple Elimination",
-           "3 Game Guarentee", "Compass Draw"]
-
-
-class Fight:
+class Timezone:
     """Cog for organizing fights"""
 
     def __init__(self, bot):
