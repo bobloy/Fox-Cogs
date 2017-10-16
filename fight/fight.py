@@ -390,8 +390,8 @@ class Fight:
 
         for round in schedule:
             for mID in round:
-                teamnum = _rr_matchperms(serverid, tID, userid, mID)
-                if teamnum and not _rr_matchover(serverid, tID, mID):  # User is in this match, check if it's done yet
+                teamnum = self._rr_matchperms(serverid, tID, userid, mID)
+                if teamnum and not self._rr_matchover(serverid, tID, mID):  # User is in this match, check if it's done yet
                     return mID
     
         return False  # All matches done or not in tourney
@@ -411,7 +411,7 @@ class Fight:
         currRound = currFight["TYPEDATA"]["SCHEDULE"][currFight["TYPEDATA"]["ROUND"]]
 
         for mID in currRound:
-            if not _rr_matchover(serverid, tID, mID):
+            if not self._rr_matchover(serverid, tID, mID):
                 return False
         return True
 
