@@ -93,6 +93,10 @@ class Fight:
             await self.bot.say("You have no match to update!")
             return
             
+        if mID==1:
+            await self.bot.say("equal 1 fail")
+            return
+            
         if currFight["RULES"]["TYPE"] == 0:
             await self._rr_score(server.id, tID, mID, user)
 
@@ -349,7 +353,7 @@ class Fight:
         if self._getfight(serverid, tID)["RULES"]["TYPE"] == 0:  # RR
             return self._rr_parseuser(serverid, tID, userid)
 
-        return False
+        return 1
         
     def _get_team(self, serverid, teaminfo):
         """Team info is a list of userid's. Returns a list of user objects"""
