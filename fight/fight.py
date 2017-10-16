@@ -234,7 +234,7 @@ class Fight:
         """Lists all current and past fights"""
         server = ctx.message.server
         
-        for page in pagify(str(self.the_data[server.id]["TOURNEYS"], shorten_by=24)):
+        for page in pagify(str(self.the_data[server.id]["TOURNEYS"])):
             await self.bot.say(box(page))
 
         await self.bot.say("Done")
