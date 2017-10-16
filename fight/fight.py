@@ -427,10 +427,10 @@ class Fight:
     def _rr_matchperms(self, serverid, tID, userid, mID):
         # if self._get_user_from_id(serverid, userid) # Do an if-admin at start
         theT = self._getfight(serverid, tID)
-        if theT["TYPEDATA"]["MATCHES"][mID]["TEAM1"] == userid:            
+        if userid in theT["TYPEDATA"]["MATCHES"][mID]["TEAM1"]:           
             return 1
 
-        if theT["TYPEDATA"]["MATCHES"][mID]["TEAM2"] == userid:
+        if userid in theT["TYPEDATA"]["MATCHES"][mID]["TEAM2"]:
             return 2
 
         return False
@@ -493,13 +493,13 @@ class Fight:
         theD = theT["TYPEDATA"]
         
         if t1points and t2points:
-            theD["MATCHES"][mID]["TEAM1"] = t1points
-            theD["MATCHES"][mID]["TEAM2"] = t2points
+            theD["MATCHES"][mID]["SCORE1"] = t1points
+            theD["MATCHES"][mID]["SCORE2"] = t2points
             self.save_data()
             return
         
         await self.bot.say("Entering scores for match ID: " + mID + "\n\n")
-        await self.bot.say("How many points did " + theD["MATCHES"][mID]["TEAM1"] + " get?")
+        await self.bot.say("How many points did TEAM1 get?")
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         try:
             t1points = int(answer.content)
@@ -507,7 +507,7 @@ class Fight:
             await self.bot.say("That's not a number!")
             return
             
-        await self.bot.say("How many points did " + theD["MATCHES"][mID]["TEAM2"] + " get?")
+        await self.bot.say("How many points did TEAM2 get?")
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         try:
             t2points = int(answer.content)
