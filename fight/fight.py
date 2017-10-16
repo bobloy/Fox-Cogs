@@ -331,7 +331,7 @@ class Fight:
     def _infight(self, serverid, tID, userid):
         """Checks if passed member is already in the tournament"""
         
-        return userid in self.the_data[serverid]["TOURNEYS"][tID]["PLAYERS"]
+        return (userid in self.the_data[serverid]["TOURNEYS"][tID]["PLAYERS"])
 
     async def _placeholder(self, serverid, tID,):
         """Checks if fight is accepting joins"""
