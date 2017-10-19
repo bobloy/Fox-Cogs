@@ -74,7 +74,7 @@ class Fight:
         await self.bot.say("User has been added to tournament")
 
     @fight.command(name="score", pass_context=True)
-    async def fight_score(self, ctx, tID=None, score1=None:, score2=None):
+    async def fight_score(self, ctx, tID=None, score1=None, score2=None):
         """Enters score for current match, or for passed tournament ID"""
         server = ctx.message.server
         user = ctx.message.author
