@@ -512,28 +512,34 @@ class Fight:
         theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
         
-        if t1points and t2points:
-            theD["MATCHES"][mID]["SCORE1"] = t1points
-            theD["MATCHES"][mID]["SCORE2"] = t2points
-            self.save_data()
-            return
+        #if t1points and t2points:
+        #    theD["MATCHES"][mID]["SCORE1"] = t1points
+        #    theD["MATCHES"][mID]["SCORE2"] = t2points
+        #    self.save_data()
+        #    return
         
-        await self.bot.say("Entering scores for match ID: " + mID + "\n\n")
-        await self.bot.say("How many points did TEAM1 get?")
-        answer = await self.bot.wait_for_message(timeout=120, author=author)
-        try:
-            t1points = int(answer.content)
-        except:
-            await self.bot.say("That's not a number!")
-            return
-            
-        await self.bot.say("How many points did TEAM2 get?")
-        answer = await self.bot.wait_for_message(timeout=120, author=author)
-        try:
-            t2points = int(answer.content)
-        except:
-            await self.bot.say("That's not a number!")
-            return
+        if not t1points:
+            await self.bot.say("Entering scores for match ID: " + mID + "\n\n")
+            await self.bot.say("How many points did TEAM1 get?")
+            if self._rr_matchperms(serverid, tID, author.id, mID)==1:
+                await self.bot.say("*HINT: You are on TEAM1*")
+            answer = await self.bot.wait_for_message(timeout=120, author=author)
+            try:
+                t1points = int(answer.content)
+            except:
+                await self.bot.say("That's not a number!")
+                return
+        
+        if not t2points:
+            await self.bot.say("How many points did TEAM2 get?")
+            if self._rr_matchperms(serverid, tID, author.id, mID)==2:
+                await self.bot.say("*HINT: You are on TEAM2*")
+            answer = await self.bot.wait_for_message(timeout=120, author=author)
+            try:
+                t2points = int(answer.content)
+            except:
+                await self.bot.say("That's not a number!")
+                return
 
         if t1points == math.ceil(theT["RULES"]["BESTOF"]/2) or t2points == math.ceil(theT["RULES"]["BESTOF"]/2):
             theD["MATCHES"][mID]["SCORE1"] = t1points
