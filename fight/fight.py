@@ -10,7 +10,6 @@ from .utils import checks
 from random import randint
 
 
-
 # 0 - Robin, 1 - Single, 2 - Double, 3 - Triple, 4 - Guarentee, 5 - Compass
 T_TYPES = {0: "Round Robin", 1: "Single Elimination",
            2: "Double Elimination", 3: "Triple Elimination",
@@ -36,12 +35,12 @@ class Fight:
     async def fight(self, ctx):
         """Participate in active fights!"""
         server = ctx.message.server
-        
+
         if not self._activefight(server.id):
             await self.bot.say("No tournament currently running!")
         else:
             await self.bot.say("Current tournament ID: " + self._activefight(server.id))
-            
+
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
             # await self.bot.say("I can do stuff!")
@@ -52,25 +51,25 @@ class Fight:
         server = ctx.message.server
         if not user:
             user = ctx.message.author
-        
+
         currFight = self._getcurrentfight(server.id)
         tID = self._activefight(server.id)
         if not currFight:
             await self.bot.say("No tournament currently running!")
             return
-        
+
         if not currFight["OPEN"]:
             await self.bot.say("Tournament currently not accepting new players")
             return
-        
+
         if self._infight(server.id, tID, user.id):
             await self.bot.say("You are already in this tournament!")
             return
-            
+
         currFight["PLAYERS"].append(user.id)
-        
+
         self.save_data()
-        
+
         await self.bot.say("User has been added to tournament")
 
     @fight.command(name="score", pass_context=True)
@@ -78,19 +77,19 @@ class Fight:
         """Enters score for current match, or for passed tournament ID"""
         server = ctx.message.server
         user = ctx.message.author
-        
+
         currFight = self._getcurrentfight(server.id)
         if not currFight:
             await self.bot.say("No tournament currently running!")
             return
-            
+
         if not tID:
             tID = self._activefight(server.id)
-       
+
         if not self._infight(server.id, tID, user.id):
             await self.bot.say("You are not in a current tournament")
             return
-            
+
         mID = self._parseuser(server.id, tID, user.id)
         if not mID:
             await self.bot.say("You have no match to update!")
@@ -105,7 +104,7 @@ class Fight:
         server = ctx.message.server
         if not user:
             user = ctx.message.author
-        
+
         if not tID:
             tID = self._activefight(serverid)
         await self.bot.say("Todo Leave")
@@ -192,24 +191,24 @@ class Fight:
         if not tID and not self._activefight(server.id):
             await self.bot.say("No active fight to adjust")
             return
-        
+
         if not tID:
             tID = self._activefight(server.id)
-        
+
         try:
             num = int(incount)
         except:
             await self.bot.say("That is not a number")
             return
-        
+
         if num % 2 != 1:
             await self.bot.say("Must be an odd number")
             return
-        
+
         if num < 1:
             await self.bot.say("Must be greater than 0, idiot")
             return
-            
+
         self._getfight(server.id, tID)["RULES"]["BESTOFFINAL"] = num
         self.save_data()
         await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
@@ -219,26 +218,26 @@ class Fight:
         """Sets the current tournament to passed ID"""
         server = ctx.message.server
         aFight = self._getfight(server.id, tID)
-            
+
         if not aFight:
             await self.bot.say("No tourney found with that ID")
             return
-         
+
         self.the_data[server.id]["CURRENT"] = tID
         self.save_data()
-        
+
         await self.bot.say("Current tournament set to "+tID)
-        
+
     @fightset.command(name="list", pass_context=True)
     async def fightset_list(self, ctx):
         """Lists all current and past fights"""
         server = ctx.message.server
-        
+
         for page in pagify(str(self.the_data[server.id]["TOURNEYS"])):
             await self.bot.say(box(page))
 
         await self.bot.say("Done")
-        
+
     @fightset.command(name="toggleopen", pass_context=True)
     async def fightset_toggleopen(self, ctx):
         """Toggles the open status of current tournament"""
@@ -246,14 +245,14 @@ class Fight:
         if not self._activefight(server.id):
             await self.bot.say("No active fight to adjust")
             return
-        
+
         currFight = self._getcurrentfight(server.id)
         currFight["OPEN"] = not currFight["OPEN"]
 
         self.save_data()
 
         await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
-    
+
     @fightset.command(name="name", pass_context=True)
     async def fightset_name(self, ctx, inname, tID=None):
         """Renames the tournament"""
@@ -359,7 +358,7 @@ class Fight:
 
     def _infight(self, serverid, tID, userid):
         """Checks if passed member is already in the tournament"""
-        
+
         return userid in self.the_data[serverid]["TOURNEYS"][tID]["PLAYERS"]
 
     async def _placeholder(self, serverid, tID,):
@@ -508,20 +507,20 @@ class Fight:
         await self._rr_printround(serverid, tID, 0)
 
     async def _rr_score(self, serverid, tID, mID, author, t1points, t2points):
-        
+
         theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
         
-        #if t1points and t2points:
+        # if t1points and t2points:
         #    theD["MATCHES"][mID]["SCORE1"] = t1points
         #    theD["MATCHES"][mID]["SCORE2"] = t2points
         #    self.save_data()
         #    return
-        
+
         if not t1points:
             await self.bot.say("Entering scores for match ID: " + mID + "\n\n")
             await self.bot.say("How many points did TEAM1 get?")
-            if self._rr_matchperms(serverid, tID, author.id, mID)==1:
+            if self._rr_matchperms(serverid, tID, author.id, mID) == 1:
                 await self.bot.say("*HINT: You are on TEAM1*")
             answer = await self.bot.wait_for_message(timeout=120, author=author)
             try:
@@ -529,10 +528,10 @@ class Fight:
             except:
                 await self.bot.say("That's not a number!")
                 return
-        
+
         if not t2points:
             await self.bot.say("How many points did TEAM2 get?")
-            if self._rr_matchperms(serverid, tID, author.id, mID)==2:
+            if self._rr_matchperms(serverid, tID, author.id, mID) == 2:
                 await self.bot.say("*HINT: You are on TEAM2*")
             answer = await self.bot.wait_for_message(timeout=120, author=author)
             try:
@@ -541,14 +540,15 @@ class Fight:
                 await self.bot.say("That's not a number!")
                 return
 
-        if t1points == math.ceil(theT["RULES"]["BESTOF"]/2) or t2points == math.ceil(theT["RULES"]["BESTOF"]/2):
+        if (t1points == math.ceil(theT["RULES"]["BESTOF"]/2) or
+             t2points == math.ceil(theT["RULES"]["BESTOF"]/2)):
             theD["MATCHES"][mID]["SCORE1"] = t1points
             theD["MATCHES"][mID]["SCORE2"] = t2points
             self.save_data()
         else:
             await self.bot.say("Invalid scores, nothing will be updated")
             return
-        
+
         await self.bot.say("Scores have been saved successfully!")
 
         # if self._rr_checkround(serverid, tID)
@@ -557,7 +557,7 @@ class Fight:
         """ Create a schedule for the teams in the list and return it"""
         s = []  # Schedule list
         outID = {}  # Matches
-        
+
         firstID = ["A", "B", "C", "D", "E", "F",
                    "G", "H", "I", "J", "K", "L",
                    "M", "N", "O", "P", "Q", "R",
