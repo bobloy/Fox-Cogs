@@ -354,6 +354,8 @@ class Fight:
                                     "REPORTCHNNL": None,
                                     "ANNOUNCECHNNL": None
                                     }
+                                    
+        currServ["SRTRACKER"] = {}
 
         self.save_data()
 
