@@ -267,9 +267,7 @@ class Fight:
         
         self._getfight(server.id, tID)["NAME"] = inname
         self.save_data()
-        await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
-
-        await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
+        await self.bot.say("Tourney ID "+tID+" is now called "+self._getfight(server.id, tID)["NAME"])
         
     @fightset.command(name="start", pass_context=True)
     async def fightset_start(self, ctx):
