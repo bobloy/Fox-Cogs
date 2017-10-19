@@ -74,7 +74,7 @@ class Fight:
         await self.bot.say("User has been added to tournament")
 
     @fight.command(name="score", pass_context=True)
-    async def fight_score(self, ctx, tID=None):
+    async def fight_score(self, ctx, tID=None, score1=None:, score2=None):
         """Enters score for current match, or for passed tournament ID"""
         server = ctx.message.server
         user = ctx.message.author
@@ -97,7 +97,7 @@ class Fight:
             return
 
         if currFight["RULES"]["TYPE"] == 0: # Round-Robin
-            await self._rr_score(server.id, tID, mID, user)
+            await self._rr_score(server.id, tID, mID, user, score1, score2)
 
     @fight.command(name="leave", pass_context=True)
     async def fight_leave(self, ctx, tID=None, user: discord.Member=None):
@@ -253,6 +253,23 @@ class Fight:
         self.save_data()
 
         await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
+    
+    @fightset.command(name="name", pass_context=True)
+    async def fightset_name(self, ctx, inname, tID=None):
+        """Renames the tournament"""
+        server = ctx.message.server
+        if not tID and not self._activefight(server.id):
+            await self.bot.say("No active fight to adjust")
+            return
+        
+        if not tID:
+            tID = self._activefight(server.id)
+        
+        self._getfight(server.id, tID)["NAME"] = inname
+        self.save_data()
+        await self.bot.say("Tourney ID "+tID+" is now Best of "+str(num))
+
+        await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
         
     @fightset.command(name="start", pass_context=True)
     async def fightset_start(self, ctx):
@@ -296,11 +313,16 @@ class Fight:
         currServ["TOURNEYS"][tID] = {
                                         "PLAYERS": [],
                                         "NAME": "Tourney "+str(tID),
-                                        "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "SELFREPORT": True, "TYPE": 0},
+                                        "RULES": {"BESTOF": 1, "BESTOFFINAL": 1, "TYPE": 0},
                                         "TYPEDATA": {},
                                         "OPEN": False,
                                         "WINNER": None
                                         }
+        currServ["SETTINGS"] = {    
+                                    "SELFREPORT": True,
+                                    "REPORTCHNNL": None,
+                                    "ANNOUNCECHNNL": None
+                                    }
 
         self.save_data()
 
@@ -453,7 +475,7 @@ class Fight:
         theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
 
-        await self.bot.say("Round "+str(rID))
+        await self.bot.say("Round "+str(rID+1)) # rID starts at 0, so print +1. Never used for computation, so doesn't matter
         
         for mID in theD["SCHEDULE"][rID]:
             team1 = self._get_team(serverid, theD["MATCHES"][mID]["TEAM1"])
@@ -487,7 +509,7 @@ class Fight:
         await self.bot.say("**Tournament is Starting**")
         await self._rr_printround(serverid, tID, 0)
 
-    async def _rr_score(self, serverid, tID, mID, author, t1points=None, t2points=None):
+    async def _rr_score(self, serverid, tID, mID, author, t1points, t2points):
         
         theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
@@ -522,6 +544,8 @@ class Fight:
         else:
             await self.bot.say("Invalid scores, nothing will be updated")
             return
+        
+        await self.bot.say("Scores have been saved successfully!")
 
         # if self._rr_checkround(serverid, tID)
 
