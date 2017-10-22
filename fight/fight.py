@@ -420,6 +420,12 @@ class Fight:
         
     def _getsettings(self, serverid):
         return self.the_data[serverid]["SETTINGS"]
+    
+    async def _get_message_from_id(self, channelid, messageid):
+        return await self.bot.get_message(self._get_channel_from_id(channelid), messageid)
+    
+    def _get_message_from_id_recent(self, messageid):
+        return discord.utils.get(self.bot.messages, id=messageid)
         
     def _get_channel_from_id(self, serverid, channelid):
         server = self._get_server_from_id(serverid)
