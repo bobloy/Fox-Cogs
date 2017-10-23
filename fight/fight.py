@@ -141,8 +141,19 @@ class Fight:
         if server.id not in self.the_data:
             self.the_data[server.id] = {
                 "CURRENT": None,
-                "TOURNEYS": {}
-            }
+                "TOURNEYS": {},
+                "SETTINGS": {    
+                    "SELFREPORT": True,
+                    "REPORTCHNNL": None,
+                    "ANNOUNCECHNNL": None,
+                    "ADMIN": None
+                    },  
+                "SRTRACKER": {
+                    "ROUND": None,
+                    "CHNNLS": None,
+                    }
+                }
+                
             self.save_data()
 
         if ctx.invoked_subcommand is None:
@@ -248,45 +259,6 @@ class Fight:
 
         await self.bot.say("Tournament Open status is now set to: " + str(currFight["OPEN"]))
         
-    @fightset.command(name="selfreport", pass_context=True)
-    async def fightset_selfreport(self, ctx):
-        """Toggles the ability to self-report scores for all tournaments"""
-        server = ctx.message.server
-        
-        settings = self._getsettings(server.id)
-        
-        settings["SELFREPORT"] = not settings["SELFREPORT"]
-
-        self.save_data()
-
-        await self.bot.say("Self-Reporting ability is now set to: " + str(settings["SELFREPORT"]))
-        
-    @fightset.command(name="REPORTCHNNL", pass_context=True)
-    async def fightset_REPORTCHNNL(self, ctx, channel: discord.Channel=None):
-        """Set the channel for self-reporting"""
-        server = ctx.message.server
-        
-        settings = self._getsettings(server.id)
-        
-        settings["REPORTCHNNL"] = channel.id
-
-        self.save_data()
-
-        await self.bot.say("Self-Reporting Channel is now set to: " + channel.mention)
-        
-    @fightset.command(name="ANNOUNCECHNNL", pass_context=True)
-    async def fightset_ANNOUNCECHNNL(self, ctx, channel: discord.Channel=None):
-        """Set the channel for tournament announcements"""
-        server = ctx.message.server
-        
-        settings = self._getsettings(server.id)
-        
-        settings["ANNOUNCECHNNL"] = channel.id
-
-        self.save_data()
-
-        await self.bot.say("Announcement Channel is now set to: " + channel.mention)
-
     @fightset.command(name="name", pass_context=True)
     async def fightset_name(self, ctx, inname, tID=None):
         """Renames the tournament"""
@@ -349,16 +321,6 @@ class Fight:
                                         "OPEN": False,
                                         "WINNER": None
                                         }
-        currServ["SETTINGS"] = {    
-                                    "SELFREPORT": True,
-                                    "REPORTCHNNL": None,
-                                    "ANNOUNCECHNNL": None
-                                    }
-                                    
-        currServ["SRTRACKER"] = {
-                                    "ROUND": None,
-                                    "CHNNLS": None
-                                    }
 
         self.save_data()
 
@@ -390,6 +352,78 @@ class Fight:
         self.save_data()
         await self.bot.say("Fight has been stopped")
 
+# ***************************Fightset_server command group start**************************        
+    @fightset.group(name="server", pass_context=True)
+    async def fightset_server(self, ctx):
+        """Adjust server wide settings"""
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+    
+    @fightset_server.command(name="selfreport", pass_context=True)
+    async def fightset_server_selfreport(self, ctx):
+        """Toggles the ability to self-report scores for all tournaments"""
+        server = ctx.message.server
+        
+        settings = self._getsettings(server.id)
+        
+        settings["SELFREPORT"] = not settings["SELFREPORT"]
+
+        self.save_data()
+
+        await self.bot.say("Self-Reporting ability is now set to: " + str(settings["SELFREPORT"]))
+        
+    @fightset_server.command(name="reportchnnl", pass_context=True)
+    async def fightset_server_reportchnnl(self, ctx, channel: discord.Channel=None):
+        """Set the channel for self-reporting"""
+        server = ctx.message.server
+        
+        settings = self._getsettings(server.id)
+        
+        settings["REPORTCHNNL"] = channel.id
+
+        self.save_data()
+
+        await self.bot.say("Self-Reporting Channel is now set to: " + channel.mention)
+        
+    @fightset_server.command(name="announcechnnl", pass_context=True)
+    async def fightset_server_announcechnnl(self, ctx, channel: discord.Channel=None):
+        """Set the channel for tournament announcements"""
+        server = ctx.message.server
+        
+        settings = self._getsettings(server.id)
+        
+        settings["ANNOUNCECHNNL"] = channel.id
+
+        self.save_data()
+
+        await self.bot.say("Announcement Channel is now set to: " + channel.mention)
+        
+    @fightset_server.command(name="announcechnnl", pass_context=True)
+    async def fightset_server_announcechnnl(self, ctx, channel: discord.Channel=None):
+        """Set the channel for tournament announcements"""
+        server = ctx.message.server
+        
+        settings = self._getsettings(server.id)
+        
+        settings["ANNOUNCECHNNL"] = channel.id
+
+        self.save_data()
+
+        await self.bot.say("Announcement Channel is now set to: " + channel.mention)
+        
+    @fightset_server.command(name="setadmin", pass_context=True)
+    async def fightset_server_setadmin(self, ctx, role: discord.Role=None):
+        """Chooses the tournament-admin role. CAREFUL: This grants the ability to override self-reported scores!"""
+        server = ctx.message.server
+        
+        settings = self._getsettings(server.id)
+        
+        settings["ADMIN"] = role.id
+
+        self.save_data()
+
+        await self.bot.say("Tournament Admin role is now set to: " + role.mention)
+
 # **********************Private command group start*********************
     def _serversettings(self, serverid):
         """Returns the dictionary of server settings"""
@@ -417,6 +451,7 @@ class Fight:
         await self.bot.say("_comparescores Todo")
 
     def _parseuser(self, serverid, tID, userid):
+        """Finds user in the tournament"""
         if self._getfight(serverid, tID)["RULES"]["TYPE"] == 0:  # RR
             return self._rr_parseuser(serverid, tID, userid)
 
@@ -532,7 +567,7 @@ class Fight:
         theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
         # rID starts at 0, so print +1. Never used for computation, so doesn't matter
-        if self._serversettings(serverid)["REPORTCHNNL"]:
+        if self._serversettings(serverid)["ANNOUNCECHNNL"]:
             await self.bot.send_message(
                         self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
                         "Round "+str(rID+1)
@@ -560,9 +595,9 @@ class Fight:
             mention1 = ", ".join(team1)
             mention2 = ", ".join(team2)
             outembed=discord.Embed(title="Match ID: " + mID, color=0x0000bf)
-            outembed.add_field(name="Team 1", value=mention1, inline=True)
-            outembed.add_field(name="VS", value="_", inline=True)
-            outembed.add_field(name="Team 2", value=mention2, inline=True)
+            outembed.add_field(name="Team 🅰", value=mention1, inline=True)
+            outembed.add_field(name="Team 🅱", value=mention2, inline=True)
+            outembed.set_footer(text="React with 🅰 or 🅱 to report the winner")
             
             if self._serversettings(serverid)["REPORTCHNNL"]:
                 message = await self.bot.send_message(
@@ -571,12 +606,17 @@ class Fight:
                             )
             else:
                 message = await self.bot.say(embed=outembed)
+            
+            self._messagetracker(serverid)[message.id] = {"TID": tID, "MID": mID, "RID": rID}
+            self.save_data()
+                
+            
             # await self.bot.say(team1 + " vs " + team2 + " || Match ID: " + match)
 
     async def _rr_start(self, serverid, tID):
 
         self._rr_setup(serverid, tID)
-        if self._serversettings(serverid)["REPORTCHNNL"]:
+        if self._serversettings(serverid)["ANNOUNCECHNNL"]:
             await self.bot.send_message(
                             self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
                             "**Tournament is Starting**"
