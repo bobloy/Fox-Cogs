@@ -18,6 +18,7 @@ class Hangman:
         self.answer_path = "data/hangman/hanganswers.txt"
         self.the_data = dataIO.load_json(self.file_path)
         self.winbool = False
+        self.letters = "🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿"
         self._updateHanglist()
 
     def _updateHanglist(self):
@@ -244,7 +245,10 @@ class Hangman:
         cSay = ("Guess this: " + str(self._hideanswer()) + "\n"
                 + "Used Letters: " + str(self._guesslist()) + "\n"
                 + self.hanglist[self.the_data["hangman"]])
-        await self.bot.say(cSay)
+        message = await self.bot.say(cSay)
+        for x in range(len(self.letters)):
+            if x in [i for i,b in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ") if b in self._guessletter()]:
+                self.bot.add_reation(message, self.letters[x])
         
     
 def check_folders():
