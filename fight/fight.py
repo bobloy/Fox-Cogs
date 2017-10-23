@@ -577,12 +577,12 @@ class Fight:
 
         self._rr_setup(serverid, tID)
         if self._serversettings(serverid)["REPORTCHNNL"]:
-                await self.bot.send_message(
+            await self.bot.send_message(
                             self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
                             "**Tournament is Starting**"
                             )
-            else:
-                await self.bot.say("**Tournament is Starting**")
+        else:
+            await self.bot.say("**Tournament is Starting**")
         
         await self._rr_printround(serverid, tID, 0)
 
