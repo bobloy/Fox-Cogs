@@ -531,8 +531,15 @@ class Fight:
 
         theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
-
-        await self.bot.say("Round "+str(rID+1))  # rID starts at 0, so print +1. Never used for computation, so doesn't matter
+        # rID starts at 0, so print +1. Never used for computation, so doesn't matter
+        if self._serversettings(serverid)["REPORTCHNNL"]:
+                await self.bot.send_message(
+                            self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
+                            "Round "+str(rID+1))
+                            )
+            else:
+                await self.bot.say("Round "+str(rID+1))  
+        
         
         for mID in theD["SCHEDULE"][rID]:
             team1 = self._get_team(serverid, theD["MATCHES"][mID]["TEAM1"])
@@ -569,8 +576,14 @@ class Fight:
     async def _rr_start(self, serverid, tID):
 
         self._rr_setup(serverid, tID)
-        await self.bot.
-        await self.bot.say("**Tournament is Starting**")
+        if self._serversettings(serverid)["REPORTCHNNL"]:
+                await self.bot.send_message(
+                            self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
+                            "**Tournament is Starting**")
+                            )
+            else:
+                await self.bot.say("**Tournament is Starting**")
+        
         await self._rr_printround(serverid, tID, 0)
 
     async def _rr_score(self, serverid, tID, mID, author, t1points, t2points):
