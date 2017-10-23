@@ -533,12 +533,12 @@ class Fight:
         theD = theT["TYPEDATA"]
         # rID starts at 0, so print +1. Never used for computation, so doesn't matter
         if self._serversettings(serverid)["REPORTCHNNL"]:
-                await self.bot.send_message(
-                            self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
-                            "Round "+str(rID+1)
-                            )
-            else:
-                await self.bot.say("Round "+str(rID+1))
+            await self.bot.send_message(
+                        self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
+                        "Round "+str(rID+1)
+                        )
+        else:
+            await self.bot.say("Round "+str(rID+1))
         
         
         for mID in theD["SCHEDULE"][rID]:
