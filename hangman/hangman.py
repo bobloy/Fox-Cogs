@@ -19,6 +19,7 @@ class Hangman:
         self.the_data = dataIO.load_json(self.file_path)
         self.winbool = False
         self.letters = "🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿"
+        self.navigate = "🔼🔽"
         self._updateHanglist()
 
     def _updateHanglist(self):
@@ -259,17 +260,48 @@ class Hangman:
         if emoji in self.letters:
             self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == emoji][0]])
             
+        if emoji in self.navigate:
+            if emoji == self.navigate[0]:
+                await self._reactmessage_am(self, message)
+            
+            if emoji == self.navigate[-1]:
+                await self._reactmessage_nz(self, message)
+    
+    
+    async def reactmessage_menu(self, message):
+        """React with menu options"""
+        await self.clear_reactions(message)
+        await self.bot.add_reaction(message, self.navigate[0])
+        await self.bot.add_reaction(message, self.navigate[-1])
+        
+    async def _reactmessage_am(self, message):
+        await self.clear_reactions(message)
+        for x in range(len(self.letters)):
+            if x not in [i for i,b in enumerate("ABCDEFGHIJKLM") if b in self._guesslist()]:
+                await self.bot.add_reaction(message, self.letters[x])
+         
+        await self.add_reaction(message, self.navigate[-1])
+        self.the_data["trackmessage"] = message.id
+    
+    async def _reactmessage_nz(self, message):
+        await self.clear_reactions(message)
+        
+        for x in range(len(self.letters)):
+            if x not in [i for i,b in enumerate("NOPQRSTUVWXYZ") if b in self._guesslist()]:
+                await self.bot.add_reaction(message, self.letters[x])
+        
+        await self.add_reaction(message, self.navigate[0])        
+        self.the_data["trackmessage"] = message.id
+        
+        
     async def _printgame(self):
         """Print the current state of game"""
         cSay = ("Guess this: " + str(self._hideanswer()) + "\n"
                 + "Used Letters: " + str(self._guesslist()) + "\n"
-                + self.hanglist[self.the_data["hangman"]])
+                + self.hanglist[self.the_data["hangman"]] + "\n"
+                + self.letters[0]+" for A-M, "+self.letters[-1]+" for N-Z")
         message = await self.bot.say(cSay)
-        for x in range(len(self.letters)):
-            if x not in [i for i,b in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ") if b in self._guesslist()]:
-                await self.bot.add_reaction(message, self.letters[x])
-                
-        self.the_data["trackmessage"] = message.id
+        self._reactmessage_menu(message)
         
     
 def check_folders():
@@ -284,7 +316,7 @@ def check_folders():
         
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
-        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0, "guesses": [], "theface": "<:never:336861463446814720>"})
+        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0, "guesses": [], "theface": "<:never:336861463446814720>"}, "trackmessage": False)
     
 
 def setup(bot):
