@@ -356,7 +356,7 @@ class Fight:
                                     }
                                     
         currServ["SRTRACKER"] = {
-                                    "ROUND": None
+                                    "ROUND": None,
                                     "CHNNLS": None
                                     }
 
