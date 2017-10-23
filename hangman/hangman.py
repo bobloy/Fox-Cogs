@@ -253,7 +253,7 @@ class Hangman:
         message = reaction.message
         emoji = reaction.emoji
         
-        if not message.id = self.the_data["trackmessage"]:
+        if not message.id == self.the_data["trackmessage"]:
             return
         
         if emoji in self.letters:
