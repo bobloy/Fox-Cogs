@@ -247,7 +247,7 @@ class Hangman:
                 + self.hanglist[self.the_data["hangman"]])
         message = await self.bot.say(cSay)
         for x in range(len(self.letters)):
-            if x in [i for i,b in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ") if b in self._guesslist()]:
+            if x not in [i for i,b in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ") if b in self._guesslist()]:
                 await self.bot.add_reaction(message, self.letters[x])
         
     
