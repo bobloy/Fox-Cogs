@@ -138,7 +138,7 @@ class Fight:
         """Admin command for starting or managing tournaments"""
         server = ctx.message.server
 
-        if server.id not in self.the_data:
+        if server.id not in self.the_data or True:
             self.the_data[server.id] = {
                 "CURRENT": None,
                 "TOURNEYS": {},
@@ -151,6 +151,11 @@ class Fight:
                 "SRTRACKER": {
                     "ROUND": None,
                     "CHNNLS": None,
+                    },
+                "EMOJI": {
+                    "NUMS": [],
+                    "UNDO": None,
+                    "APPR": None
                     }
                 }
                 
@@ -183,6 +188,10 @@ class Fight:
 
         if num < 1:
             await self.bot.say("Must be greater than 0, idiot")
+            return
+            
+        if num > 17:
+            await self.bot.say("I can't go that high! Max 17")
             return
 
         self._getfight(server.id, tID)["RULES"]["BESTOF"] = num
@@ -595,9 +604,9 @@ class Fight:
             mention1 = ", ".join(team1)
             mention2 = ", ".join(team2)
             outembed=discord.Embed(title="Match ID: " + mID, color=0x0000bf)
-            outembed.add_field(name="Team 🅰", value=mention1, inline=True)
-            outembed.add_field(name="Team 🅱", value=mention2, inline=True)
-            outembed.set_footer(text="React with 🅰 or 🅱 to report the winner")
+            outembed.add_field(name="Team 1", value=mention1, inline=True)
+            outembed.add_field(name="Team 2", value=mention2, inline=True)
+            outembed.set_footer(text="React your team's score, then your opponents score!")
             
             if self._serversettings(serverid)["REPORTCHNNL"]:
                 message = await self.bot.send_message(
