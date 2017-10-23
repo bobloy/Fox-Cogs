@@ -95,7 +95,7 @@ class Fight:
             await self.bot.say("You have no match to update!")
             return
 
-        if currFight["RULES"]["TYPE"] == 0: # Round-Robin
+        if currFight["RULES"]["TYPE"] == 0:  # Round-Robin
             await self._rr_score(server.id, tID, mID, user, score1, score2)
 
     @fight.command(name="leave", pass_context=True)
@@ -314,7 +314,7 @@ class Fight:
             await self.bot.say("No current fight to start")
             return
             
-        if currFight["TYPEDATA"]: # Empty dicionary {} resolves to False
+        if currFight["TYPEDATA"]:  # Empty dicionary {} resolves to False
             await self.bot.say("Looks like this tournament has already started.\nDo you want to delete all match data and restart? (yes/no)")
             answer = await self.bot.wait_for_message(timeout=120, author=author)
 
@@ -325,7 +325,7 @@ class Fight:
         currFight["OPEN"] = False  # first close the tournament
         self.save_data()                                         
         
-        if currFight["RULES"]["TYPE"] == 0: # Round-Robin
+        if currFight["RULES"]["TYPE"] == 0:  # Round-Robin
             await self._rr_start(server.id, tID)
 
     @fightset.command(name="setup", pass_context=True)
@@ -355,7 +355,10 @@ class Fight:
                                     "ANNOUNCECHNNL": None
                                     }
                                     
-        currServ["SRTRACKER"] = {}
+        currServ["SRTRACKER"] = {
+                                    "ROUND": None
+                                    "CHNNLS": None
+                                    }
 
         self.save_data()
 
@@ -388,6 +391,14 @@ class Fight:
         await self.bot.say("Fight has been stopped")
 
 # **********************Private command group start*********************
+    def _serversettings(self, serverid):
+        """Returns the dictionary of server settings"""
+        return self.the_data[serverid]["SETTINGS"]
+        
+    def _messagetracker(self, serverid):
+        """Returns the dictionary of message tracking"""
+        return self.the_data[serverid]["SRTRACKER"]
+    
     def _activefight(self, serverid):
         """Returns id for active fight, or None if no active fight"""
         return self.the_data[serverid]["CURRENT"]
@@ -478,7 +489,7 @@ class Fight:
         match = theT["TYPEDATA"]["MATCHES"][mID]
         
         if (match["SCORE1"] == math.ceil(theT["RULES"]["BESTOF"]/2) or 
-            match["SCORE1"] == math.ceil(theT["RULES"]["BESTOF"]/2)):
+                match["SCORE1"] == math.ceil(theT["RULES"]["BESTOF"]/2)):
                 
             return True
         return False
@@ -521,7 +532,7 @@ class Fight:
         theT = self._getfight(serverid, tID)
         theD = theT["TYPEDATA"]
 
-        await self.bot.say("Round "+str(rID+1)) # rID starts at 0, so print +1. Never used for computation, so doesn't matter
+        await self.bot.say("Round "+str(rID+1))  # rID starts at 0, so print +1. Never used for computation, so doesn't matter
         
         for mID in theD["SCHEDULE"][rID]:
             team1 = self._get_team(serverid, theD["MATCHES"][mID]["TEAM1"])
@@ -545,8 +556,14 @@ class Fight:
             outembed.add_field(name="Team 1", value=mention1, inline=True)
             outembed.add_field(name="VS", value="_", inline=True)
             outembed.add_field(name="Team 2", value=mention2, inline=True)
-            await self.bot.say(embed=outembed)
             
+            if self._serversettings(serverid)["REPORTCHNNL"]:
+                message = await self.bot.send_message(
+                            self._get_channel_from_id(serverid, self._serversettings(serverid)["REPORTCHNNL"]),
+                            embed=outembed
+                            )
+            else:
+                message = await self.bot.say(embed=outembed)
             # await self.bot.say(team1 + " vs " + team2 + " || Match ID: " + match)
 
     async def _rr_start(self, serverid, tID):
@@ -591,7 +608,7 @@ class Fight:
                 return
 
         if (t1points == math.ceil(theT["RULES"]["BESTOF"]/2) or
-             t2points == math.ceil(theT["RULES"]["BESTOF"]/2)):
+                t2points == math.ceil(theT["RULES"]["BESTOF"]/2)):
             theD["MATCHES"][mID]["SCORE1"] = t1points
             theD["MATCHES"][mID]["SCORE2"] = t2points
             self.save_data()
