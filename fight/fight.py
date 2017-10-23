@@ -535,10 +535,10 @@ class Fight:
         if self._serversettings(serverid)["REPORTCHNNL"]:
                 await self.bot.send_message(
                             self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
-                            "Round "+str(rID+1))
+                            "Round "+str(rID+1)
                             )
             else:
-                await self.bot.say("Round "+str(rID+1))  
+                await self.bot.say("Round "+str(rID+1))
         
         
         for mID in theD["SCHEDULE"][rID]:
@@ -579,7 +579,7 @@ class Fight:
         if self._serversettings(serverid)["REPORTCHNNL"]:
                 await self.bot.send_message(
                             self._get_channel_from_id(serverid, self._serversettings(serverid)["ANNOUNCECHNNL"]),
-                            "**Tournament is Starting**")
+                            "**Tournament is Starting**"
                             )
             else:
                 await self.bot.say("**Tournament is Starting**")
