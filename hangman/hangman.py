@@ -179,6 +179,7 @@ class Hangman:
         self.the_data["guesses"] = []
         self.winbool = False
         self.the_data["running"] = True
+        self.the_data["trackmessage"] = False
         self.save_data()
         
     def _stopgame(self):
@@ -239,6 +240,24 @@ class Hangman:
         self.save_data()
         
         await self._printgame()
+        
+    async def _on_react(self, reaction, user):
+        """ Thanks to flapjack reactpoll for guidelines
+            https://github.com/flapjax/FlapJack-Cogs/blob/master/reactpoll/reactpoll.py"""
+            
+        if not self.the_data["trackmessage"]:
+            return
+        
+        if user == self.bot.user:
+            return  # Don't remove bot's own reactions
+        message = reaction.message
+        emoji = reaction.emoji
+        
+        if not message.id = self.the_data["trackmessage"]:
+            return
+        
+        if emoji in self.letters:
+            self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == emoji][0]])
             
     async def _printgame(self):
         """Print the current state of game"""
@@ -249,6 +268,8 @@ class Hangman:
         for x in range(len(self.letters)):
             if x not in [i for i,b in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ") if b in self._guesslist()]:
                 await self.bot.add_reaction(message, self.letters[x])
+                
+        self.the_data["trackmessage"] = message.id
         
     
 def check_folders():
@@ -269,7 +290,6 @@ def check_files():
 def setup(bot):
     check_folders()
     check_files()
-    if True:  # soupAvailable: No longer need Soup
-        bot.add_cog(Hangman(bot))
-    else:
-        raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
+    bot.add_cog(Hangman(bot))
+    bot.add_listener(n._on_react, "on_reaction_add")
+    
