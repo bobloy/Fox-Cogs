@@ -182,7 +182,7 @@ class Hangman:
         self.the_data["running"] = False
         self.save_data()
     
-    def _checkdone(self, channel=None):
+    async def _checkdone(self, channel=None):
         if self.winbool:
             if channel:
                 await self.bot.send_message(channel, "You Win!")
