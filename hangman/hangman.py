@@ -322,6 +322,7 @@ def check_files():
 def setup(bot):
     check_folders()
     check_files()
-    bot.add_cog(Hangman(bot))
+    n = Hangman(bot)
+    bot.add_cog(n)
     bot.add_listener(n._on_react, "on_reaction_add")
     
