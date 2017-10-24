@@ -224,7 +224,7 @@ class Hangman:
         
         return out_str
         
-    async def _guessletter(self, guess: chr=None):
+    async def _guessletter(self, guess):
         """Checks the guess on a letter and prints game if acceptable guess"""
         if not guess.upper() in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or not len(guess) == 1:
             await self.bot.say("Invalid guess. Only A-Z is accepted")
@@ -261,7 +261,10 @@ class Hangman:
         
         if str(emoji) in self.letters:
             await self.bot.send_message(message.channel, "ABCD guess")
-            await self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == str(emoji)][0]])
+            
+            letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[self.letters.index(str(emoji))]
+            await self._guessletter(letter)
+            
             
         if str(emoji) in self.navigate:
             if str(emoji) == self.navigate[0]:
