@@ -246,17 +246,19 @@ class Hangman:
         """ Thanks to flapjack reactpoll for guidelines
             https://github.com/flapjax/FlapJack-Cogs/blob/master/reactpoll/reactpoll.py"""
         
-        await self.bot.send_message(reaction.message.channel, "You just reacted!")
+        
         
         if not self.the_data["trackmessage"]:
+            await self.bot.send_message(reaction.message.channel, "Not tracking!")
             return
         
         if user == self.bot.user:
+            await self.bot.send_message(reaction.message.channel, "Bot User!")
             return  # Don't remove bot's own reactions
         message = reaction.message
         emoji = reaction.emoji
         
-        
+        await self.bot.send_message(reaction.message.channel, str(emoji))
         
         if not message.id == self.the_data["trackmessage"]:
             return
