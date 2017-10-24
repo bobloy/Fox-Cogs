@@ -301,7 +301,7 @@ class Hangman:
                 + self.hanglist[self.the_data["hangman"]] + "\n"
                 + self.letters[0]+" for A-M, "+self.letters[-1]+" for N-Z")
         message = await self.bot.say(cSay)
-        self._reactmessage_menu(message)
+        await self._reactmessage_menu(message)
         
     
 def check_folders():
