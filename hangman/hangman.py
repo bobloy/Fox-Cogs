@@ -268,7 +268,7 @@ class Hangman:
                 await self._reactmessage_nz(self, message)
     
     
-    async def reactmessage_menu(self, message):
+    async def _reactmessage_menu(self, message):
         """React with menu options"""
         await self.clear_reactions(message)
         await self.bot.add_reaction(message, self.navigate[0])
