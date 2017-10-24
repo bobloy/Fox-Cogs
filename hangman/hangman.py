@@ -224,14 +224,20 @@ class Hangman:
         
         return out_str
         
-    async def _guessletter(self, guess):
+    async def _guessletter(self, guess, channel=None):
         """Checks the guess on a letter and prints game if acceptable guess"""
         if not guess.upper() in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or not len(guess) == 1:
-            await self.bot.say("Invalid guess. Only A-Z is accepted")
+            if channel:
+                await self.bot.send_message(channel, "Invalid guess. Only A-Z is accepted")
+            else:
+                await self.bot.say("Invalid guess. Only A-Z is accepted")
             return
 
         if guess.upper() in self.the_data["guesses"]:
-            await self.bot.say("Already guessed that! Try again")
+            if channel:
+                await self.bot.send_message(channel, "Already guessed that! Try again")
+            else:
+                await self.bot.say("Already guessed that! Try again")
             return
 
         if not guess.upper() in self.the_data["answer"]:
@@ -240,7 +246,7 @@ class Hangman:
         self.the_data["guesses"].append(guess.upper())
         self.save_data()
         
-        await self._printgame()
+        await self._printgame(channel)
         
     async def _on_react(self, reaction, user):
         """ Thanks to flapjack reactpoll for guidelines
@@ -260,10 +266,8 @@ class Hangman:
             return
         
         if str(emoji) in self.letters:
-            await self.bot.send_message(message.channel, "ABCD guess")
-            
             letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[self.letters.index(str(emoji))]
-            await self._guessletter(letter)
+            await self._guessletter(letter, message.channel)
             
             
         if str(emoji) in self.navigate:
@@ -301,13 +305,17 @@ class Hangman:
         await self.add_reaction(message, self.navigate[0])        
 
 
-    async def _printgame(self):
+    async def _printgame(self, channel=None):
         """Print the current state of game"""
         cSay = ("Guess this: " + str(self._hideanswer()) + "\n"
                 + "Used Letters: " + str(self._guesslist()) + "\n"
                 + self.hanglist[self.the_data["hangman"]] + "\n"
                 + self.navigate[0]+" for A-M, "+self.navigate[-1]+" for N-Z")
-        message = await self.bot.say(cSay)
+        if channel:
+            message = await self.bot.send_message(channel, cSay)
+        else:
+            message = await self.bot.say(cSay)
+        
         self.the_data["trackmessage"] = message.id
         self.save_data()
         await self._reactmessage_menu(message)
