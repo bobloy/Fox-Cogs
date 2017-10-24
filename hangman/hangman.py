@@ -281,8 +281,8 @@ class Hangman:
                 await self.bot.add_reaction(message, self.letters[x])
          
         await self.add_reaction(message, self.navigate[-1])
-        self.the_data["trackmessage"] = message.id
-    
+
+        
     async def _reactmessage_nz(self, message):
         await self.bot.clear_reactions(message)
         
@@ -291,7 +291,6 @@ class Hangman:
                 await self.bot.add_reaction(message, self.letters[x])
         
         await self.add_reaction(message, self.navigate[0])        
-        self.the_data["trackmessage"] = message.id
         
         
     async def _printgame(self):
@@ -301,6 +300,8 @@ class Hangman:
                 + self.hanglist[self.the_data["hangman"]] + "\n"
                 + self.letters[0]+" for A-M, "+self.letters[-1]+" for N-Z")
         message = await self.bot.say(cSay)
+        self.the_data["trackmessage"] = message.id
+        self.save_data()
         await self._reactmessage_menu(message)
         
     
