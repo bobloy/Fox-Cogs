@@ -245,7 +245,9 @@ class Hangman:
     async def _on_react(self, reaction, user):
         """ Thanks to flapjack reactpoll for guidelines
             https://github.com/flapjax/FlapJack-Cogs/blob/master/reactpoll/reactpoll.py"""
-            
+        
+        await self.bot.send_message(reaction.message.channel, "You just reacted!")
+        
         if not self.the_data["trackmessage"]:
             return
         
@@ -254,7 +256,7 @@ class Hangman:
         message = reaction.message
         emoji = reaction.emoji
         
-        await self.bot.say(str(emoji))
+        
         
         if not message.id == self.the_data["trackmessage"]:
             return
