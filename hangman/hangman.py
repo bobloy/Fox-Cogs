@@ -260,6 +260,7 @@ class Hangman:
             return
         
         if str(emoji) in self.letters:
+            await self.bot.send_message(message.channel, "ABCD guess")
             await self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == str(emoji)][0]])
             
         if str(emoji) in self.navigate:
@@ -281,7 +282,7 @@ class Hangman:
         await self.bot.clear_reactions(message)
 
         for x in range(len(self.letters)):
-            if x not in [i for i,b in enumerate("ABCDEFGHIJKLM") if b in self._guesslist()]:
+            if x in [i for i,b in enumerate("ABCDEFGHIJKLM") if b not in self._guesslist()]:
                 await self.bot.add_reaction(message, self.letters[x])
          
         await self.add_reaction(message, self.navigate[-1])
