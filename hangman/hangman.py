@@ -258,7 +258,7 @@ class Hangman:
         message = reaction.message
         emoji = reaction.emoji
         
-        await self.bot.send_message(reaction.message.channel, str(emoji))
+        await self.bot.send_message(reaction.message.channel, str(emoji) + " - " + self.navigate[0])
         
         if not message.id == self.the_data["trackmessage"]:
             return
