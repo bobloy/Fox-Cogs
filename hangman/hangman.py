@@ -254,6 +254,8 @@ class Hangman:
         message = reaction.message
         emoji = reaction.emoji
         
+        await self.bot.say(str(emoji))
+        
         if not message.id == self.the_data["trackmessage"]:
             return
         
