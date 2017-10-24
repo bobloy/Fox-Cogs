@@ -329,7 +329,7 @@ class Hangman:
         self.the_data["trackmessage"] = message.id
         self.save_data()
         await self._reactmessage_menu(message)
-        self._checkdone(channel)
+        await self._checkdone(channel)
         
     
 def check_folders():
