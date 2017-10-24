@@ -164,14 +164,8 @@ class Hangman:
             await self._printgame()
         else:    
             await self._guessletter(guess)
-            
-            if self.winbool:
-                await self.bot.say("You Win!")
-                self._stopgame()
-                
-            if self.the_data["hangman"] >= 7:
-                await self.bot.say("You Lose!\nThe Answer was: **"+self.the_data["answer"]+"**")
-                self._stopgame()
+
+
                 
     def _startgame(self):
         """Starts a new game of hangman"""
@@ -188,6 +182,22 @@ class Hangman:
         self.the_data["running"] = False
         self.save_data()
     
+    def _checkdone(self, channel=None):
+        if self.winbool:
+            if channel:
+                await self.bot.send_message(channel, "You Win!")
+            else:
+                await self.bot.say("You Win!")
+            self._stopgame()
+                
+        if self.the_data["hangman"] >= 7:
+            if channel:
+                await self.bot.send_message(channel, "You Lose!\nThe Answer was: **"+self.the_data["answer"]+"**")
+            else:
+                await self.bot.say("You Lose!\nThe Answer was: **"+self.the_data["answer"]+"**")
+                
+            self._stopgame()
+                
     def _getphrase(self):
         """Get a new phrase for the game and returns it"""
         phrasefile = open(self.answer_path, 'r')
@@ -319,6 +329,7 @@ class Hangman:
         self.the_data["trackmessage"] = message.id
         self.save_data()
         await self._reactmessage_menu(message)
+        self._checkdone(channel)
         
     
 def check_folders():
