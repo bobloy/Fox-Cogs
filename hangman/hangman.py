@@ -257,14 +257,14 @@ class Hangman:
         if not message.id == self.the_data["trackmessage"]:
             return
         
-        if emoji in self.letters:
-            self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == emoji][0]])
+        if str(emoji) in self.letters:
+            self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == str(emoji)][0]])
             
-        if emoji in self.navigate:
-            if emoji == self.navigate[0]:
+        if str(emoji) in self.navigate:
+            if str(emoji) == self.navigate[0]:
                 await self._reactmessage_am(self, message)
             
-            if emoji == self.navigate[-1]:
+            if str(emoji) == self.navigate[-1]:
                 await self._reactmessage_nz(self, message)
     
     
