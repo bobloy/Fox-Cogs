@@ -286,17 +286,17 @@ class Hangman:
          
         await self.add_reaction(message, self.navigate[-1])
 
-        
+
     async def _reactmessage_nz(self, message):
         await self.bot.clear_reactions(message)
 
         for x in range(len(self.letters)):
-            if x not in [i for i,b in enumerate("NOPQRSTUVWXYZ") if b in self._guesslist()]:
+            if x in [i for i,b in enumerate("NOPQRSTUVWXYZ") if b not in self._guesslist()]:
                 await self.bot.add_reaction(message, self.letters[x])
         
         await self.add_reaction(message, self.navigate[0])        
-        
-        
+
+
     async def _printgame(self):
         """Print the current state of game"""
         cSay = ("Guess this: " + str(self._hideanswer()) + "\n"
