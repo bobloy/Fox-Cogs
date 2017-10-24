@@ -249,22 +249,20 @@ class Hangman:
         
         
         if not self.the_data["trackmessage"]:
-            await self.bot.send_message(reaction.message.channel, "Not tracking!")
             return
         
         if user == self.bot.user:
-            await self.bot.send_message(reaction.message.channel, "Bot User!")
             return  # Don't remove bot's own reactions
         message = reaction.message
         emoji = reaction.emoji
         
-        await self.bot.send_message(reaction.message.channel, str(emoji) + " - " + self.navigate[0])
+        await self.bot.send_message(reaction.message.channel, str(str(emoji) == self.navigate[0]))
         
         if not message.id == self.the_data["trackmessage"]:
             return
         
         if str(emoji) in self.letters:
-            self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == str(emoji)][0]])
+            await self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == str(emoji)][0]])
             
         if str(emoji) in self.navigate:
             if str(emoji) == self.navigate[0]:
