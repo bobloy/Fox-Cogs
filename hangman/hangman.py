@@ -264,23 +264,21 @@ class Hangman:
             
         if str(emoji) in self.navigate:
             if str(emoji) == self.navigate[0]:
-                await self._reactmessage_am(self, message)
+                await self._reactmessage_am(message)
             
             if str(emoji) == self.navigate[-1]:
-                await self._reactmessage_nz(self, message)
+                await self._reactmessage_nz(message)
     
     
     async def _reactmessage_menu(self, message):
         """React with menu options"""
         await self.bot.clear_reactions(message)
+        
         await self.bot.add_reaction(message, self.navigate[0])
         await self.bot.add_reaction(message, self.navigate[-1])
         
     async def _reactmessage_am(self, message):
-        await self.bot.send_message(message.channel, str(str(emoji) == self.navigate[0]))
-        
         await self.bot.clear_reactions(message)
-        
 
         for x in range(len(self.letters)):
             if x not in [i for i,b in enumerate("ABCDEFGHIJKLM") if b in self._guesslist()]:
@@ -290,11 +288,7 @@ class Hangman:
 
         
     async def _reactmessage_nz(self, message):
-    
-        await self.bot.send_message(message.channel, str(str(emoji) == self.navigate[0]))
-        
         await self.bot.clear_reactions(message)
-        
 
         for x in range(len(self.letters)):
             if x not in [i for i,b in enumerate("NOPQRSTUVWXYZ") if b in self._guesslist()]:
