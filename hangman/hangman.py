@@ -18,6 +18,8 @@ class Hangman:
         self.answer_path = "data/hangman/hanganswers.txt"
         self.the_data = dataIO.load_json(self.file_path)
         self.winbool = False
+        self.letters = "🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿"
+        self.navigate = "🔼🔽"
         self._updateHanglist()
 
     def _updateHanglist(self):
@@ -178,6 +180,7 @@ class Hangman:
         self.the_data["guesses"] = []
         self.winbool = False
         self.the_data["running"] = True
+        self.the_data["trackmessage"] = False
         self.save_data()
         
     def _stopgame(self):
@@ -238,13 +241,67 @@ class Hangman:
         self.save_data()
         
         await self._printgame()
+        
+    async def _on_react(self, reaction, user):
+        """ Thanks to flapjack reactpoll for guidelines
+            https://github.com/flapjax/FlapJack-Cogs/blob/master/reactpoll/reactpoll.py"""
             
+        if not self.the_data["trackmessage"]:
+            return
+        
+        if user == self.bot.user:
+            return  # Don't remove bot's own reactions
+        message = reaction.message
+        emoji = reaction.emoji
+        
+        if not message.id == self.the_data["trackmessage"]:
+            return
+        
+        if emoji in self.letters:
+            self._guessletter("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[[i for i,b in enumerate(self.letters) if b == emoji][0]])
+            
+        if emoji in self.navigate:
+            if emoji == self.navigate[0]:
+                await self._reactmessage_am(self, message)
+            
+            if emoji == self.navigate[-1]:
+                await self._reactmessage_nz(self, message)
+    
+    
+    async def reactmessage_menu(self, message):
+        """React with menu options"""
+        await self.clear_reactions(message)
+        await self.bot.add_reaction(message, self.navigate[0])
+        await self.bot.add_reaction(message, self.navigate[-1])
+        
+    async def _reactmessage_am(self, message):
+        await self.clear_reactions(message)
+        for x in range(len(self.letters)):
+            if x not in [i for i,b in enumerate("ABCDEFGHIJKLM") if b in self._guesslist()]:
+                await self.bot.add_reaction(message, self.letters[x])
+         
+        await self.add_reaction(message, self.navigate[-1])
+        self.the_data["trackmessage"] = message.id
+    
+    async def _reactmessage_nz(self, message):
+        await self.clear_reactions(message)
+        
+        for x in range(len(self.letters)):
+            if x not in [i for i,b in enumerate("NOPQRSTUVWXYZ") if b in self._guesslist()]:
+                await self.bot.add_reaction(message, self.letters[x])
+        
+        await self.add_reaction(message, self.navigate[0])        
+        self.the_data["trackmessage"] = message.id
+        
+        
     async def _printgame(self):
         """Print the current state of game"""
         cSay = ("Guess this: " + str(self._hideanswer()) + "\n"
                 + "Used Letters: " + str(self._guesslist()) + "\n"
-                + self.hanglist[self.the_data["hangman"]])
-        await self.bot.say(cSay)
+                + self.hanglist[self.the_data["hangman"]] + "\n"
+                + self.letters[0]+" for A-M, "+self.letters[-1]+" for N-Z")
+        message = await self.bot.say(cSay)
+        self._reactmessage_menu(message)
         
     
 def check_folders():
@@ -259,13 +316,12 @@ def check_folders():
         
 def check_files():
     if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
-        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0, "guesses": [], "theface": "<:never:336861463446814720>"})
+        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0, "guesses": [], "theface": "<:never:336861463446814720>"}, "trackmessage": False)
     
 
 def setup(bot):
     check_folders()
     check_files()
-    if True:  # soupAvailable: No longer need Soup
-        bot.add_cog(Hangman(bot))
-    else:
-        raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
+    bot.add_cog(Hangman(bot))
+    bot.add_listener(n._on_react, "on_reaction_add")
+    
