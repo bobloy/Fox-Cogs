@@ -300,7 +300,7 @@ class Hangman:
 
         for x in range(len(self.letters)):
             if x in [i for i,b in enumerate("NOPQRSTUVWXYZ") if b not in self._guesslist()]:
-                await self.bot.add_reaction(message, self.letters[x])
+                await self.bot.add_reaction(message, self.letters[x+13])
         
         await self.add_reaction(message, self.navigate[0])        
 
