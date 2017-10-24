@@ -298,7 +298,7 @@ class Hangman:
         cSay = ("Guess this: " + str(self._hideanswer()) + "\n"
                 + "Used Letters: " + str(self._guesslist()) + "\n"
                 + self.hanglist[self.the_data["hangman"]] + "\n"
-                + self.letters[0]+" for A-M, "+self.letters[-1]+" for N-Z")
+                + self.navigate[0]+" for A-M, "+self.navigate[-1]+" for N-Z")
         message = await self.bot.say(cSay)
         self.the_data["trackmessage"] = message.id
         self.save_data()
