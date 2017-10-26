@@ -743,6 +743,37 @@ class Fight:
         # outlist[1] is dict data of matches
 
         return outlist
+        
+        
+    #**************** Socket attempt ********************
+    
+    async def _on_socket(self, data):
+        
+        
+        await bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),str(data))
+        
+        #if not self.the_data["trackmessage"]:
+        #    return
+        
+        #if user == self.bot.user:
+        #    return  # Don't remove bot's own reactions
+        #message = reaction.message
+        #emoji = reaction.emoji
+        
+        #if not message.id == self.the_data["trackmessage"]:
+        #    return
+        
+        #if str(emoji) in self.letters:
+        #    letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[self.letters.index(str(emoji))]
+        #    await self._guessletter(letter, message.channel)
+            
+            
+        #if str(emoji) in self.navigate:
+        #    if str(emoji) == self.navigate[0]:
+        #        await self._reactmessage_am(message)
+            
+        #    if str(emoji) == self.navigate[-1]:
+        #        await self._reactmessage_nz(message)
 
 
 def check_folders():
@@ -763,4 +794,6 @@ def check_files():
 def setup(bot):
     check_folders()
     check_files()
-    bot.add_cog(Fight(bot))
+    n = Fight(bot)
+    bot.add_cog(n)
+    bot.add_listener(n._on_socket, "on_socket_raw_receive")
