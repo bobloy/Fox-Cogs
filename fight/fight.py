@@ -406,20 +406,7 @@ class Fight:
         self.save_data()
 
         await self.bot.say("Announcement Channel is now set to: " + channel.mention)
-        
-    @fightset_server.command(name="announcechnnl", pass_context=True)
-    async def fightset_server_announcechnnl(self, ctx, channel: discord.Channel=None):
-        """Set the channel for tournament announcements"""
-        server = ctx.message.server
-        
-        settings = self._getsettings(server.id)
-        
-        settings["ANNOUNCECHNNL"] = channel.id
 
-        self.save_data()
-
-        await self.bot.say("Announcement Channel is now set to: " + channel.mention)
-        
     @fightset_server.command(name="setadmin", pass_context=True)
     async def fightset_server_setadmin(self, ctx, role: discord.Role=None):
         """Chooses the tournament-admin role. CAREFUL: This grants the ability to override self-reported scores!"""
