@@ -734,7 +734,7 @@ class Fight:
         
     #**************** Socket attempt ********************
     
-    async def _on_socket(self, data):
+    async def on_socket_response(self, data):
         
         
         await bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),str(data))
@@ -783,4 +783,3 @@ def setup(bot):
     check_files()
     n = Fight(bot)
     bot.add_cog(n)
-    bot.add_listener(n._on_socket, "on_socket_response")
