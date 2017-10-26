@@ -758,7 +758,7 @@ class Fight:
         #if str(emoji) in self.navigate:
         #    if str(emoji) == self.navigate[0]:
         #        await self._reactmessage_am(message)
-            
+
         #    if str(emoji) == self.navigate[-1]:
         #        await self._reactmessage_nz(message)
 
@@ -783,4 +783,4 @@ def setup(bot):
     check_files()
     n = Fight(bot)
     bot.add_cog(n)
-    bot.add_listener(n._on_socket, "on_socket_raw_receive")
+    bot.add_listener(n._on_socket, "on_socket_response")
