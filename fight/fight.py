@@ -137,7 +137,7 @@ class Fight:
     async def fightset(self, ctx):
         """Admin command for starting or managing tournaments"""
         server = ctx.message.server
-        await bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),"socket_response")
+        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),"socket_response")
         if server.id not in self.the_data or True:
             self.the_data[server.id] = {
                 "CURRENT": None,
@@ -763,14 +763,14 @@ class Fight:
         #                await self._reactmessage_nz(message)
      
     async def on_socket_response(self, obj):
-        await bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),"socket_response")
+        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),"socket_response")
 
         if obj["t"] != "MESSAGE_REACTION_ADD":
             return
         message_id = obj["d"]["message_id"]
         emoji = obj["d"]["emoji"]["name"]
         
-        await bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),message_id)
+        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),message_id)
 
 
 def check_folders():
