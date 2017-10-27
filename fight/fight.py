@@ -735,32 +735,32 @@ class Fight:
     #**************** Socket attempt ********************
     
     async def _on_react(self, reaction, user):
+        """do nothing"""
         
         
         
-        
-#        if not self.the_data["trackmessage"]:
-#            return
-#        
-#        if user == self.bot.user:
-#            return  # Don't remove bot's own reactions
-#        message = reaction.message
-#        emoji = reaction.emoji
-#        
-#        if not message.id == self.the_data["trackmessage"]:
-#            return
-#        
-#        if str(emoji) in self.letters:
-#            letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[self.letters.index(str(emoji))]
-#            await self._guessletter(letter, message.channel)
-#            
-#            
-#        if str(emoji) in self.navigate:
-#            if str(emoji) == self.navigate[0]:
-#                await self._reactmessage_am(message)
-#
-#            if str(emoji) == self.navigate[-1]:
-#                await self._reactmessage_nz(message)
+        #        if not self.the_data["trackmessage"]:
+        #            return
+        #        
+        #        if user == self.bot.user:
+        #            return  # Don't remove bot's own reactions
+        #        message = reaction.message
+        #        emoji = reaction.emoji
+        #        
+        #        if not message.id == self.the_data["trackmessage"]:
+        #            return
+        #        
+        #        if str(emoji) in self.letters:
+        #            letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[self.letters.index(str(emoji))]
+        #            await self._guessletter(letter, message.channel)
+        #            
+        #            
+        #        if str(emoji) in self.navigate:
+        #            if str(emoji) == self.navigate[0]:
+        #                await self._reactmessage_am(message)
+        #
+        #            if str(emoji) == self.navigate[-1]:
+        #                await self._reactmessage_nz(message)
      
     async def on_socket_response(self, obj):
         if obj["t"] != "MESSAGE_REACTION_ADD":
