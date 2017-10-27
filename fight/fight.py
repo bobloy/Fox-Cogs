@@ -138,7 +138,7 @@ class Fight:
         """Admin command for starting or managing tournaments"""
         server = ctx.message.server
         
-        if server.id not in self.the_data or True:
+        if server.id not in self.the_data:
             self.the_data[server.id] = {
                 "CURRENT": None,
                 "TOURNEYS": {},
@@ -765,13 +765,19 @@ class Fight:
     async def on_socket_response(self, obj):
         if obj["t"] != "MESSAGE_REACTION_ADD":
             return
-            
-        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),"MESSAGE_REACTION_ADD")
+        
+        if "emoji" not in obj["d"]:     # This reaction is in the messages deque, use other listener
+            return
+        
+        if message_id not in [serverid for 
+        #for serverid in self.the_data:
+        #    if not self._messagetracker(serverid)
+
         message_id = obj["d"]["message_id"]
         emoji = obj["d"]["emoji"]["name"]
+        user_id = obj["d"]["user_id"]
+            
         
-        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),message_id)
-        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),emoji)
 
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
