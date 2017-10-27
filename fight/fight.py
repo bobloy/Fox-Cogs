@@ -763,14 +763,15 @@ class Fight:
         #                await self._reactmessage_nz(message)
      
     async def on_socket_response(self, obj):
-        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),obj["t"])
         if obj["t"] != "MESSAGE_REACTION_ADD":
             return
+            
+        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),"MESSAGE_REACTION_ADD")
         message_id = obj["d"]["message_id"]
         emoji = obj["d"]["emoji"]["name"]
         
         await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),message_id)
-
+        await self.bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),emoji)
 
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
