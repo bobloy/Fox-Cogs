@@ -737,30 +737,38 @@ class Fight:
     async def _on_react(self, reaction, user):
         
         
-        await bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),str(data))
         
-        if not self.the_data["trackmessage"]:
+        
+#        if not self.the_data["trackmessage"]:
+#            return
+#        
+#        if user == self.bot.user:
+#            return  # Don't remove bot's own reactions
+#        message = reaction.message
+#        emoji = reaction.emoji
+#        
+#        if not message.id == self.the_data["trackmessage"]:
+#            return
+#        
+#        if str(emoji) in self.letters:
+#            letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[self.letters.index(str(emoji))]
+#            await self._guessletter(letter, message.channel)
+#            
+#            
+#        if str(emoji) in self.navigate:
+#            if str(emoji) == self.navigate[0]:
+#                await self._reactmessage_am(message)
+#
+#            if str(emoji) == self.navigate[-1]:
+#                await self._reactmessage_nz(message)
+     
+    async def on_socket_response(self, obj):
+        if obj["t"] != "MESSAGE_REACTION_ADD":
             return
+        message_id = obj["d"]["message_id"]
+        emoji = obj["d"]["emoji"]["name"]
         
-        if user == self.bot.user:
-            return  # Don't remove bot's own reactions
-        message = reaction.message
-        emoji = reaction.emoji
-        
-        if not message.id == self.the_data["trackmessage"]:
-            return
-        
-        if str(emoji) in self.letters:
-            letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[self.letters.index(str(emoji))]
-            await self._guessletter(letter, message.channel)
-            
-            
-        if str(emoji) in self.navigate:
-            if str(emoji) == self.navigate[0]:
-                await self._reactmessage_am(message)
-
-            if str(emoji) == self.navigate[-1]:
-                await self._reactmessage_nz(message)
+        await bot.send_message( self._get_user_from_id("257557008662790145", "164200643744104448"),message_id)
 
 
 def check_folders():
