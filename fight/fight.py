@@ -769,10 +769,9 @@ class Fight:
         if "emoji" not in obj["d"]:     # This reaction is in the messages deque, use other listener
             return
         
-        if message_id not in [serverid for 
+        #if message_id not in serverid for 
         #for serverid in self.the_data:
         #    if not self._messagetracker(serverid)
-
         message_id = obj["d"]["message_id"]
         emoji = obj["d"]["emoji"]["name"]
         user_id = obj["d"]["user_id"]
