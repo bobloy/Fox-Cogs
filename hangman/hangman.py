@@ -44,7 +44,7 @@ class Hangman:
                 |               
                 |                   
                 |\___                 
-                H""",
+                **H**""",
 
             """>
                \_________       
@@ -55,7 +55,7 @@ class Hangman:
                 |                         
                 |                          
                 |\___                       
-                HA""",
+                **HA**""",
 
             """>
                \________               
@@ -66,7 +66,7 @@ class Hangman:
                 |                           
                 |                            
                 |\___                    
-                HAN""",
+                **HAN**""",
 
 
             """>
@@ -78,7 +78,7 @@ class Hangman:
                 |                        
                 |                          
                 |\___                          
-                HANG""",
+                **HANG**""",
 
 
             """>
@@ -90,7 +90,7 @@ class Hangman:
                 |                             
                 |                            
                 |\___                          
-                HANGM""",
+                **HANGM**""",
 
 
 
@@ -103,7 +103,7 @@ class Hangman:
                 |   /                            
                 |                                  
                 |\___                              
-                HANGMA""",
+                **HANGMA**""",
 
 
             """>
@@ -115,7 +115,7 @@ class Hangman:
                 |   / \        
                 |               
                 |\___           
-                HANGMAN""")
+                **HANGMAN**""")
               
     def save_data(self):
         """Saves the json"""
