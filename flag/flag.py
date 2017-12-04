@@ -21,8 +21,8 @@ class Flag:
         self.path = "data/Fox-Cogs/flag/"
         self.file_path = "data/Fox-Cogs/flag/flag.json"
         self.the_data = dataIO.load_json(self.file_path)
-        self.tags = dataIO.load_json("cogs/tags.json")
-        self.clans = dataIO.load_json("cogs/clans.json")
+        # self.tags = dataIO.load_json("cogs/tags.json")
+        # self.clans = dataIO.load_json("cogs/clans.json")
 
 
     def save_data(self):
