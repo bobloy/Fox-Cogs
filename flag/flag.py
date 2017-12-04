@@ -63,7 +63,7 @@ class Flag:
         self.save_data()
         await self._list_flags(ctx, server, user)
     
-@commands.command(pass_context=True, no_pm=True, aliases['flagclear'])
+    @commands.command(pass_context=True, no_pm=True, aliases['flagclear'])
     async def clearflag(self, ctx, user: discord.Member):
         """Clears flags for a user"""
         server = ctx.message.server
