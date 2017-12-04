@@ -91,7 +91,7 @@ class Flag:
 
         embed=discord.Embed(title="Flags for "+user.mention, decsription="User has "+str(len(flags))+" active flags", color=0x804040)
         for flag in self.the_data[server.id][user.id]:
-            embed.add_field(name=flag['reason'], value="Expires on "+str(date(flag['expireyear'], flag['expiremonth'], flag['expireday']))), inline=True)
+            embed.add_field(name=flag['reason'], value="Expires on "+str(date(flag['expireyear'], flag['expiremonth'], flag['expireday'])), inline=True)
         
         await self.bot.send_message(ctx.channel, embed=embed)
 
