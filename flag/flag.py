@@ -62,7 +62,17 @@ class Flag:
         self.the_data[server.id]['flags'][user.id].append(flag)
         self.save_data()
         await self._list_flags(ctx, server, user)
+    
+@commands.command(pass_context=True, no_pm=True, aliases['flagclear'])
+    async def clearflag(self, ctx, user: discord.Member):
+        """Clears flags for a user"""
+        server = ctx.message.server
+        self._check_flags(server)
+
+        self.the_data[server.id]['flags'][user.id] = []
         
+        self.save_data()
+        await self.bot.say("Success!") 
         
     @commands.group(pass_context=True, no_pm=True, aliases=['setflag'])
     async def flagset(self, ctx):
