@@ -70,7 +70,7 @@ class Flag:
         server = ctx.message.server
         self._check_flags(server)
         if ctx.invoked_subcommand is None:
-            await ctx.send_help()
+            await self.bot.send_cmd_help(ctx)
             
         # clashroyale = self.bot.get_cog('clashroyale')
         # if clashroyale is None:
@@ -106,6 +106,7 @@ class Flag:
                 'flags': {},
                 'days': 31
                 }
+
         for userid in self.the_data[server.id]['flags']:
             x = 0
             while x < len(self.the_data[server.id]['flags']['userid']):
