@@ -9,7 +9,7 @@ from .utils.dataIO import dataIO
 from .utils import checks
 from random import randint
 
-from datetime import date
+from datetime import date, timedelta
 
 
 
@@ -23,20 +23,19 @@ class Flag:
         self.the_data = dataIO.load_json(self.file_path)
         self.tags = dataIO.load_json("cogs/tags.json")
         self.clans = dataIO.load_json("cogs/clans.json")
-        self.flag_template = {
-            'reason': None,
-            'expireyear': None,
-            'expiremonth': None,
-            'expireday': None
-            }
-            
-        
+
 
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
 
-
+    def _flag_template(self):
+        return {
+            'reason': None,
+            'expireyear': None,
+            'expiremonth': None,
+            'expireday': None
+            }
 # ************************Flag command group start************************
     @commands.command(pass_context=True, no_pm=True)
     async def flag(self, ctx, user: discord.Member, *reason):
@@ -51,8 +50,9 @@ class Flag:
         if user.id not in self.the_data[server.id]['flags']:
             self.the_data[server.id]['flags'][user.id] = []
         
-        flag = self.flag_template
-        expiredate = date.today() + self.the_data[server.id]['days']
+        flag = self._flag_template()
+        expiredate = date.today() 
+        expiredate += timedelta(days=self.the_data[server.id]['days'])
         
         flag['reason'] = " ".join(reason)
         flag['expireyear'] = expiredate.year
@@ -60,8 +60,8 @@ class Flag:
         flag['expireday'] = expiredate.day
         
         self.the_data[server.id]['flags'][user.id].append(flag)
-        
-        await self._list_flags(server, user)
+        self.save_data()
+        await self._list_flags(ctx, server, user)
         
         
     @commands.group(pass_context=True, no_pm=True, aliases=['setflag'])
@@ -79,24 +79,25 @@ class Flag:
             
         
             
-    @flagset.command(pass_context=True, no_pm=True)
+    @flagset.command(pass_context=True, no_pm=True, name="expire")
     async def flagset_expire(self, ctx, days: int):
         """Set the number of days for flags to expire after for server"""
         server = ctx.message.server
         self.the_data[server.id]['days'] = days
         self.save_data()
+        await self.bot.say("Success")
         
     async def _list_flags(self, ctx, server, user):
         """Sends a pretty embed of flags on a user to context"""
-        if user.id not in self.the_data[server.id]:
-            await self.bot.send_message(ctx.channel, "This user has no flags!")
+        if user.id not in self.the_data[server.id]['flags']:
+            await self.bot.send_message(ctx.message.channel, "This user has no flags!")
             return
 
-        embed=discord.Embed(title="Flags for "+user.mention, decsription="User has "+str(len(flags))+" active flags", color=0x804040)
-        for flag in self.the_data[server.id][user.id]:
-            embed.add_field(name=flag['reason'], value="Expires on "+str(date(flag['expireyear'], flag['expiremonth'], flag['expireday'])), inline=True)
+        embed=discord.Embed(title="Flags for "+user.mention, description="User has "+str(len(self.the_data[server.id]['flags'][user.id]))+" active flags", color=0x804040)
+        for flag in self.the_data[server.id]['flags'][user.id]:
+            embed.add_field(name="Reason: "+flag['reason'], value="Expires on "+str(date(flag['expireyear'], flag['expiremonth'], flag['expireday'])), inline=True)
         
-        await self.bot.send_message(ctx.channel, embed=embed)
+        await self.bot.send_message(ctx.message.channel, embed=embed)
 
 
     def _check_flags(self, server):
@@ -109,10 +110,10 @@ class Flag:
 
         for userid in self.the_data[server.id]['flags']:
             x = 0
-            while x < len(self.the_data[server.id]['flags']['userid']):
-                flag = self.the_data[server.id]['flags']['userid'][x]
+            while x < len(self.the_data[server.id]['flags'][userid]):
+                flag = self.the_data[server.id]['flags'][userid][x]
                 if date.today() >= date(flag['expireyear'], flag['expiremonth'], flag['expireday']):
-                    self.the_data[server.id]['flags']['userid'].pop(x)
+                    self.the_data[server.id]['flags'][userid].pop(x)
                 else:
                     x += 1
                     
