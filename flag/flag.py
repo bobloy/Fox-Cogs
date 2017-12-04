@@ -69,6 +69,9 @@ class Flag:
         """Manage settings for flagging"""
         server = ctx.message.server
         self._check_flags(server)
+        if ctx.invoked_subcommand is None:
+            await ctx.send_help()
+            
         # clashroyale = self.bot.get_cog('clashroyale')
         # if clashroyale is None:
             # await self.bot.say("Requires clashroyale cog installed")
@@ -98,6 +101,11 @@ class Flag:
 
     def _check_flags(self, server):
         """Updates and removes expired flags"""
+        if server.id not in self.the_data:
+            self.the_data[server.id] = {
+                'flags': {},
+                'days': 31
+                }
         for userid in self.the_data[server.id]['flags']:
             x = 0
             while x < len(self.the_data[server.id]['flags']['userid']):
