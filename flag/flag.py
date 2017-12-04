@@ -39,7 +39,7 @@ class Flag:
 
 # ************************Flag command group start************************
     @commands.command(pass_context=True, no_pm=True)
-    async def flag(self, ctx, user: discord.Member, *reason=[]):
+    async def flag(self, ctx, user: discord.Member, *reason):
         """Flag a user"""
         server = ctx.message.server
         self._check_flags(server)
