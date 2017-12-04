@@ -73,7 +73,8 @@ class Flag:
         
         self.save_data()
         await self.bot.say("Success!") 
-        
+    
+    @checks.mod_or_permissions(administrator=True)
     @commands.group(pass_context=True, no_pm=True, aliases=['setflag'])
     async def flagset(self, ctx):
         """Manage settings for flagging"""
