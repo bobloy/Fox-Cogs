@@ -1,0 +1,9 @@
+{
+    "AUTHOR" : "Bobloy",
+    "INSTALL_MSG" : "Thank you for installing Fixjoin. Run with [p]fixjoin",
+    "NAME" : "Fixjoin",
+    "SHORT" : "[Incomplete] Fix join date",
+    "DESCRIPTION" : "[Incomplete] Fix join date",
+    "TAGS" : ["bobloy", "fix", "join", "tools"],
+    "HIDDEN" : false
+}
