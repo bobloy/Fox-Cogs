@@ -21,10 +21,10 @@ class Fixjoin:
 
     @checks.is_owner()
     @commands.command(pass_context=True, no_pm=True)
-    async def fixjoin(self, ctx, user: discord.Member, year: int, month: int, day: int):
+    async def fixjoin(self, ctx, user: discord.Member, year: int, month: int, day: int, hour: int=None, minute: int=None):
         """Fix a member's joindate"""
         
-        user.joined_at = datetime(year, month, day)
+        user.joined_at = datetime(year, month, day, hour, minute)
         
         await self.bot.say("Success")
 
