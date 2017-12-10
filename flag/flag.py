@@ -37,6 +37,7 @@ class Flag:
             'expireday': None
             }
 # ************************Flag command group start************************
+    @checks.mod_or_permissions(manage_roles=True)
     @commands.command(pass_context=True, no_pm=True)
     async def flag(self, ctx, user: discord.Member, *reason):
         """Flag a user"""
@@ -71,7 +72,7 @@ class Flag:
         else:
             await self.bot.send_message(ctx.message.channel, "This user has no flags!")
     
-    @checks.mod_or_permissions(administrator=True)
+    @checks.mod_or_permissions(manage_roles=True)
     @commands.command(pass_context=True, no_pm=True, aliases=['flagclear'])
     async def clearflag(self, ctx, user: discord.Member):
         """Clears flags for a user"""
@@ -83,7 +84,6 @@ class Flag:
         self.save_data()
         await self.bot.say("Success!") 
 
-    @checks.mod_or_permissions(administrator=True)
     @commands.command(pass_context=True, no_pm=True, aliases=['flaglist'])
     async def listflag(self, ctx, user: discord.Member):
         """Lists flags for a user"""
