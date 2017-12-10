@@ -111,6 +111,7 @@ class Flag:
             # await self.bot.say("Requires clashroyale cog installed")
             # return
             
+  !
   
     @flagset.command(pass_context=True, no_pm=True, name="expire")
     async def flagset_expire(self, ctx, days: int):
@@ -124,7 +125,7 @@ class Flag:
     async def flagset_dm(self, ctx):
         """Toggles DM-ing the flags"""
         server = ctx.message.server
-        if self.the_data[server.id]['dm'] is None:
+        if "dm" not in self.the_data[server.id]:
             self.the_data[server.id]['dm'] = False
         
         self.the_data[server.id]['dm'] = not self.the_data[server.id]['dm']
