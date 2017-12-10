@@ -61,7 +61,15 @@ class Flag:
         
         self.the_data[server.id]['flags'][user.id].append(flag)
         self.save_data()
-        await self._list_flags(ctx, server, user)
+        
+        outembed = (await self._list_flags(ctx, server, user))
+        
+        if outembed:
+            await self.bot.send_message(ctx.message.channel, embed=outembed)
+            if self.the_data[server.id]['dm']:
+                await self.bot.send_message(user, embed=outembed)
+        else:
+            await self.bot.send_message(ctx.message.channel, "This user has no flags!")
     
     @checks.mod_or_permissions(administrator=True)
     @commands.command(pass_context=True, no_pm=True, aliases=['flagclear'])
@@ -74,6 +82,20 @@ class Flag:
         
         self.save_data()
         await self.bot.say("Success!") 
+
+    @checks.mod_or_permissions(administrator=True)
+    @commands.command(pass_context=True, no_pm=True, aliases=['flaglist'])
+    async def listflag(self, ctx, user: discord.Member):
+        """Lists flags for a user"""
+        server = ctx.message.server
+        self._check_flags(server)
+
+        outembed = (await self._list_flags(ctx, server, user))
+        
+        if outembed:
+            await self.bot.send_message(ctx.message.channel, embed=outembed)
+        else:
+            await self.bot.send_message(ctx.message.channel, "This user has no flags!")
     
     @checks.mod_or_permissions(administrator=True)
     @commands.group(pass_context=True, no_pm=True, aliases=['setflag'])
@@ -89,8 +111,7 @@ class Flag:
             # await self.bot.say("Requires clashroyale cog installed")
             # return
             
-        
-            
+  
     @flagset.command(pass_context=True, no_pm=True, name="expire")
     async def flagset_expire(self, ctx, days: int):
         """Set the number of days for flags to expire after for server"""
@@ -98,19 +119,33 @@ class Flag:
         self.the_data[server.id]['days'] = days
         self.save_data()
         await self.bot.say("Success")
+    
+    @flagset.command(pass_context=True, no_pm=True, name="dm")
+    async def flagset_dm(self, ctx):
+        """Toggles DM-ing the flags"""
+        server = ctx.message.server
+        if self.the_data[server.id]['dm'] is None:
+            self.the_data[server.id]['dm'] = False
+        
+        self.the_data[server.id]['dm'] = not self.the_data[server.id]['dm']
+        self.save_data()
+        await self.bot.say("DM-ing users is now set to "+str(self.the_data[server.id]['dm']))
         
     async def _list_flags(self, ctx, server, user):
-        """Sends a pretty embed of flags on a user to context"""
+        """Returns a pretty embed of flags on a user"""
         if user.id not in self.the_data[server.id]['flags']:
-            await self.bot.send_message(ctx.message.channel, "This user has no flags!")
-            return
+            return None
 
-        embed=discord.Embed(title="Flags for "+user.mention, description="User has "+str(len(self.the_data[server.id]['flags'][user.id]))+" active flags", color=0x804040)
+        embed=discord.Embed(title="Flags for "+user.display_name, description="User has "+str(len(self.the_data[server.id]['flags'][user.id]))+" active flags", color=0x804040)
         for flag in self.the_data[server.id]['flags'][user.id]:
             embed.add_field(name="Reason: "+flag['reason'], value="Expires on "+str(date(flag['expireyear'], flag['expiremonth'], flag['expireday'])), inline=True)
         
-        await self.bot.send_message(ctx.message.channel, embed=embed)
+        if user.avatar_url is None:
+            embed.set_thumbnail(url="https://cdn.discordapp.com/icons/257557008662790145/dee9118e0048e5726cd0d27d37ddf4e4.jpg")
+        else:
+            embed.set_thumbnail(url=user.avatar_url)
 
+        return embed
 
     def _check_flags(self, server):
         """Updates and removes expired flags"""
