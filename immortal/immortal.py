@@ -82,7 +82,7 @@ class Immortal:
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Crypt" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
-                await self.send_welcome(member)
+                await self.send_welcome(member, "Reddit Crypt")
                 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
@@ -99,7 +99,7 @@ class Immortal:
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Revenant" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
-                await self.send_welcome(member)
+                await self.send_welcome(member, "Reddit Revenant")
                 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
@@ -116,7 +116,7 @@ class Immortal:
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Undead" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
-                await self.send_welcome(member)
+                await self.send_welcome(member, "Reddit Undead")
                 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
@@ -133,7 +133,7 @@ class Immortal:
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Phantom" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
-                await self.send_welcome(member)
+                await self.send_welcome(member, "Reddit Phantom")
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
@@ -150,7 +150,7 @@ class Immortal:
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Eternal" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
-                await self.send_welcome(member)
+                await self.send_welcome(member, "Reddit Eternal")
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
@@ -167,7 +167,7 @@ class Immortal:
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Immortal" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
-                await self.send_welcome(member)
+                await self.send_welcome(member, "Reddit Immortal")
 
     @commands.group(aliases=['setimmortal'], pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
@@ -192,11 +192,11 @@ class Immortal:
         self.save_data()
         await self.bot.say("Welcome Channel set to "+ctx.message.channel.name)
 
-    async def send_welcome(self, member):
+    async def send_welcome(self, member, clanname=""):
         server = member.server
         if server.id in self.the_data:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['WELCOMECHANNEL']),
-                                        "You now have access to the server, " + member.mention + "\n" +
+                                        "Please welcome " + member.mention + ", who just joined " + clanname +"!"\n" +
                                         "Check " + server.get_channel("257557008662790145").mention + " & " +
                                         server.get_channel("257560603093106688").mention+" for clan rules etc.\n" +
                                         "We recommend turning all message notifications on for " + server.get_channel("257560603093106688").mention +
