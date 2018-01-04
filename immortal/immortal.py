@@ -196,7 +196,7 @@ class Immortal:
         server = member.server
         if server.id in self.the_data:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['WELCOMECHANNEL']),
-                                        "Please welcome " + member.mention + ", who just joined " + clanname +"!"\n" +
+                                        "Please welcome " + member.mention + ", who just joined " + clanname +"!\n" +
                                         "Check " + server.get_channel("257557008662790145").mention + " & " +
                                         server.get_channel("257560603093106688").mention+" for clan rules etc.\n" +
                                         "We recommend turning all message notifications on for " + server.get_channel("257560603093106688").mention +
