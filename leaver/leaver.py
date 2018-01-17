@@ -47,11 +47,16 @@ class Leaver:
 
     async def when_leave(self, member):
         server = member.server
+        if member.nick:
+            leavemessage = str(member) + " (*" + str(member.nick) +"*) has left the server!"
+        else:
+            leavemessage = str(member) + " has left the server!"
+        
         if server.id in self.the_data:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['CHANNEL']),
-                                        str(member) + "(*" + str(member.nick) +"*) has left the server!")
+                                        leavemessage)
         else:
-            await self.bot.send_message(server.default_channel.id, str(member) + " (*" + str(member.nick) +"*) has left the server!")
+            await self.bot.send_message(server.default_channel.id, leavemessage)
 
 
 def check_folders():
