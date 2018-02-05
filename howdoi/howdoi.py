@@ -18,13 +18,13 @@ class Howdoi:
             "query": self.query,
             "pos": 1,
             "all": False,
-            "link": False,
+            "link": True,
             "color": False,
             "num_answers": 1,
             "clear_cache": False,
             "version": False
             }
-
+    
     @commands.command(pass_context=True)
     async def howdoi(self, ctx, *question):
         """Ask a coding question"""
@@ -32,9 +32,9 @@ class Howdoi:
         
         self.args["query"] = self.query
         
-        out = howdoi.howdoi(self.args).encode('utf-8', 'ignore')
+        out = howdoi.howdoi(self.args.copy()).encode('utf-8', 'ignore')
         
-        await self.bot.say(box(out))
+        await self.bot.say(box(out,"python"))
         # for page in pagify(out, shorten_by=24):
             # await self.bot.say(box(page))
         
