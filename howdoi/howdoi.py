@@ -32,7 +32,7 @@ class Howdoi:
         
         self.args["query"] = self.query
         
-        out = howdoi.howdoi(self.args)
+        out = howdoi.howdoi(self.args).encode('utf-8', 'ignore')
         
         for page in pagify(out, shorten_by=24):
             await self.bot.say(box(page))
