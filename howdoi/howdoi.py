@@ -34,8 +34,9 @@ class Howdoi:
         
         out = howdoi.howdoi(self.args).encode('utf-8', 'ignore')
         
-        for page in pagify(out, shorten_by=24):
-            await self.bot.say(box(page))
+        await self.bot.say(box(out))
+        # for page in pagify(out, shorten_by=24):
+            # await self.bot.say(box(page))
         
 def setup(bot):
     n = Howdoi(bot)
