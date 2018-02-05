@@ -166,7 +166,15 @@ class Hangman:
             await self._guessletter(guess)
 
 
-                
+    @commands.command(aliases=['hangend'], pass_context=True)
+    async def endhang(self, ctx):
+        """Stops the current game of hangman"""
+        if not self.the_data["running"]:
+            await self.bot.say("No game currently running")
+            return
+        self._stopgame()
+        await self.bot.say("Game has been abandoned..")
+    
     def _startgame(self):
         """Starts a new game of hangman"""
         self.the_data["answer"] = self._getphrase().upper()
