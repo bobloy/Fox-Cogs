@@ -12,6 +12,7 @@ class Howdoi:
     """Cog for answering coding questions"""
 
     def __init__(self, bot):
+        self.bot = bot
         self.query = ""
         self.args = {
             "query": self.query
