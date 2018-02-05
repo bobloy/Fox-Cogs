@@ -15,7 +15,8 @@ class Howdoi:
         self.bot = bot
         self.query = ""
         self.args = {
-            "query": self.query
+            "query": self.query,
+            "num_answers": 1
             }
 
     @commands.command(pass_context=True)
