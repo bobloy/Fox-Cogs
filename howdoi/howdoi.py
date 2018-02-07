@@ -58,9 +58,9 @@ class Howdoi:
         Default Off
         Only works if links are turned off"""
         
-        self.args['full'] = not self.args['full']
+        self.args['all'] = not self.args['all']
         
-        if self.args['full']:
+        if self.args['all']:
             await self.bot.say("Answers will now be provided in full context")
         else:
             await self.bot.say("Answers will now be provided as a code snippet")
