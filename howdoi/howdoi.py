@@ -32,9 +32,12 @@ class Howdoi:
         
         self.args["query"] = self.query
         
-        out = howdoi.howdoi(self.args.copy()).encode('utf-8', 'ignore')
+        out = howdoi.howdoi(self.args.copy()) # .encode('utf-8', 'ignore')
         
-        await self.bot.say(box(out,"python"))
+        if self.args['link']:
+            await self.bot.say(out)
+        else:
+            await self.bot.say(box(out,"python"))
         # for page in pagify(out, shorten_by=24):
             # await self.bot.say(box(page))
         
