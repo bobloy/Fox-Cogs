@@ -73,7 +73,7 @@ class Cleverio:
         
         response = self.clever.query(self.query)
         
-        if reponse:
+        if response:
             await self.bot.say(response)
         else:
             await self.bot.say(":thinking:")
