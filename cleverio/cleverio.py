@@ -7,6 +7,9 @@ import json
 
 
 class CleverBot(object):
+    """
+    Straight up copied from https://github.com/bvanrijn/clever
+    """
     def __init__(self, user, key, nick=None):
         self.user = user
         self.key = key
@@ -79,7 +82,11 @@ class Cleverio:
         else:
             await self.bot.say(":thinking:")
 
-    async def on_message(self, message):
+    async def on_message(self, message): 
+        """
+        Credit to https://github.com/Twentysix26/26-Cogs/blob/master/cleverbot/cleverbot.py
+        for on_message recognition of @bot
+        """
         author = message.author
         channel = message.channel
 
