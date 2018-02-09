@@ -97,7 +97,7 @@ class Cleverio:
                 return
             text = text.replace(to_strip, "", 1)
             await self.bot.send_typing(channel)
-            response = self.clever.query(self.query)
+            response = self.clever.query(text)
             if response:
                 await self.bot.send_message(channel, response)
             else:
