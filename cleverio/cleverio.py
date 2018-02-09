@@ -78,8 +78,8 @@ class Cleverio:
             await self.bot.say(response)
         else:
             await self.bot.say(":thinking:")
-            
-     async def on_message(self, message):
+
+    async def on_message(self, message):
         author = message.author
         channel = message.channel
 
