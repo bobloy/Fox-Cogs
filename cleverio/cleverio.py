@@ -79,5 +79,5 @@ class Cleverio:
             await self.bot.say(":thinking:")
         
 def setup(bot):
-    n = Howdoi(bot)
+    n = Cleverio(bot)
     bot.add_cog(n)
