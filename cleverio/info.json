@@ -5,6 +5,6 @@
     "SHORT" : "Answer coding questions",
     "DESCRIPTION" : "Answer coding questions using gleitz's howdoi code @ https://github.com/gleitz/howdoi",
     "TAGS" : ["howdoi", "coding","bobloy"],
-    "REQUIREMENTS" : ["Pygments", "argparse", "cssselect", "lxml", "pyquery", "requests", "requests-cache", "howdoi"],
+    "REQUIREMENTS" : [],
     "HIDDEN" : false
 }

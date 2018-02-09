@@ -55,7 +55,7 @@ class Cleverio:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
     
-    @howdoiset.command(pass_context=True, name="apikey")
+    @cleverset.command(pass_context=True, name="apikey")
     async def cleverset_apikey(self, ctx, name, key):
         """Adjust number of answers provided.
         Defaults to 1"""
