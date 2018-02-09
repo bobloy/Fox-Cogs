@@ -69,6 +69,7 @@ class Cleverio:
     @commands.command(pass_context=True)
     async def cleverio(self, ctx, *query):
         """Talk to cleverbot.io"""
+        self.bot.type()
         self.query = " ".join(query)
         
         response = self.clever.query(self.query)
@@ -77,6 +78,23 @@ class Cleverio:
             await self.bot.say(response)
         else:
             await self.bot.say(":thinking:")
+            
+     async def on_message(self, message):
+        author = message.author
+        channel = message.channel
+
+        if message.author.id != self.bot.user.id:
+            to_strip = "@" + author.server.me.display_name + " "
+            text = message.clean_content
+            if not text.startswith(to_strip):
+                return
+            text = text.replace(to_strip, "", 1)
+            await self.bot.send_typing(channel)
+            response = self.clever.query(self.query)
+            if response:
+                await self.bot.send_message(channel, response)
+            else:
+                await self.bot.send_message(channel, ":thinking:")
         
 def setup(bot):
     n = Cleverio(bot)
