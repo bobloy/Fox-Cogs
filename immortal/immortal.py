@@ -9,7 +9,7 @@ from .utils import checks
 
 
 class Immortal:
-    """Creates a goodbye message when people leave"""
+    """Custom commands for the Immortal Alliance server"""
 
     def __init__(self, bot):
         self.bot = bot
