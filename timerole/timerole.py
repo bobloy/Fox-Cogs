@@ -6,6 +6,7 @@ from discord.ext import commands
 from .utils.dataIO import dataIO
 from .utils import checks
 
+import asyncio
 
 class Timerole:
     """Creates a goodbye message when people leave"""
