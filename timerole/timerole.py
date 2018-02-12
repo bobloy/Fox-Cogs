@@ -24,7 +24,7 @@ class Timerole:
         dataIO.save_json(self.file_path, self.the_data)
     
     @commands.command(pass_context=True, no_pm=True)
-    @checks.mod_or_permissions(administrator=True)
+    @checks.is_owner()
     async def testtimerole(self, ctx):
         """Trigger the daily timerole"""
         
