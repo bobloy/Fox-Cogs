@@ -26,7 +26,7 @@ class Timerole:
     async def testtimerole(self, ctx):
         """Trigger the daily timerole"""
         
-        await self.check_day()
+        await self.check_day(True)
          
     @commands.group(aliases=['settimerole'], pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
@@ -53,11 +53,12 @@ class Timerole:
         await self.bot.say("Time Role for {0} set to {1} days".format(role.name, days))
     
 
-    async def check_day(self):
+    async def check_day(self, skipwait=False):
         tomorrow = datetime.now()+timedelta(days=1)
         midnight = datetime(year=tomorrow.year, month=tomorrow.month, 
                         day=tomorrow.day, hour=0, minute=0, second=0)
-        asyncio.sleep((midnight - datetime.now()).seconds)
+        if not skipwait:
+            asyncio.sleep((midnight - datetime.now()).seconds)
         while self is self.bot.get_cog("timerole"):
             for server in self.bot.servers:
                 addlist = []
