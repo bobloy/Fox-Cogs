@@ -54,7 +54,7 @@ class Timerole:
     
 
     async def check_day(self):
-        tomorrow = datetime.now()+timedelta(day=1)
+        tomorrow = datetime.now()+timedelta(days=1)
         midnight = datetime(year=tomorrow.year, month=tomorrow.month, 
                         day=tomorrow.day, hour=0, minute=0, second=0)
         asyncio.sleep((midnight - datetime.now()).seconds)
