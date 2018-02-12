@@ -29,7 +29,7 @@ class Timerole:
             await self.bot.send_cmd_help(ctx)
 
     @timeroleset.command(pass_context=True, no_pm=True)
-    async def addrole(self, ctx, role: Discord.role, days: int, *requiredroles: Discord.role):
+    async def addrole(self, ctx, role: discord.Role, days: int, *requiredroles: discord.Role):
         server = ctx.message.server
         if server.id not in self.the_data:
             self.the_data[server.id] = {}
