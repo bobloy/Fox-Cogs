@@ -25,10 +25,10 @@ class Timerole:
     
     @commands.command(pass_context=True, no_pm=True)
     @checks.is_owner()
-    async def testtimerole(self, ctx):
+    async def runtimerole(self, ctx):
         """Trigger the daily timerole"""
         
-        await self.check_day(True)
+        await self.timerole_update()
         await self.bot.say("Success")
     @commands.group(aliases=['settimerole'], pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
@@ -69,64 +69,68 @@ class Timerole:
         self.save_data()
         await self.bot.say("Announce channel set to {0}".format(channel.mention))
     
-
-    async def check_day(self, skipwait=False):
+    
+    async def timerole_update(self):
+        for server in self.bot.servers:
+            print("In server {}".format(server.name))
+            addlist = []
+            if server.id not in self.the_data: # Hasn't been configured
+                print("Not configured")
+                continue
+            
+            if 'ROLES' not in self.the_data[server.id]: # No roles
+                print("No roles")
+                continue
+            
+            for member in server.members:
+                has_roles = [r.id for r in member.roles]
+                
+                get_roles = [rID for rID in self.the_data[server.id]['ROLES']]
+                
+                check_roles = set(get_roles) - set(has_roles)
+                
+                print("{} is being checked for {}".format(member.display_name, check_roles))
+                
+                for role_id in check_roles:
+                    # Check for required role
+                    if 'REQUIRED' in self.the_data[server.id]['ROLES'][role_id]:
+                        if not set(self.the_data[server.id]['ROLES'][role_id]['REQUIRED']) & set(has_roles): 
+                            print("Doesn't have required role")
+                            continue
+                    
+                    
+                    if member.joined_at + timedelta(days=self.the_data[server.id]['ROLES'][role_id]['DAYS']) > datetime.today():
+                        print("Qualifies")
+                        addlist.append( (member, role_id) )
+                    print("Out")
+            channel = None
+            if "ANNOUNCE" in self.the_data[server.id]:
+                channel = server.get_channel(self.the_data[server.id]["ANNOUNCE"])
+            
+            results = "**These members have received the following roles**\n"
+            for member, role_id in addlist:
+                role = discord.utils.get(server.roles, id=role_id)
+                await self.bot.add_roles(member, role)
+                results += "{} : {}\n".format(member.display_name, role.name)
+            
+            if channel:
+                for page in pagify(
+                        results, shorten_by=50):
+                    await self.bot.send_message(channel, page)
+                
+            print(results)
+            
+    async def check_day(self):
         tomorrow = datetime.now()+timedelta(days=1)
         midnight = datetime(year=tomorrow.year, month=tomorrow.month, 
                         day=tomorrow.day, hour=0, minute=0, second=0)
-        if not skipwait:
-            await asyncio.sleep((midnight - datetime.now()).seconds)
+
+        await asyncio.sleep((midnight - datetime.now()).seconds)
         print("About to start")
         while self is self.bot.get_cog("Timerole"):
-            for server in self.bot.servers:
-                print("In server {}".format(server.name))
-                addlist = []
-                if server.id not in self.the_data: # Hasn't been configured
-                    print("Not configured")
-                    continue
-                
-                if 'ROLES' not in self.the_data[server.id]: # No roles
-                    print("No roles")
-                    continue
-                
-                for member in server.members:
-                    has_roles = [r.id for r in member.roles]
-                    
-                    get_roles = [rID for rID in self.the_data[server.id]['ROLES']]
-                    
-                    check_roles = set(get_roles) - set(has_roles)
-                    
-                    print("{} is being checked for {}".format(member.display_name, check_roles))
-                    
-                    for role_id in check_roles:
-                        # Check for required role
-                        if 'REQUIRED' in self.the_data[server.id]['ROLES'][role_id]:
-                            if not set(self.the_data[server.id]['ROLES'][role_id]['REQUIRED']) & set(has_roles): 
-                                print("Doesn't have required role")
-                                continue
-                        
-                        
-                        if member.joined_at + timedelta(days=self.the_data[server.id]['ROLES'][role_id]['DAYS']) > datetime.today():
-                            print("Qualifies")
-                            addlist.append( (member, role_id) )
-                        print("Out")
-                channel = None
-                if "ANNOUNCE" in self.the_data[server.id]:
-                    channel = server.get_channel(self.the_data[server.id]["ANNOUNCE"])
-                
-                results = "**These members have received the following roles**\n"
-                for member, role_id in addlist:
-                    role = discord.utils.get(server.roles, id=role_id)
-                    await self.bot.add_roles(member, role)
-                    results += "{} : {}\n".format(member.display_name, role.name)
-                
-                if channel:
-                    for page in pagify(
-                            results, shorten_by=50):
-                        await self.bot.send_message(channel, page)
-                    
-                print(results)
-                
+        
+            self.timerole_update()
+            
             await asyncio.sleep(86400) # Wait 24 hours
 
 
