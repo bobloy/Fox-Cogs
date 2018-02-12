@@ -20,7 +20,14 @@ class Timerole:
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
-
+    
+    @commands.command(pass_context=True, no_pm=True)
+    @checks.mod_or_permissions(administrator=True)
+    async def testtimerole(self, ctx):
+        """Trigger the daily timerole"""
+        
+        await self.check_day()
+         
     @commands.group(aliases=['settimerole'], pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
     async def timeroleset(self, ctx):
