@@ -40,7 +40,7 @@ class Timerole:
         self.the_data[server.id]['ROLES'] = {role.id: {'DAYS': days}}
 
         if requiredroles:
-            self.the_data[server.id]['ROLES'][role.id]['REQUIRED'] = requiredroles
+            self.the_data[server.id]['ROLES'][role.id]['REQUIRED'] = [r.id for r in requiredroles]
 
         self.save_data()
         await self.bot.say("Time Role for {0} set to {1} days".format(role.name, days))
