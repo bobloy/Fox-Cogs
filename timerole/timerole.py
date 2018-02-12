@@ -36,8 +36,9 @@ class Timerole:
             self.the_data[server.id] = {}
             self.save_data()
         
+        
+        self.the_data[server.id]['ROLES'] = {role.id: {'DAYS': days}}
 
-        self.the_data[server.id][role.id] = {'DAYS': days}
         if requiredroles:
             self.the_data[server.id]['ROLES'][role.id]['REQUIRED'] = requiredroles
 
