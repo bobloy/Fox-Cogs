@@ -129,7 +129,7 @@ class Timerole:
         print("About to start")
         while self is self.bot.get_cog("Timerole"):
         
-            self.timerole_update()
+            await self.timerole_update()
             
             await asyncio.sleep(86400) # Wait 24 hours
 
