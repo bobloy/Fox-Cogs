@@ -30,9 +30,9 @@ class Timerole:
         
         await self.timerole_update()
         await self.bot.say("Success")
-    @commands.group(aliases=['settimerole'], pass_context=True, no_pm=True)
+    @commands.group(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
-    async def timeroleset(self, ctx):
+    async def timerole(self, ctx):
         """Adjust timerole settings"""
 
         if ctx.invoked_subcommand is None:
@@ -70,6 +70,20 @@ class Timerole:
 
         self.save_data()
         await self.bot.say("Announce channel set to {0}".format(channel.mention))
+        
+    @timeroleset.command(pass_context=True, no_pm=True)
+    async def removerole(self, ctx, role: discord.Role):
+        """Removes a role from being added after specified time"""
+        server = ctx.message.server
+        if server.id not in self.the_data:
+            self.the_data[server.id] = {}
+            self.save_data()
+        
+        
+        self.the_data[server.id]['ROLES'].pop(role.id, None)
+
+        self.save_data()
+        await self.bot.say("{0} will no longer be applied".format(role.name))
     
     
     async def timerole_update(self):
