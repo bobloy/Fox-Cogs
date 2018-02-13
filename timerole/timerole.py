@@ -46,8 +46,10 @@ class Timerole:
             self.the_data[server.id] = {}
             self.save_data()
         
-        
-        self.the_data[server.id]['ROLES'] = {role.id: {'DAYS': days}}
+        if 'ROLES' not in self.the_data[server.id]:
+            self.the_data[server.id]['ROLES'] = {}
+            
+        self.the_data[server.id]['ROLES'][role.id] = {'DAYS': days}
 
         if requiredroles:
             self.the_data[server.id]['ROLES'][role.id]['REQUIRED'] = [r.id for r in requiredroles]
@@ -89,7 +91,7 @@ class Timerole:
                 
                 check_roles = set(get_roles) - set(has_roles)
                 
-                print("{} is being checked for {}".format(member.display_name, check_roles))
+                print("{} is being checked for {}".format(member.display_name, list(check_roles)))
                 
                 for role_id in check_roles:
                     # Check for required role
