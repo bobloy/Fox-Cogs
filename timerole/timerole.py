@@ -38,7 +38,7 @@ class Timerole:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
-    @timeroleset.command(pass_context=True, no_pm=True)
+    @timerole.command(pass_context=True, no_pm=True)
     async def addrole(self, ctx, role: discord.Role, days: int, *requiredroles: discord.Role):
         """Add a role to be added after specified time on server"""
         server = ctx.message.server
@@ -57,7 +57,7 @@ class Timerole:
         self.save_data()
         await self.bot.say("Time Role for {0} set to {1} days".format(role.name, days))
         
-    @timeroleset.command(pass_context=True, no_pm=True)
+    @timerole.command(pass_context=True, no_pm=True)
     async def channel(self, ctx, channel: discord.Channel):
         """Sets the announce channel for role adds"""
         server = ctx.message.server
@@ -71,7 +71,7 @@ class Timerole:
         self.save_data()
         await self.bot.say("Announce channel set to {0}".format(channel.mention))
         
-    @timeroleset.command(pass_context=True, no_pm=True)
+    @timerole.command(pass_context=True, no_pm=True)
     async def removerole(self, ctx, role: discord.Role):
         """Removes a role from being added after specified time"""
         server = ctx.message.server
