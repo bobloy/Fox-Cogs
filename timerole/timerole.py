@@ -115,7 +115,7 @@ class Timerole:
                             continue
                     
                     
-                    if member.joined_at + timedelta(days=self.the_data[server.id]['ROLES'][role_id]['DAYS']) > datetime.today():
+                    if member.joined_at + timedelta(days=self.the_data[server.id]['ROLES'][role_id]['DAYS']) <= datetime.today():
                         print("Qualifies")
                         addlist.append( (member, role_id) )
                     print("Out")
