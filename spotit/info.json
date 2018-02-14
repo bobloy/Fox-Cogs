@@ -1,0 +1,14 @@
+{
+	"AUTHOR": "Bobloy",
+	"DESCRIPTION": "Spot-It Cog for Red Discord bot. Play a game of Spot-It with your friends!",
+	"INSTALL_MSG": "Thank you for installing Spot-it! Play with [p]spotit, edit with [p]spotitset",
+	"NAME": "Spotit",
+	"SHORT": "Play a game of Spot-It with your friends!",
+	"TAGS": [
+		"spotit",
+		"bobloy",
+		"fun",
+		"game"
+	],
+	"HIDDEN": false
+}
