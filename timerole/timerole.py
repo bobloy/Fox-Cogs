@@ -123,18 +123,21 @@ class Timerole:
             if "ANNOUNCE" in self.the_data[server.id]:
                 channel = server.get_channel(self.the_data[server.id]["ANNOUNCE"])
             
-            results = "**These members have received the following roles**\n"
+            title = "**These members have received the following roles**\n"
+            results = ""
             for member, role_id in addlist:
                 role = discord.utils.get(server.roles, id=role_id)
                 await self.bot.add_roles(member, role)
                 results += "{} : {}\n".format(member.display_name, role.name)
             
-            if channel:
+            
+            if channel and results:
+                await self.bot.send_message(channel, title)
                 for page in pagify(
                         results, shorten_by=50):
                     await self.bot.send_message(channel, page)
                 
-            print(results)
+            print(title+results)
             
     async def check_day(self):
         tomorrow = datetime.now()+timedelta(days=1)
