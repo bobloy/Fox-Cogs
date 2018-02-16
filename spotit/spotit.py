@@ -40,13 +40,13 @@ class Spotit:
         
         await self.bot.send_message(channel, embed=embed)
         
-        response = await self.bot.wait_for_message(timeout=15, channel=channel, content=self.answer)
+        response = await self.bot.wait_for_message(timeout=20, channel=channel, content=self.answer)
         
-        if not reponse:
-            await self.bot.send_message(channel, "Timed-out! Ending game")
-            await self._stopgame()
+        if not response:
+            await self.bot.send_message(channel, "Timed-out! Answer was {}:{}\nEnding game".format(self.answer, str(self.answer_emoji)))
+            self._stopgame()
         else:
-            await self.bot.send_message(channel, "Correct! Answer was {}:{}".format(self.answer, str(self.answer_emoji))
+            await self.bot.send_message(channel, "Correct! Answer was {}:{}".format(self.answer, str(self.answer_emoji)))
 
     def _card_embeds(self):
         embed=discord.Embed(title="Spot-It!", description="Identify the matching symbols!")
@@ -63,12 +63,12 @@ class Spotit:
         text2 = ""
         
         for x in range(len(card1)):
-            if x%3 = 0:  # New line
+            if x%3 == 0:  # New line
                 text1 += "\n"+rev_u_letters.pop()
                 text2 += "\n⏹"
                 rev_letters.pop()
             
-            if self.leftcard[x] = self.answer:
+            if sorted(self.leftcard)[x] == self.answer:
                 self.answer = rev_letters[-1]+"123"[x%3]
                 self.answer_emoji = card1[x]
             
@@ -79,12 +79,14 @@ class Spotit:
         text2 += "\n⏹⏹⏹⏹"
         
 
-        embed.add_field(name=Card 1, value=text1, inline=True)
-        embed.add_field(name=Card 2, value=text2, inline=True)
+        embed.add_field(name="Card 1", value=text1, inline=True)
+        embed.add_field(name="Card 2", value=text2, inline=True)
+        
+        return embed
         
 
-    def new_game():
-        self.emojilist = self.load_emojis()
+    async def new_game(self):
+        self.emojilist = await self.load_emojis()
 
         if not self.emojilist:
             print("Not enough custom emojis")
@@ -92,14 +94,14 @@ class Spotit:
 
         for x in range(len(PRIME_LIST)):
             p = PRIME_LIST[x]
-            if p * p + p + 1 > len(self.load_emojis()):
-                self.cardslist, self.emojicount = self.create_cards(PRIME_LIST[x-1])
+            if p * p + p + 1 > len(self.emojilist):
+                self.cardlist, self.emojicount = self.create_cards(PRIME_LIST[x-1])
                 return True
 
         print("How the hell do you have so many emojis available to you?")
         return False
 
-    def create_cards(p):
+    def create_cards(self, p):
         for min_factor in range(2, 1 + int(p ** 0.5)):
             if p % min_factor == 0:
                 break
@@ -116,16 +118,27 @@ class Spotit:
         cards.append(set([p * p + i for i in range(min_factor + 1)]))
         return cards, p * p + p + 1
 
-    def check_cards(card1, card2):
+    def check_cards(self, card1, card2):
         return sorted(card1 & card2)
               
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
     
-    def load_emojis(self):
+    async def load_emojis(self):
         """Get all custom emojis from every server bot can see"""
-        return [r for server in self.bot.servers for r in server.emojis]
+        emoji_list = []
+        for s in self.bot.servers:
+            r = discord.http.Route('GET', '/guilds/{guild_id}', guild_id=s.id)
+            j = await self.bot.http.request(r)
+            g_emoji = [e for e in j['emojis']]
+            emoji_list.extend(g_emoji)
+
+        # for emoji in emoji_list:
+            # await self.bot.say("{}".format(str(emoji)))
+        
+        return ["<{}:{}:{}>".format("a" if e['animated'] else "", e['name'], e['id']) for e in emoji_list]
+        # return [r for server in self.bot.servers for r in server.emojis]
         
     @commands.group(aliases=['setspotit'], pass_context=True)
     @checks.mod_or_permissions(administrator=True)
@@ -138,7 +151,10 @@ class Spotit:
     @commands.command(pass_context=True)
     async def spotit(self, ctx):
         """Start a new game of Spot-It"""
-        if not self.newgame():
+        if self.is_running:
+            await self.bot.say("Game is already running\nStop it with `[p]endspotit`")
+            return
+        if not await self.new_game():
             await self.bot.say("Failed to start a new game, check console for more information")
             return
         
@@ -155,20 +171,19 @@ class Spotit:
         
     @commands.command(aliases=['spotitend', 'stopspotit', 'spotitstop'], pass_context=True)
     async def endspotit(self, ctx):
-        """Stops the current game of hangman"""
+        """Stops the current game of Spot-It!"""
         if not self.is_running:
             await self.bot.say("No game currently running")
             return
         self._stopgame()
         await self.bot.say("Game has been abandoned..")
     
-    def _startgame(self, channel, user_scores):
-        """Starts a new game of hangman"""
+    async def _startgame(self, channel, user_scores):
+        """Starts a new game of Spot-It!"""
         self.is_running= True
         
         while self.is_running:  # Until someone stops it or times out or winner
             await self.pick_a_card(channel, user_scores)
-        
 
         
     def _stopgame(self):
@@ -177,42 +192,25 @@ class Spotit:
 
 
 
-    async def _printgame(self, channel=None):
-        """Print the current state of game"""
-        cSay = ("Guess this: " + str(self._hideanswer()) + "\n"
-                + "Used Letters: " + str(self._guesslist()) + "\n"
-                + self.hanglist[self.the_data["hangman"]] + "\n"
-                + self.navigate[0]+" for A-M, "+self.navigate[-1]+" for N-Z")
-        if channel:
-            message = await self.bot.send_message(channel, cSay)
-        else:
-            message = await self.bot.say(cSay)
-        
-        self.the_data["trackmessage"] = message.id
-        self.save_data()
-        await self._reactmessage_menu(message)
-        await self._checkdone(channel)
-        
     
 def check_folders():
     if not os.path.exists("data/Fox-Cogs"):
         print("Creating data/Fox-Cogs folder...")
         os.makedirs("data/Fox-Cogs")
 
-    if not os.path.exists("data/Fox-Cogs/hangman"):
-        print("Creating data/Fox-Cogs/hangman folder...")
-        os.makedirs("data/Fox-Cogs/hangman")
+    if not os.path.exists("data/Fox-Cogs/spotit"):
+        print("Creating data/Fox-Cogs/spotit folder...")
+        os.makedirs("data/Fox-Cogs/spotit")
 
         
 def check_files():
-    if not dataIO.is_valid_json("data/Fox-Cogs/hangman/hangman.json"):
-        dataIO.save_json("data/Fox-Cogs/hangman/hangman.json", {"running": False, "hangman": 0, "guesses": [], "theface": "<:never:336861463446814720>", "trackmessage": False})
+    if not dataIO.is_valid_json("data/Fox-Cogs/spotit/spotit.json"):
+        dataIO.save_json("data/Fox-Cogs/spotit/spotit.json", {})
     
 
 def setup(bot):
     check_folders()
     check_files()
-    n = Hangman(bot)
+    n = Spotit(bot)
     bot.add_cog(n)
-    bot.add_listener(n._on_react, "on_reaction_add")
     
