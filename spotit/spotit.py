@@ -51,8 +51,8 @@ class Spotit:
     def _card_embeds(self):
         embed=discord.Embed(title="Spot-It!", description="Identify the matching symbols!")
      
-        card1 = [self.emojilist[x-1] for x in self.leftcard]
-        card2 = [self.emojilist[x-1] for x in self.rightcard]
+        card1 = list(self.leftcard)
+        card2 = list(self.righcard)
         
         rev_u_letters = list(U_LETTERS[::-1])  # Reverse u_letters as a list
         rev_letters = list(LETTERS[::-1])  # Reverse letters as a list
@@ -70,10 +70,10 @@ class Spotit:
             
             if sorted(self.leftcard)[x] == self.answer[0]:
                 self.answer = rev_letters[-1]+"123"[x%3]
-                self.answer_emoji = card1[x]
+                self.answer_emoji = self.emojilist[card1[x]-1]
             
-            text1 += str(card1[x])
-            text2 += str(card2[x])
+            text1 += str(self.emojilist[card1[x]-1])
+            text2 += str(self.emojilist[card2[x]-1])
             
         text1 += "\n⏹:one::two::three:"
         text2 += "\n⏹⏹⏹⏹"
