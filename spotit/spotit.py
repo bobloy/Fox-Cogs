@@ -58,7 +58,7 @@ class Spotit:
         rev_letters = list(LETTERS[::-1])  # Reverse letters as a list
 
         self.answer = self.check_cards(self.leftcard, self.rightcard)[0]
-        self.answer_emoji = self.emojilist[self.answer[0]-1]
+        self.answer_emoji = self.emojilist[self.answer-1]
         
         text1 = ""
         text2 = ""
