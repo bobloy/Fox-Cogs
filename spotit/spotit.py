@@ -43,7 +43,7 @@ class Spotit:
         response = await self.bot.wait_for_message(timeout=20, channel=channel, content=self.answer)
         
         if not response:
-            await self.bot.send_message(channel, "Timed-out! Answer was {}:{}\nEnding game".format(self.answer, str(self.answer_emoji)))
+            await self.bot.send_message(channel, "Timed-out! Answer was {}:{}\nEnding game".format(self.answer, self.answer_emoji))
             self._stopgame()
         else:
             await self.bot.send_message(channel, "Correct! Answer was {}:{}".format(self.answer, str(self.answer_emoji)))
@@ -57,7 +57,8 @@ class Spotit:
         rev_u_letters = list(U_LETTERS[::-1])  # Reverse u_letters as a list
         rev_letters = list(LETTERS[::-1])  # Reverse letters as a list
 
-        self.answer = self.check_cards(self.leftcard, self.rightcard)
+        self.answer = self.check_cards(self.leftcard, self.rightcard)[0]
+        self.answer_emoji = self.emojilist[self.answer[0]-1]
         
         text1 = ""
         text2 = ""
@@ -66,12 +67,10 @@ class Spotit:
             if x%3 == 0:  # New line
                 text1 += "\n"+rev_u_letters.pop()
                 text2 += "\n⏹"
-                rev_letters.pop()
+                line_letter = rev_letters.pop()
             
-            if sorted(self.leftcard)[x] == self.answer[0]:
-                self.answer = rev_letters[-1]+"123"[x%3]
-                self.answer_emoji = self.emojilist[card1[x]-1]
-            
+            if card1[x] == self.answer:    
+                self.answer_text = line_letter+"123"[x%3]
             text1 += str(self.emojilist[card1[x]-1])
             text2 += str(self.emojilist[card2[x]-1])
             
@@ -87,7 +86,8 @@ class Spotit:
 
     async def new_game(self):
         self.emojilist = await self.load_emojis()
-
+        shuffle(self.emojilist)
+        
         if not self.emojilist:
             print("Not enough custom emojis")
             return False
