@@ -68,7 +68,7 @@ class Spotit:
                 text2 += "\n⏹"
                 rev_letters.pop()
             
-            if sorted(self.leftcard)[x] == self.answer[0]:
+            if self.leftcard[x] == self.answer[0]:
                 self.answer = rev_letters[-1]+"123"[x%3]
                 self.answer_emoji = card1[x]
             
@@ -114,8 +114,11 @@ class Spotit:
             for j in range(p):
                 cards.append(set([k * p + (j + i * k) % p
                                   for k in range(p)] + [p * p + 1 + i]))
-
-        cards.append(set([p * p + i for i in range(min_factor + 1)]))
+        
+        outlist = list(set([p * p + i for i in range(min_factor + 1)]))
+        shuffle(outlist)
+        
+        cards.append(outlist)
         return cards, p * p + p + 1
 
     def check_cards(self, card1, card2):
