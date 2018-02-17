@@ -109,13 +109,13 @@ class Spotit:
             min_factor = p
         cards = []
         for i in range(p):
-            cards.append(list(set([i * p + j for j in range(p)] + [p * p]))
+            cards.append(list(set([i * p + j for j in range(p)] + [p * p])))
         for i in range(min_factor):
             for j in range(p):
                 cards.append(list(set([k * p + (j + i * k) % p
-                                  for k in range(p)] + [p * p + 1 + i]))
+                                  for k in range(p)] + [p * p + 1 + i])))
         
-        cards.append(list(set([p * p + i for i in range(min_factor + 1)]))
+        cards.append(list(set([p * p + i for i in range(min_factor + 1)])))
         
         return cards, p * p + p + 1
 
