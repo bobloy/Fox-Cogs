@@ -40,7 +40,7 @@ class Spotit:
         
         await self.bot.send_message(channel, embed=embed)
         
-        response = await self.bot.wait_for_message(timeout=30, channel=channel, content=self.answer)
+        response = await self.bot.wait_for_message(timeout=30, channel=channel, content=self.answer_text)
         
         if not response:
             await self.bot.send_message(channel, "Timed-out! Answer was {} : {}\nEnding game".format(self.answer_emoji, self.answer_text))
