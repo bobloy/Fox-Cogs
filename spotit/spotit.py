@@ -52,7 +52,7 @@ class Spotit:
         embed=discord.Embed(title="Spot-It!", description="Identify the matching symbols!")
      
         card1 = list(self.leftcard)
-        card2 = list(self.righcard)
+        card2 = list(self.rightcard)
         
         rev_u_letters = list(U_LETTERS[::-1])  # Reverse u_letters as a list
         rev_letters = list(LETTERS[::-1])  # Reverse letters as a list
