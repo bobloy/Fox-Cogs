@@ -68,7 +68,7 @@ class Spotit:
                 text2 += "\n⏹"
                 rev_letters.pop()
             
-            if sorted(self.leftcard)[x] == self.answer:
+            if sorted(self.leftcard)[x] == self.answer[0]:
                 self.answer = rev_letters[-1]+"123"[x%3]
                 self.answer_emoji = card1[x]
             
@@ -176,7 +176,7 @@ class Spotit:
             await self.bot.say("No game currently running")
             return
         self._stopgame()
-        await self.bot.say("Game has been abandoned..")
+        await self.bot.say("Game will be abandoned after timeout..")
     
     async def _startgame(self, channel, user_scores):
         """Starts a new game of Spot-It!"""
