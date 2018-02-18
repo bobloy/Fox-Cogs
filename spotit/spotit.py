@@ -84,6 +84,7 @@ class Spotit:
 
         embed.add_field(name="Card 1", value=text1, inline=True)
         embed.add_field(name="Card 2", value=text2, inline=True)
+        embed.set_footer(text="Example answer: A1")
         
         return embed
         
