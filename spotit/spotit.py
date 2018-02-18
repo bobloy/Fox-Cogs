@@ -17,8 +17,8 @@ class Spotit:
 
     def __init__(self, bot):
         self.bot = bot
-        self.path = "data/Fox-Cogs/spotit"
-        self.file_path = "data/Fox-Cogs/spotit/spotit.json"
+        self.path = "data/Fox-Cogs/spotit/"
+        self.file_path = self.path+"spotit.json"
         self.the_data = dataIO.load_json(self.file_path)
         self.emojilist = []
         self.cardlist = [] 
