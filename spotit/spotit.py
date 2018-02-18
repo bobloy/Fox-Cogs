@@ -170,11 +170,17 @@ class Spotit:
         if user_scores: # If anyone responded at all
             await self.bot.say("Here are the scores!")
             embed=discord.Embed(title="Spot-It Scores")
+            topscore = 0
             for userid in user_scores:
                 score = user_scores[userid]['SCORE']
                 user = user_scores[userid]['OBJECT']
+                if score > topscore and user.avatar:
+                    topscore = score
+                    embed.set_thumbnail(url=user.avatar_url)
+                    
                 embed.add_field(name=user.display_name, value="Points: {}".format(score), inline=False)
-        
+            
+            await self.bot.say(embed=embed)
         
     @commands.command(aliases=['spotitend', 'stopspotit', 'spotitstop'], pass_context=True)
     async def endspotit(self, ctx):
