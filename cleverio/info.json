@@ -2,9 +2,9 @@
     "AUTHOR" : "Bobloy",
     "INSTALL_MSG" : "Thank you for installing! Ask a question with [p]cleverio",
     "NAME" : "cleverio",
-    "SHORT" : "Answer coding questions",
-    "DESCRIPTION" : "Answer coding questions using gleitz's howdoi code @ https://github.com/gleitz/howdoi",
-    "TAGS" : ["howdoi", "coding","bobloy"],
+    "SHORT" : "Talk to cleverbot",
+    "DESCRIPTION" : "Implementation of cleverbot using clever.io",
+    "TAGS" : ["clever","cleverbot", "bobloy"],
     "REQUIREMENTS" : [],
     "HIDDEN" : false
 }
