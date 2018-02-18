@@ -2,8 +2,8 @@
     "AUTHOR" : "Bobloy",
     "INSTALL_MSG" : "Thank you for installing Flag. Run with [p]flag or [p]flagset",
     "NAME" : "Flag",
-    "SHORT" : "[Incomplete] Flag inactive or problem users temporarily",
-    "DESCRIPTION" : "[Incomplete] Cog to flag inactive or problem users with expiring flags",
+    "SHORT" : "Flag inactive or problem users temporarily",
+    "DESCRIPTION" : "Cog to flag inactive or problem users with expiring flags",
     "TAGS" : ["bobloy", "warn", "flag", "tools"],
     "HIDDEN" : false
 }
