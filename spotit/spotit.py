@@ -40,13 +40,17 @@ class Spotit:
         
         await self.bot.send_message(channel, embed=embed)
         
-        response = await self.bot.wait_for_message(timeout=30, channel=channel, content=self.answer_text)
+        message = await self.bot.wait_for_message(timeout=30, channel=channel, content=self.answer_text)
         
-        if not response:
+        if not message:
             await self.bot.send_message(channel, "Timed-out! Answer was {} : {}\nEnding game".format(self.answer_emoji, self.answer_text))
             self._stopgame()
         else:
             await self.bot.send_message(channel, "Correct! Answer was {} : {}".format(self.answer_emoji, self.answer_text))
+            if message.author.id in user_scores:
+                user_scores[message.author.id] += 1
+            else:
+                user_scores[message.author.id] = 1
 
     def _card_embeds(self):
         embed=discord.Embed(title="Spot-It!", description="Identify the matching symbols!")
