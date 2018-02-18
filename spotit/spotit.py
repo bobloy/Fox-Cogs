@@ -48,9 +48,9 @@ class Spotit:
         else:
             await self.bot.send_message(channel, "Correct! Answer was {} : {}".format(self.answer_emoji, self.answer_text))
             if message.author.id in user_scores:
-                user_scores[message.author.id] += 1
+                user_scores[message.author.id]['SCORE'] += 1
             else:
-                user_scores[message.author.id] = 1
+                user_scores[message.author.id] = {'SCORE': 1, 'OBJECT': message.author}
 
     def _card_embeds(self):
         embed=discord.Embed(title="Spot-It!", description="Identify the matching symbols!")
@@ -170,7 +170,9 @@ class Spotit:
         if user_scores: # If anyone responded at all
             await self.bot.say("Here are the scores!")
             embed=discord.Embed(title="Spot-It Scores")
-            for user in user_scores:
+            for userid in user_scores:
+                score = user_scores[userid]['SCORE']
+                user = user_scores[userid]['OBJECT']
                 embed.add_field(name=user.display_name, value="Points: {}".format(score), inline=False)
         
         
