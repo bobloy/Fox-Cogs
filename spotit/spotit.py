@@ -31,8 +31,9 @@ class Spotit:
 
 
     async def pick_a_card(self, channel, user_scores):
-        shuffle(self.cardlist)
-
+        if len(self.cardlist)<2:
+            await self.bot.send_message(channel, "All cards have been used!\nEnding game...")
+            self._stopgame()
         self.leftcard = self.cardlist.pop()
         self.rightcard = self.cardlist[-1]
 
@@ -196,8 +197,8 @@ class Spotit:
     async def _startgame(self, channel, user_scores):
         """Starts a new game of Spot-It!"""
         self.is_running= True
-        
-        while self.is_running:  # Until someone stops it or times out or winner
+        shuffle(self.cardlist)
+        while self.is_running:  # Until someone stops it or times out or winner or no cards left
             await self.pick_a_card(channel, user_scores)
 
         
