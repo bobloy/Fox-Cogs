@@ -7,7 +7,9 @@ from random import randint, shuffle
 from .utils.dataIO import dataIO
 from .utils import checks
 
-PRIME_LIST = [0, 1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101]
+PRIME_LIST = [1, 2, 3, 5, 7, 11, 13, 17, 19,
+    23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
+    71, 73, 79, 83, 89, 97, 101, 103, 107, 109]
 U_LETTERS = "🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿"
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -40,8 +42,9 @@ class Spotit:
         embed = self._card_embeds()
         
         await self.bot.send_message(channel, embed=embed)
-        
-        message = await self.bot.wait_for_message(timeout=30, channel=channel, content=self.answer_text)
+        def check(msg):
+            return msg.content.capitalize()==self.answer_text
+        message = await self.bot.wait_for_message(timeout=30, channel=channel, check=check)
         
         if not message:
             await self.bot.send_message(channel, "Timed-out! Answer was {} : {}\nEnding game".format(self.answer_emoji, self.answer_text))
@@ -94,8 +97,8 @@ class Spotit:
         self.emojilist = await self.load_emojis()
         shuffle(self.emojilist)
         
-        if not self.emojilist:
-            print("Not enough custom emojis")
+        if not self.emojilist or len(self.emojilist)<3:
+            print("Not enough custom emojis, need at least 3")
             return False
 
         for x in range(len(PRIME_LIST)):
@@ -104,8 +107,9 @@ class Spotit:
                 self.cardlist, self.emojicount = self.create_cards(PRIME_LIST[x-1])
                 return True
 
-        print("How the hell do you have so many emojis available to you?")
-        return False
+        print("How do you have so many emojis available to you?")
+        self.cardlist, self.emojicount = self.create_cards(PRIME_LIST[-1])  # Largest possible size
+        return True
 
     def create_cards(self, p):
         for min_factor in range(2, 1 + int(p ** 0.5)):
