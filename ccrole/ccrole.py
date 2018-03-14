@@ -1,3 +1,5 @@
+import discord
+
 from discord.ext import commands
 from .utils.dataIO import dataIO
 from .utils import checks
@@ -25,27 +27,33 @@ class CCRole:
     @checks.mod_or_permissions(administrator=True)
     async def ccrole_add(self, ctx, command : str):
         """Adds a custom command with roles"""
-        
-        server = ctx.message.server
-        author = ctx.message.author
-        msg = 'What roles should it add? (Must be comma separated) Example:\n\n'
-        for c, m in enumerate(self.settings[server.id]["GREETING"]):
-            msg += "  {}. {}\n".format(c, m)
-        for page in pagify(msg, ['\n', ' '], shorten_by=20):
-            await self.bot.say("```\n{}\n```".format(page))
-        answer = await self.bot.wait_for_message(timeout=120, author=author)
-        try:
-            num = int(answer.content)
-            choice = self.settings[server.id]["GREETING"].pop(num)
-        except:
-            await self.bot.say("That's not a number in the list :/")
-            return
-
-        server = ctx.message.server
         command = command.lower()
         if command in self.bot.commands:
             await self.bot.say("That command is already a standard command.")
             return
+
+        server = ctx.message.server
+        author = ctx.message.author
+        
+        # Roles to add
+        await self.bot.say('What roles should it add? (Must be comma separated)\nSay `None` to skip adding roles')
+        
+        answer = await self.bot.wait_for_message(timeout=120, author=author)
+        if not answer:
+            await self.bot.say("Timed out, canceling")
+            return
+        if answer.content.upper()!="NONE":
+            role_list = answer.content.split(",")
+            
+            try:
+                role_list = [discord.utils.get(server.roles, role) for role in role_list]
+            except:
+                await self.bot.say("Invalid answer, canceling")
+                return
+        
+        
+
+        
         if server.id not in self.c_commands:
             self.c_commands[server.id] = {}
         cmdlist = self.c_commands[server.id]
@@ -55,38 +63,13 @@ class CCRole:
             dataIO.save_json(self.file_path, self.c_commands)
             await self.bot.say("Custom command successfully added.")
         else:
-            await self.bot.say("This command already exists. Use "
-                               "`{}customcom edit` to edit it."
-                               "".format(ctx.prefix))
-
-    @customcom.command(name="edit", pass_context=True)
-    @checks.mod_or_permissions(administrator=True)
-    async def cc_edit(self, ctx, command : str, *, text):
-        """Edits a custom command
-        Example:
-        [p]customcom edit yourcommand Text you want
-        """
-        server = ctx.message.server
-        command = command.lower()
-        if server.id in self.c_commands:
-            cmdlist = self.c_commands[server.id]
-            if command in cmdlist:
-                cmdlist[command] = text
-                self.c_commands[server.id] = cmdlist
-                dataIO.save_json(self.file_path, self.c_commands)
-                await self.bot.say("Custom command successfully edited.")
-            else:
-                await self.bot.say("That command doesn't exist. Use "
-                                   "`{}customcom add` to add it."
-                                   "".format(ctx.prefix))
-        else:
-            await self.bot.say("There are no custom commands in this server."
-                               " Use `{}customcom add` to start adding some."
+            await self.bot.say("This command already exists. Delete"
+                               "`it with {}ccrole delete` first."
                                "".format(ctx.prefix))
 
     @customcom.command(name="delete", pass_context=True)
     @checks.mod_or_permissions(administrator=True)
-    async def cc_delete(self, ctx, command : str):
+    async def ccrole_delete(self, ctx, command : str):
         """Deletes a custom command
         Example:
         [p]customcom delete yourcommand"""
@@ -107,7 +90,7 @@ class CCRole:
                                "".format(ctx.prefix))
 
     @customcom.command(name="list", pass_context=True)
-    async def cc_list(self, ctx):
+    async def ccrole_list(self, ctx):
         """Shows custom commands list"""
         server = ctx.message.server
         commands = self.c_commands.get(server.id, {})

@@ -11,7 +11,7 @@ from .utils.chat_formatting import pagify
 import asyncio
 
 class Timerole:
-    """Creates a goodbye message when people leave"""
+    """Add roles to users based on time on server"""
 
     def __init__(self, bot):
         self.bot = bot
