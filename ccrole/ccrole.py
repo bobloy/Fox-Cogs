@@ -58,7 +58,7 @@ class CCRole:
             arole_list = answer.content.split(",")
 
             try:
-                arole_list = [discord.utils.get(server.roles, name=role).id for role in arole_list]
+                arole_list = [discord.utils.get(server.roles, name=role.strip(' ')).id for role in arole_list]
             except:
                 await self.bot.say("Invalid answer, canceling")
                 return
@@ -76,7 +76,7 @@ class CCRole:
             rrole_list = answer.content.split(",")
 
             try:
-                rrole_list = [discord.utils.get(server.roles, name=role).id for role in rrole_list]
+                rrole_list = [discord.utils.get(server.roles, name=role.strip(' ')).id for role in rrole_list]
             except:
                 await self.bot.say("Invalid answer, canceling")
                 return
@@ -94,7 +94,7 @@ class CCRole:
             prole_list = answer.content.split(",")
 
             try:
-                prole_list = [discord.utils.get(server.roles, name=role).id for role in rrole_list]
+                prole_list = [discord.utils.get(server.roles, name=role.strip(' ')).id for role in prole_list]
             except:
                 await self.bot.say("Invalid answer, canceling")
                 return
@@ -107,7 +107,7 @@ class CCRole:
             await self.bot.say("Timed out, canceling")
             return
         
-        if answer.content.upper() not in ["Y", "YES"]:
+        if answer.content.upper() in ["Y", "YES"]:
             targeted = True
             await self.bot.say("This command will be targeted")
         else:
@@ -127,7 +127,8 @@ class CCRole:
 
         # Save the command
         
-        cmdlist[command] = {'text': text, 'aroles': arole_list, 'rroles': rrole_list, "proles", prole_list, "targeted": targeted}
+        cmdlist[command] = {'text': text, 'aroles': arole_list, 'rroles': rrole_list, "proles": prole_list, "targeted": targeted}
+        
         self.c_commands[server.id] = cmdlist
         dataIO.save_json(self.file_path, self.c_commands)
         await self.bot.say("Custom command successfully added.")
@@ -190,10 +191,10 @@ class CCRole:
             cmd = message.content[len(prefix):].split()[0]
             if cmd in cmdlist:
                 cmd = cmdlist[cmd]
-                self.eval_cc(cmd, message)
+                await self.eval_cc(cmd, message)
             elif cmd.lower() in cmdlist:
                 cmd = cmdlist[cmd.lower()]
-                self.eval_cc(cmd, message)
+                await self.eval_cc(cmd, message)
 
     def get_prefix(self, message):
         for p in self.bot.settings.get_prefixes(message.server):
@@ -201,27 +202,34 @@ class CCRole:
                 return p
         return False
         
-    def eval_cc(self, cmd, message):
+    async def eval_cc(self, cmd, message):
         if cmd['proles'] and not (set(role.id for role in message.author.roles) & set(cmd['proles'])):
             return  # Not authorized, do nothing
         
         if cmd['targeted']:
             try:
-                target = discord.utils.get(server.members, name=message.content.split()[1])
+                target = discord.utils.get(message.server.members, mention=message.content.split()[1])
             except:
                 target = None
             
             if not target:
-                await self.bot.send_message(message.channel, "This command is targeted! @mention a target\n`{} <target>`".format(message.content.split()[0])
+                out_message = "This command is targeted! @mention a target\n`{} <target>`".format(message.content.split()[0])
+                
+                await self.bot.send_message(message.channel, out_message)
+                
                 return
         else:
             target = message.author
             
         if cmd['aroles']:
-            await self.bot.add_roles(target, [discord.utils.get(server.roles, role.id) for role in cmd['aroles']])  # Will try-except this later
+            arole_list = [discord.utils.get(message.server.roles, id=roleid) for roleid in cmd['aroles']]
+            await self.bot.send_message(message.channel, "Adding: "+str(arole_list))
+            await self.bot.add_roles(target, *arole_list)
         
         if cmd['rroles']:
-            await self.bot.remove_roles(target, [discord.utils.get(server.roles, role.id) for role in cmd['rroles']])
+            rrole_list = [discord.utils.get(message.server.roles, id=roleid) for roleid in cmd['rroles']]
+            await self.bot.send_message(message.channel, "Removing: "+str(rrole_list))
+            await self.bot.remove_roles(target, *rrole_list)
         
         await self.bot.send_message(message.channel, cmd['text'])
             
