@@ -107,7 +107,7 @@ class CCRole:
             await self.bot.say("Timed out, canceling")
             return
         
-        if answer.content.upper() not in ["Y", "YES"]
+        if answer.content.upper() not in ["Y", "YES"]:
             targeted = True
             await self.bot.say("This command will be targeted")
         else:
