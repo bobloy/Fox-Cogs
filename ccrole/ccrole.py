@@ -1,4 +1,5 @@
 import discord
+import asyncio 
 
 from discord.ext import commands
 from .utils.dataIO import dataIO
@@ -223,12 +224,14 @@ class CCRole:
             
         if cmd['aroles']:
             arole_list = [discord.utils.get(message.server.roles, id=roleid) for roleid in cmd['aroles']]
-            await self.bot.send_message(message.channel, "Adding: "+str(arole_list))
+            # await self.bot.send_message(message.channel, "Adding: "+str([str(arole) for arole in arole_list]))
             await self.bot.add_roles(target, *arole_list)
+            
+        await asyncio.sleep(1)
         
         if cmd['rroles']:
             rrole_list = [discord.utils.get(message.server.roles, id=roleid) for roleid in cmd['rroles']]
-            await self.bot.send_message(message.channel, "Removing: "+str(rrole_list))
+            # await self.bot.send_message(message.channel, "Removing: "+str([str(rrole) for rrole in rrole_list]))
             await self.bot.remove_roles(target, *rrole_list)
         
         await self.bot.send_message(message.channel, cmd['text'])
