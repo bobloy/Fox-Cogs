@@ -97,6 +97,16 @@ class Flag:
         else:
             await self.bot.send_message(ctx.message.channel, "This user has no flags!")
     
+    @commands.command(pass_context=True, no_pm=True, aliases=['flagall'])
+    async def allflag(self, ctx):
+        """Lists all flags for the server"""
+        server = ctx.message.server
+        self._check_flags(server)
+        for user in server.members:
+            outembed = (await self._list_flags(ctx, server, user))
+            if outembed:
+                await self.bot.send_message(ctx.message.channel, embed=outembed)
+
     @checks.mod_or_permissions(administrator=True)
     @commands.group(pass_context=True, no_pm=True, aliases=['setflag'])
     async def flagset(self, ctx):
