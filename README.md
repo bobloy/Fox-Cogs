@@ -14,7 +14,7 @@ Cog Function
 
 Cog Status
 
-  - ccrole: **Incomplete** - More research necessary to code
+  - ccrole: **Working** - May have some bugs, please let me know if you run into any
   - cleverio: **Working** - Currently functioning, inspired by 26's clever cog
   - fight: **Abandoned** - for RED v3 alternative, see [Fox-V3](https://github.com/bobloy/Fox-V3)
   - flag: **Working** - Development may continue
