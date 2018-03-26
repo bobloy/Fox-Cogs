@@ -1,0 +1,9 @@
+{
+	"AUTHOR" : "Bobloy",
+	"INSTALL_MSG" : "Thank you for installing TrustRole. Use `[p]trustset` and `[p]trust` to get started",
+	"NAME" : "TrustRole",
+	"SHORT" : "[Beta] Add a role after receiving votes",
+	"DESCRIPTION" : "[Beta] Set a trust threshold, and assign a role to anyone who reaches the threshold",
+	"TAGS" : ["roles", "tools", "utilities", "bobloy", "fox"],
+	"HIDDEN" : false
+}
