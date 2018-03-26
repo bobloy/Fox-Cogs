@@ -1,0 +1,9 @@
+{
+	"AUTHOR" : "Bobloy",
+	"INSTALL_MSG" : "Thank you for installing WordSprint. Use `[p]sprint new` and `[p]sprint join` to get started",
+	"NAME" : "WordSprint",
+	"SHORT" : "[Beta] Times a word sprint",
+	"DESCRIPTION" : "[Beta] Times a word sprint and picks winners in the end",
+	"TAGS" : ["tools", "utilities", "bobloy", "fox"],
+	"HIDDEN" : false
+}
