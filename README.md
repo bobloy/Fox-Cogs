@@ -11,15 +11,17 @@ Cog Function
   - immortal: Cog designed for a specific server, not recommended to install
   - leaver: Send a message in a channel when a user leaves the server
   - timerole: Assign roles to users after time on server
+  - trustrole: Assign roles based on user votes for trust
 
 Cog Status
 
-  - ccrole: **Working** - May have some bugs, please let me know if you run into any
-  - cleverio: **Working** - Currently functioning, inspired by 26's clever cog
+  - ccrole: **Beta** - May have some bugs, please let me know if you run into any
+  - cleverio: **Alpha** - Currently functioning, inspired by 26's clever cog
   - fight: **Abandoned** - for RED v3 alternative, see [Fox-V3](https://github.com/bobloy/Fox-V3)
-  - flag: **Working** - Development may continue
-  - hangman: **Finished!** - Will address issues
-  - howdoi: **Developing** - Lots of obvious fixes are still needed, but works
+  - flag: **Beta** - Development may continue
+  - hangman: **Release** - Will address issues
+  - howdoi: **Alpha** - Lots of obvious fixes are still needed, but works
   - immortal: **Private** - Designed for a specific server, not recommended to install
-  - leaver: **Finished!** - Will address issues
-  - timerole: **Working** - Currently functioning, will continue to improve
+  - leaver: **Release** - Will address issues
+  - timerole: **Beta** - Currently functioning, will continue to improve
+  - trustrole: **Alpha** - Just released, please report any bugs
