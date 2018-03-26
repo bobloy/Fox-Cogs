@@ -5,6 +5,7 @@ from discord.ext import commands
 from .utils.dataIO import dataIO
 from .utils import checks
 
+import os
 
 class TrustRole:
     """
@@ -29,9 +30,9 @@ class TrustRole:
         Set the trust role and threshold
         Run with no arguments to disable trust role assignment
         """
-        server = ctx.server
+        server = ctx.message.server
         
-        if ctx.server.id not in self.data:
+        if server.id not in self.data:
             self.data[server.id] = {"members":{}}
         
         if role is None:
@@ -61,9 +62,9 @@ class TrustRole:
         Set the distrust role and threshold
         Run with no arguments to disable distrust role assignment
         """
-        server = ctx.server
+        server = ctx.message.server
         
-        if ctx.server.id not in self.data:
+        if server.id not in self.data:
             self.data[server.id] = {"members":{}}
         
         if role is None:
@@ -83,7 +84,7 @@ class TrustRole:
                 "threshold": threshold,
                 "role_id": role.id
                 }
-        await self.bot.say("Distrusting now assigns {} and is triggered at threshold {}".format(role,threshold))
+        await self.bot.say("Distrusting now assigns {} and is triggered at threshold -{}".format(role,threshold))
 
         dataIO.save_json(self.file_path, self.data)
 
@@ -91,18 +92,25 @@ class TrustRole:
     async def trust(self, ctx, member : discord.Member):
         """Vote to trust a user"""
         server = ctx.message.server
+        
         if server.id not in self.data:
             await self.bot.say("This hasn't been setup on this server yet")
             return
             
-        if member is ctx.author:
+        if member is ctx.message.author:
             await self.bot.say("Can't vote for yourself")
             return
-
+        
+        if member == server.me:
+            await self.bot.say("Nice try, but I'm already trustworthy")
+            return
+            
+        author = ctx.message.author
+        
         if member.id not in self.data[server.id]["members"]:
-            self.data[server.id]["members"][member.id] = {ctx.author.id: 1}
+            self.data[server.id]["members"][member.id] = {author.id: 1}
         else:
-            self.data[server.id]["members"][member.id][ctx.author.id] = 1
+            self.data[server.id]["members"][member.id][author.id] = 1
         
         dataIO.save_json(self.file_path, self.data)
         
@@ -118,14 +126,20 @@ class TrustRole:
             await self.bot.say("This hasn't been setup on this server yet")
             return
             
-        if member is ctx.author:
+        if member is ctx.message.author:
             await self.bot.say("Can't vote for yourself")
             return
-
+        
+        if member == server.me:
+            await self.bot.say("Nice try, but I'm already trustworthy")
+            return
+            
+        author = ctx.message.author
+        
         if member.id not in self.data[server.id]["members"]:
-            self.data[server.id]["members"][member.id] = {ctx.author.id: -1}
+            self.data[server.id]["members"][member.id] = {author.id: -1}
         else:
-            self.data[server.id]["members"][member.id][ctx.author.id] = -1
+            self.data[server.id]["members"][member.id][author.id] = -1
         
         dataIO.save_json(self.file_path, self.data)
         
@@ -157,7 +171,7 @@ class TrustRole:
                     role = discord.utils.get(server.roles, id=self.data[server.id][ori]["role_id"])
                 
                 if role is not None:
-                    await self.bot.add_roles(member, [role])
+                    await self.bot.add_roles(member, role)
                 
         
 
