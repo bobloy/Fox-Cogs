@@ -2,18 +2,21 @@
 
 Cog Function
 
-  - ccrole: Create custom commands that also assign roles
-  - cleverio: Chatbot using [cleverbot.io](https://cleverbot.io/)
-  - fight: Organize bracket tournaments within discord
-  - flag: Create temporary marks on users that expire after specified time
-  - hangman: Play a game of hangman
-  - howdoi: Get answers to coding questions
-  - immortal: Cog designed for a specific server, not recommended to install
-  - leaver: Send a message in a channel when a user leaves the server
-  - timerole: Assign roles to users after time on server
-  - trustrole: Assign roles based on user votes for trust
+| Name | Status | Description
+| --- | --- | --- | 
+| ccrole | **Beta** | Create custom commands that also assign roles |
+| cleverio | **Alpha** | Chatbot using [cleverbot.io](https://cleverbot.io/) |
+| fight | **Abandoned** | Organize bracket tournaments within discord |
+| flag | **Beta** | Create temporary marks on users that expire after specified time |
+| hangman | **Release** | Play a game of hangman |
+| howdoi | **Alpha** | Get answers to coding questions |
+| immortal | **Private** | Cog designed for a specific server, not recommended to install |
+| leaver | **Release** | Send a message in a channel when a user leaves the server |
+| timerole | **Beta** | Assign roles to users after time on server |
+| trustrole | **Alpha** | Assign roles based on user votes for trust |
 
-Cog Status
+
+Cog Status Descriptions
 
   - ccrole: **Beta** - May have some bugs, please let me know if you run into any
   - cleverio: **Alpha** - Currently functioning, inspired by 26's clever cog
