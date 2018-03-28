@@ -25,9 +25,10 @@ class WordSprint:
         self.example_server = {
             "running": False,
             "started": False,
-            "finished": False
+            "finished": False,
             "endtime": None,
-            "channel": None
+            "channel": None,
+            "users" : {}
             }
         
     
@@ -57,17 +58,17 @@ class WordSprint:
         self.data[server.id]["running"] = True
         
         save_id = self.sprintid
-        asyncio.sleep(60)
+        await asyncio.sleep(60)
         
         if save_id != self.sprintid:
             # Can be canceled with another command, so won't start
             return
         
-        await self._start_sprint(server, channel, time, ctx.prefix)
+        await self._start_sprint(server, ctx.message.channel, time, ctx.prefix)
         
     @checks.mod()
     @sprint.command(name="cancel", pass_context=True)
-    async def sprint_cancel(self, ctx, time: int):
+    async def sprint_cancel(self, ctx):
         """
         Cancel the current sprint
         """
@@ -102,7 +103,8 @@ class WordSprint:
             
         self.data[server.id]["users"][ctx.message.author.id] = [ctx.message.author, wc, wc]
 
-        await self.bot.say("Joined!")
+        await self.bot.say("You're in! Starting word count will be {}".format(wc))
+        
         if self.data[server.id]["started"]:
             await self._time_remaining(server, ctx.message.channel)
 
@@ -125,7 +127,7 @@ class WordSprint:
 
         await self._time_remaining(server, ctx.message.channel)
         
-    @sprint.command(name="join", pass_context=True)
+    @sprint.command(name="wc", pass_context=True)
     async def sprint_wc(self, ctx, wc: int = 0):
         """
         Post your word count at the end of a sprint
@@ -135,25 +137,26 @@ class WordSprint:
         if server.id not in self.data:
             self.data[server.id] = self.example_server.copy()
 
-        if self.data[server.id]["running"] or not self.data[server.id]["finished"]:
+        if not self.data[server.id]["running"] or not self.data[server.id]["finished"]:
             await self.bot.say("Not the time to post word counts!")
             return
         
-        if ctx.author.id not in self.data[server.id]["users"]:
+        if ctx.message.author.id not in self.data[server.id]["users"]:
             await self.bot.say("You are not part of this sprint")
             return
             
-        self.data[server.id]["users"][ctx.author.id][2] = wc
+        self.data[server.id]["users"][ctx.message.author.id][2] = wc
         
-        await self.bot.say("You wrote {} words during this sprint!".format(wc - self.data[server.id]["users"][ctx.author.id][1]))
+        await self.bot.say("You wrote {} words during this sprint!".format(wc - self.data[server.id]["users"][ctx.message.author.id][1]))
         
-        await self._wc_ranking(server, channel)
+        await self._wc_ranking(server, ctx.message.channel)
 
     async def _start_sprint(self, server, channel, time, prefix):
+    
         duration = timedelta(minutes=time)
-
         
         self.data[server.id]["channel"] = channel
+        self.data[server.id]["started"] = True
         
         starttime = datetime.utcnow()
         self.data[server.id]["endtime"] = starttime + duration
@@ -162,23 +165,27 @@ class WordSprint:
         await self._time_remaining(server, channel)
         save_id = self.sprintid
         
-        asyncio.sleep(time*60)
+        loop = asyncio.get_event_loop()
+        
+        try:
+            await asyncio.wait_for(self._time_loop(server, channel), time*60)  # Run infinite loop until timeout
+        except TimeoutError:
+            pass
         
         if save_id != self.sprintid: #Sprint was canceled
             return
             
         # Now do the end sprint stuff
-        self.data[server.id]["running"] = False
+        self.data[server.id]["finished"] = True
         
         tag_list = [member[0].mention for member in self.data[server.id]["users"].values()]
         
-        await self.bot.send_message(channel, "**Time is UP**\n{}".format(tag_list.join(" ")))
+        await self.bot.send_message(channel, "**Time is UP**\n{}".format(" ".join(tag_list)))
         
         await self.bot.send_message(channel, "You have five minutes to post your final word counts!\nUse `{}sprint wc [word count #]`".format(prefix))
         
-        await self._wc_ranking(server, channel)
-        
-        asyncio.sleep(5*60)
+
+        await asyncio.sleep(5*60)
         
         await self.bot.send_message(channel, "Sprint word counts are now final")
         
@@ -186,42 +193,46 @@ class WordSprint:
         
         self.sprintid = self.sprintid + 1
         self.data[server.id] = self.example_server.copy()
-        
+    
+    async def _time_loop(self, server, channel):
+        while server and channel:
+            await asyncio.sleep(35)  # Adjustable?
+            await self._time_remaining(server, channel)
+
     async def _time_remaining(self, server, channel):
-        remaining = datetime.now() - self.data[server.id]["endtime"]
+        remaining = self.data[server.id]["endtime"] - datetime.utcnow()
         
         embed=discord.Embed(title="Time Reaming: **{}**".format(remaining))
         
         await self.bot.send_message(channel, embed=embed)
         
     async def _wc_ranking(self, server, channel):
-        tot = [[member, start_wc, end_wc, total_wc] 
-                for player in self.data[server.id]["users"]
-                    for member, start_wc, end_wc, total_wc in player + [player[2]-player[1]]]
+        tot = [ player + [player[2]-player[1]]
+                for player in self.data[server.id]["users"].values()]
         
         tot.sort(key=lambda x : x[3])
 
         embed=discord.Embed(title="Word Count Totals")
         
         for x in range(len(tot)):
-            embed.add_field(name="**#{}**".format(x), value="**{0}** words - {1}\nStarting: {2} - Ending {3}".format(tot[x][3],tot[x][0].mention,tot[x][1],tot[x][2], inline=x>3)
+            embed.add_field(name="**#{}**".format(x+1), value="**{0}** words - {1}\nStarting: {2} - Ending {3}".format(tot[x][3],tot[x][0].mention,tot[x][1],tot[x][2]), inline=x>2)
         
         await self.bot.send_message(channel, embed=embed)  
 
 def check_folders():
-    if not os.path.exists("data/trustrole"):
-        print("Creating data/trustrole folder...")
-        os.makedirs("data/trustrole")
+    if not os.path.exists("data/wordsprint"):
+        print("Creating data/wordsprint folder...")
+        os.makedirs("data/wordsprint")
 
 
 def check_files():
-    f = "data/trustrole/trust_data.json"
+    f = "data/wordsprint/sprint_data.json"
     if not dataIO.is_valid_json(f):
-        print("Creating empty trust_data.json...")
+        print("Creating empty sprint_data.json...")
         dataIO.save_json(f, {})
 
 
 def setup(bot):
     check_folders()
     check_files()
-    bot.add_cog(TrustRole(bot))
+    bot.add_cog(WordSprint(bot))
