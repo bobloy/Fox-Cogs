@@ -18,6 +18,7 @@ class WordSprint:
         self.bot = bot
         self.file_path = "data/wordsprint/sprint_data.json"
         
+        self.sprint_data = dataIO.load_json(self.file_path)
         self.data = {}
         
         self.sprintid = 0
@@ -31,7 +32,10 @@ class WordSprint:
             "users" : {}
             }
         
-    
+    @commands.command(pass_context=True, no_pm=True)
+    async def dailygoal(self, ctx, wc: int):
+        
+        
     @commands.group(pass_context=True, no_pm=True)
     async def sprint(self, ctx):
         """Word sprint base command"""
