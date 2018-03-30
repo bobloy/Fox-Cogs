@@ -14,6 +14,7 @@ Cog Function
 | leaver | **Release** | Send a message in a channel when a user leaves the server |
 | timerole | **Beta** | Assign roles to users after time on server |
 | trustrole | **Alpha** | Assign roles based on user votes for trust |
+| wordsprint | **Alpha** | Host 'Word Sprints' and set daily goals |
 
 
 Cog Status Descriptions
@@ -28,3 +29,4 @@ Cog Status Descriptions
   - leaver: **Release** - Will address issues
   - timerole: **Beta** - Currently functioning, will continue to improve
   - trustrole: **Alpha** - Just released, please report any bugs
+  - wordsprint: **Alpha** - Just released, please report any bugs
