@@ -161,12 +161,12 @@ class WordSprint:
         
         if ctx.message.author.id in self.sprint_data:
             goal = self.sprint_data[ctx.message.author.id]
-            if wc_tot - goal > 0:
-                out += "\n{0} words left to hit your daily goal! ({1:.0%})".format(wc_tot - goal, goal - wc_tot / goal)
-            elif wc_tot - goal == 0:
+            if goal - wc_tot > 0:
+                out += "\n{0} words left to hit your daily goal! ({1:.0%})".format(goal - wc_tot, wc_tot / goal)
+            elif goal - wc_tot == 0:
                 out += "\nYou exactly hit your daily goal of {} words!".format(goal)
             else:
-                out += "\nYou passed your daily goal by {0} words! ({1:.0%})".format(goal - wc_tot, goal - wc_tot / goal)
+                out += "\nYou passed your daily goal by {0} words! ({1:.0%})".format(wc_tot - goal, wc_tot / goal)
                 
         await self.bot.say(out)
         
