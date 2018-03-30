@@ -19,6 +19,7 @@ class WordSprint:
         self.file_path = "data/wordsprint/sprint_data.json"
         
         self.sprint_data = dataIO.load_json(self.file_path)
+        
         self.data = {}
         
         self.sprintid = 0
@@ -34,7 +35,10 @@ class WordSprint:
         
     @commands.command(pass_context=True, no_pm=True)
     async def dailygoal(self, ctx, wc: int):
+        self.sprint_data[ctx.message.author.id] = wc
+        dataIO.save_json(self.file_path, self.sprint_data)
         
+        await self.bot.say("Daily Goal set to {} words".format(wc))
         
     @commands.group(pass_context=True, no_pm=True)
     async def sprint(self, ctx):
@@ -151,7 +155,20 @@ class WordSprint:
             
         self.data[server.id]["users"][ctx.message.author.id][2] = wc
         
-        await self.bot.say("You wrote {} words during this sprint!".format(wc - self.data[server.id]["users"][ctx.message.author.id][1]))
+        wc_tot = wc - self.data[server.id]["users"][ctx.message.author.id][1]
+        
+        out = "You wrote {} words during this sprint!".format(wc_tot)
+        
+        if ctx.message.author.id in self.sprint_data:
+            goal = self.sprint_data[ctx.message.author.id]
+            if wc_tot - goal > 0:
+                out += "\n{0} words left to hit your daily goal! ({1:.0%})".format(wc_tot - goal, goal - wc_tot / goal)
+            elif wc_tot - goal == 0:
+                out += "\nYou exactly hit your daily goal of {} words!".format(goal)
+            else:
+                out += "\nYou passed your daily goal by {0} words! ({1:.0%})".format(goal - wc_tot, goal - wc_tot / goal)
+                
+        await self.bot.say(out)
         
         await self._wc_ranking(server, ctx.message.channel)
 
@@ -173,7 +190,7 @@ class WordSprint:
         
         try:
             await asyncio.wait_for(self._time_loop(server, channel), time*60)  # Run infinite loop until timeout
-        except TimeoutError:
+        except:
             pass
         
         if save_id != self.sprintid: #Sprint was canceled
@@ -189,10 +206,11 @@ class WordSprint:
         await self.bot.send_message(channel, "You have five minutes to post your final word counts!\nUse `{}sprint wc [word count #]`".format(prefix))
         
 
-        await asyncio.sleep(5*60)
+        await asyncio.sleep(5*60)  # Adjustable?
         
         await self.bot.send_message(channel, "Sprint word counts are now final")
         
+        await self._wc_daily(server, channel)
         await self._wc_ranking(server, channel)
         
         self.sprintid = self.sprintid + 1
@@ -209,7 +227,12 @@ class WordSprint:
         embed=discord.Embed(title="Time Reaming: **{}**".format(remaining))
         
         await self.bot.send_message(channel, embed=embed)
-        
+    
+    async def _wc_daily(self, server, channel):
+        for user_id, user_data in self.data[server.id]["users"]:
+            if user_id in self.sprint_data[server.id]:
+                self.sprint_data[server.id][user_id] -= user_data[2] - user_data[1]
+
     async def _wc_ranking(self, server, channel):
         tot = [ player + [player[2]-player[1]]
                 for player in self.data[server.id]["users"].values()]
