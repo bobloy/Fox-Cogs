@@ -229,9 +229,9 @@ class WordSprint:
         await self.bot.send_message(channel, embed=embed)
     
     async def _wc_daily(self, server, channel):
-        for user_id, user_data in self.data[server.id]["users"]:
-            if user_id in self.sprint_data[server.id]:
-                self.sprint_data[server.id][user_id] -= user_data[2] - user_data[1]
+        for user_id, user_data in self.data[server.id]["users"].items():
+            if user_id in self.sprint_data:
+                self.sprint_data[user_id] -= user_data[2] - user_data[1]
 
     async def _wc_ranking(self, server, channel):
         tot = [ player + [player[2]-player[1]]
@@ -242,7 +242,7 @@ class WordSprint:
         embed=discord.Embed(title="Word Count Totals")
         
         for x in range(len(tot)):
-            embed.add_field(name="**#{}**".format(x+1), value="**{0}** words - {1}\nStarting: {2} - Ending {3}".format(tot[x][3],tot[x][0].mention,tot[x][1],tot[x][2]), inline=x>2)
+            embed.add_field(name="**#{}**".format(x+1), value="**{0}** words - {1}\nStarting: {2} - Ending {3}".format(tot[x][3],tot[x][0].display_name,tot[x][1],tot[x][2]), inline=x>2)
         
         await self.bot.send_message(channel, embed=embed)  
 
