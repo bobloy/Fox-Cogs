@@ -57,7 +57,7 @@ class Cleverio:
         Settings are reset on reload"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-    
+
     @cleverset.command(pass_context=True, name="apikey")
     async def cleverset_apikey(self, ctx, name, key):
         """Adjust number of answers provided.
