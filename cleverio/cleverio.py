@@ -46,8 +46,8 @@ class Cleverio:
 
     def __init__(self, bot):
         self.bot = bot
-        self.name="JINruSYcSFZnT2qf"
-        self.key="Ty2orHyWbSSnG9IOmLhV2dscyWvFclpF"
+        self.name=""
+        self.key=""
         self.clever = CleverBot(self.name, self.key)
         self.query = ""
 
