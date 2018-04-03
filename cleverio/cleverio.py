@@ -60,8 +60,7 @@ class Cleverio:
 
     @cleverset.command(pass_context=True, name="apikey")
     async def cleverset_apikey(self, ctx, name, key):
-        """Adjust number of answers provided.
-        Defaults to 1"""
+        """Adjust api key settings"""
         
         self.name = name
         self.key = key
