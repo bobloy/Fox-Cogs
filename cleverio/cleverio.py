@@ -1,15 +1,17 @@
-import discord
-
 from discord.ext import commands
 
 import requests
 import json
+import os
+
+from cogs.utils.dataIO import dataIO
 
 
 class CleverBot(object):
     """
     Straight up copied from https://github.com/bvanrijn/clever
     """
+
     def __init__(self, user, key, nick=None):
         self.user = user
         self.key = key
@@ -22,7 +24,6 @@ class CleverBot(object):
         }
 
         requests.post('https://cleverbot.io/1.0/create', json=body)
-
 
     def query(self, text):
         body = {
@@ -46,10 +47,9 @@ class Cleverio:
 
     def __init__(self, bot):
         self.bot = bot
-        self.name=""
-        self.key=""
-        self.clever = CleverBot(self.name, self.key)
-        self.query = ""
+        self.apifile = "data/Cleverio/apikey.json"
+        self.api = dataIO.load_json(self.apifile)
+        self.clever = CleverBot(self.api["user"], self.api["key"], bot.user.name)
 
     @commands.group(pass_context=True)
     async def cleverset(self, ctx):
@@ -59,29 +59,30 @@ class Cleverio:
             await self.bot.send_cmd_help(ctx)
 
     @cleverset.command(pass_context=True, name="apikey")
-    async def cleverset_apikey(self, ctx, name, key):
+    async def cleverset_apikey(self, ctx, user, key):
         """Adjust api key settings"""
-        
-        self.name = name
-        self.key = key
-        
-        self.clever = CleverBot(self.name, self.key)
+
+        self.api["user"] = user
+        self.api["key"] = key
+        dataIO.save_json(self.apifile, self.api)
+        name = self.bot.user.name
+
+        self.clever = CleverBot(self.api["user"], self.api["key"], name)
         await self.bot.say("New cleverbot acquired")
-    
+
     @commands.command(pass_context=True)
-    async def cleverio(self, ctx, *query):
+    async def cleverio(self, ctx, *, query):
         """Talk to cleverbot.io"""
         self.bot.type()
-        self.query = " ".join(query)
-        
-        response = self.clever.query(self.query)
-        
+
+        response = self.clever.query(query)
+
         if response:
             await self.bot.say(response)
         else:
             await self.bot.say(":thinking:")
 
-    async def on_message(self, message): 
+    async def on_message(self, message):
         """
         Credit to https://github.com/Twentysix26/26-Cogs/blob/master/cleverbot/cleverbot.py
         for on_message recognition of @bot
@@ -101,7 +102,23 @@ class Cleverio:
                 await self.bot.send_message(channel, response)
             else:
                 await self.bot.send_message(channel, ":thinking:")
-        
+
+
+def check_folders():
+    if not os.path.exists("data/Cleverio"):
+        os.makedirs("data/Cleverio")
+
+
+def check_files():
+    system = {"user": "",
+              "key": ""}
+    f = "data/Cleverio/apikey.json"
+    if not dataIO.is_valid_json(f):
+        dataIO.save_json(f, system)
+
+
 def setup(bot):
+    check_folders()
+    check_files()
     n = Cleverio(bot)
     bot.add_cog(n)
