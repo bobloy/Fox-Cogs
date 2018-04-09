@@ -57,6 +57,8 @@ class Cleverio:
         """
         author = message.author
         channel = message.channel
+        if channel.is_private:  # author.server won't work
+            return
 
         if message.author.id != self.bot.user.id:
             to_strip = "@" + author.server.me.display_name + " "
