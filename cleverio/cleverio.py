@@ -1,45 +1,9 @@
 from discord.ext import commands
 
-import requests
-import json
+import aiohttp
 import os
 
 from cogs.utils.dataIO import dataIO
-
-
-class CleverBot(object):
-    """
-    Straight up copied from https://github.com/bvanrijn/clever
-    """
-
-    def __init__(self, user, key, nick=None):
-        self.user = user
-        self.key = key
-        self.nick = nick
-
-        body = {
-            'user': user,
-            'key': key,
-            'nick': nick
-        }
-
-        requests.post('https://cleverbot.io/1.0/create', json=body)
-
-    def query(self, text):
-        body = {
-            'user': self.user,
-            'key': self.key,
-            'nick': self.nick,
-            'text': text
-        }
-
-        r = requests.post('https://cleverbot.io/1.0/ask', json=body)
-        r = json.loads(r.text)
-
-        if r['status'] == 'success':
-            return r['response']
-        else:
-            return False
 
 
 class Cleverio:
@@ -47,9 +11,13 @@ class Cleverio:
 
     def __init__(self, bot):
         self.bot = bot
+        self.session = aiohttp.ClientSession(loop=self.bot.loop)
         self.apifile = "data/Cleverio/apikey.json"
         self.api = dataIO.load_json(self.apifile)
-        self.clever = CleverBot(self.api["user"], self.api["key"], bot.user.name)
+        self.clever = None
+
+    def __unload(self):
+        self.session.close()
 
     @commands.group(pass_context=True)
     async def cleverset(self, ctx):
@@ -65,9 +33,9 @@ class Cleverio:
         self.api["user"] = user
         self.api["key"] = key
         dataIO.save_json(self.apifile, self.api)
-        name = self.bot.user.name
+        nick = self.bot.user.name
 
-        self.clever = CleverBot(self.api["user"], self.api["key"], name)
+        self.clever = await self.bot_instance(self.api["user"], self.api["key"], nick)
         await self.bot.say("New cleverbot acquired")
 
     @commands.command(pass_context=True)
@@ -75,7 +43,7 @@ class Cleverio:
         """Talk to cleverbot.io"""
         self.bot.type()
 
-        response = self.clever.query(query)
+        response = await self.bot_query(self.api["user"], self.api["key"], self.bot.user.name, query)
 
         if response:
             await self.bot.say(response)
@@ -97,11 +65,39 @@ class Cleverio:
                 return
             text = text.replace(to_strip, "", 1)
             await self.bot.send_typing(channel)
-            response = self.clever.query(text)
+            response = await self.bot_query(self.api["user"], self.api["key"], self.bot.user.name, text)
             if response:
                 await self.bot.send_message(channel, response)
             else:
                 await self.bot.send_message(channel, ":thinking:")
+
+    async def bot_instance(self, user, key, nick):
+        """Creates an bot instance"""
+        data = {
+            "user": user,
+            "key": key,
+            "nick": nick
+        }
+        async with self.session.post("https://cleverbot.io/1.0/create", data=data) as request:
+            if request.status is not 200:
+                return None
+            return await request.json()
+
+    async def bot_query(self, user, key, nick, query):
+        """Querying cleverbot"""
+        if self.clever is None:
+            await self.bot_instance(user, key, nick)
+        data = {
+            "user": user,
+            "key": key,
+            "nick": nick,
+            "text": query
+        }
+        async with self.session.post("https://cleverbot.io/1.0/ask", data=data) as request:
+            if request.status is not 200:
+                return None
+            response = await request.json()
+            return response["response"]  # Get JSON field "response" of HTTP-request response .-.
 
 
 def check_folders():
