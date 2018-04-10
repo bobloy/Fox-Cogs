@@ -56,7 +56,8 @@ class Leaver:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['CHANNEL']),
                                         leavemessage)
         else:
-            await self.bot.send_message(server.default_channel.id, leavemessage)
+            # server not enabled
+            pass
 
 
 def check_folders():
