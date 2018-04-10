@@ -140,17 +140,18 @@ class Timerole:
             print(title+results)
             
     async def check_day(self):
-        tomorrow = datetime.now()+timedelta(days=1)
-        midnight = datetime(year=tomorrow.year, month=tomorrow.month, 
-                        day=tomorrow.day, hour=0, minute=0, second=0)
-
-        await asyncio.sleep((midnight - datetime.now()).seconds)
-        print("About to start")
         while self is self.bot.get_cog("Timerole"):
-        
+            tomorrow = datetime.now()+timedelta(days=1)
+            midnight = datetime(year=tomorrow.year, month=tomorrow.month, 
+                            day=tomorrow.day, hour=0, minute=0, second=0)
+
+            await asyncio.sleep((midnight - datetime.now()).seconds)
+
             await self.timerole_update()
             
-            await asyncio.sleep(86400) # Wait 24 hours
+            await asyncio.sleep(3) 
+            #then start loop over again
+
 
 
 def check_folders():
