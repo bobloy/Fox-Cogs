@@ -1,14 +1,13 @@
-import discord
+import asyncio
 import os
 from datetime import datetime, timedelta
+
+import discord
 from discord.ext import commands
 
-from .utils.dataIO import dataIO
-from .utils import checks
-from .utils.chat_formatting import box
-from .utils.chat_formatting import pagify
-
-import asyncio
+from cogs.utils import checks
+from cogs.utils.chat_formatting import pagify
+from cogs.utils.dataIO import dataIO
 
 
 class Timerole:

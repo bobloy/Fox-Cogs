@@ -1,11 +1,11 @@
-import discord
 import os
-
-from discord.ext import commands
 from random import randint
 
-from .utils.dataIO import dataIO
-from .utils import checks
+import discord
+from discord.ext import commands
+
+from cogs.utils import checks
+from cogs.utils.dataIO import dataIO
 
 
 class Hangman:

@@ -1,11 +1,11 @@
-import discord
 import asyncio
 import os
-from datetime import datetime
+
+import discord
 from discord.ext import commands
 
-from .utils.dataIO import dataIO
-from .utils import checks
+from cogs.utils import checks
+from cogs.utils.dataIO import dataIO
 
 
 class Immortal:

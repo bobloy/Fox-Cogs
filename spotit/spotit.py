@@ -1,11 +1,11 @@
-import discord
 import os
+from random import shuffle
 
+import discord
 from discord.ext import commands
-from random import randint, shuffle
 
-from .utils.dataIO import dataIO
-from .utils import checks
+from cogs.utils import checks
+from cogs.utils.dataIO import dataIO
 
 PRIME_LIST = [1, 2, 3, 5, 7, 11, 13, 17, 19,
               23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,

@@ -1,13 +1,12 @@
-import discord
 import asyncio
-
-from discord.ext import commands
-from .utils.dataIO import dataIO
-from .utils import checks
-
+import os
 from datetime import datetime, timedelta
 
-import os
+import discord
+from discord.ext import commands
+
+from cogs.utils import checks
+from cogs.utils.dataIO import dataIO
 
 
 class WordSprint:

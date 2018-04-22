@@ -1,7 +1,7 @@
-from discord.ext import commands
+import os
 
 import aiohttp
-import os
+from discord.ext import commands
 
 from cogs.utils.dataIO import dataIO
 

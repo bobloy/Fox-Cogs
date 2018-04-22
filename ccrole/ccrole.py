@@ -1,12 +1,12 @@
-import discord
 import asyncio
-
-from discord.ext import commands
-from .utils.dataIO import dataIO
-from .utils import checks
-from .utils.chat_formatting import pagify, box
 import os
-import re
+
+import discord
+from discord.ext import commands
+
+from cogs.utils import checks
+from cogs.utils.chat_formatting import pagify, box
+from cogs.utils.dataIO import dataIO
 
 
 class CCRole:
@@ -162,21 +162,21 @@ class CCRole:
     async def ccrole_list(self, ctx):
         """Shows custom commands list"""
         server = ctx.message.server
-        commands = self.c_commands.get(server.id, {})
+        cust_coms = self.c_commands.get(server.id, {})
 
-        if not commands:
+        if not cust_coms:
             await self.bot.say("There are no custom commands in this server."
                                " Use `{}ccrole add` to start adding some."
                                "".format(ctx.prefix))
             return
 
-        commands = ", ".join([ctx.prefix + c for c in sorted(commands.keys())])
-        commands = "Custom commands:\n\n" + commands
+        cust_coms = ", ".join([ctx.prefix + c for c in sorted(cust_coms.keys())])
+        cust_coms = "Custom commands:\n\n" + cust_coms
 
-        if len(commands) < 1500:
-            await self.bot.say(box(commands))
+        if len(cust_coms) < 1500:
+            await self.bot.say(box(cust_coms))
         else:
-            for page in pagify(commands, delims=[" ", "\n"]):
+            for page in pagify(cust_coms, delims=[" ", "\n"]):
                 await self.bot.whisper(box(page))
 
     async def on_message(self, message):
@@ -186,7 +186,7 @@ class CCRole:
         server = message.server
         prefix = self.get_prefix(message)
 
-        if not prefix:
+        if prefix is None:
             return
 
         if server.id in self.c_commands and self.bot.user_allowed(message):
@@ -203,7 +203,7 @@ class CCRole:
         for p in self.bot.settings.get_prefixes(message.server):
             if message.content.startswith(p):
                 return p
-        return False
+        return None
 
     async def eval_cc(self, cmd, message):
         if cmd['proles'] and not (set(role.id for role in message.author.roles) & set(cmd['proles'])):
