@@ -1,5 +1,5 @@
 import discord
-import asyncio 
+import asyncio
 
 from discord.ext import commands
 from .utils.dataIO import dataIO
@@ -28,7 +28,7 @@ class CCRole:
 
     @ccrole.command(name="add", pass_context=True)
     @checks.mod_or_permissions(administrator=True)
-    async def ccrole_add(self, ctx, command : str):
+    async def ccrole_add(self, ctx, command: str):
         """Adds a custom command with roles"""
         command = command.lower()
         if command in self.bot.commands:
@@ -37,7 +37,7 @@ class CCRole:
 
         server = ctx.message.server
         author = ctx.message.author
-        
+
         if server.id not in self.c_commands:
             self.c_commands[server.id] = {}
         cmdlist = self.c_commands[server.id]
@@ -49,13 +49,13 @@ class CCRole:
 
         # Roles to add
         await self.bot.say('What roles should it add? (Must be comma separated)\nSay `None` to skip adding roles')
-        
+
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         if not answer:
             await self.bot.say("Timed out, canceling")
             return
         arole_list = []
-        if answer.content.upper()!="NONE":
+        if answer.content.upper() != "NONE":
             arole_list = answer.content.split(",")
 
             try:
@@ -63,17 +63,17 @@ class CCRole:
             except:
                 await self.bot.say("Invalid answer, canceling")
                 return
-        
+
         # Roles to remove
         await self.bot.say('What roles should it remove? (Must be comma separated)\nSay `None` to skip removing roles')
-        
+
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         if not answer:
             await self.bot.say("Timed out, canceling")
             return
-        
+
         rrole_list = []
-        if answer.content.upper()!="NONE":
+        if answer.content.upper() != "NONE":
             rrole_list = answer.content.split(",")
 
             try:
@@ -81,17 +81,18 @@ class CCRole:
             except:
                 await self.bot.say("Invalid answer, canceling")
                 return
-                
+
         # Roles to use
-        await self.bot.say('What roles are allowed to use this command? (Must be comma separated)\nSay `None` to allow all roles')
-        
+        await self.bot.say(
+            'What roles are allowed to use this command? (Must be comma separated)\nSay `None` to allow all roles')
+
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         if not answer:
             await self.bot.say("Timed out, canceling")
             return
-        
+
         prole_list = []
-        if answer.content.upper()!="NONE":
+        if answer.content.upper() != "NONE":
             prole_list = answer.content.split(",")
 
             try:
@@ -99,44 +100,45 @@ class CCRole:
             except:
                 await self.bot.say("Invalid answer, canceling")
                 return
-                
+
         # Selfrole
         await self.bot.say('Is this a targeted command?(yes/no)\nNo will make this a selfrole command')
-        
+
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         if not answer:
             await self.bot.say("Timed out, canceling")
             return
-        
+
         if answer.content.upper() in ["Y", "YES"]:
             targeted = True
             await self.bot.say("This command will be targeted")
         else:
             targeted = False
             await self.bot.say("This command will be selfrole")
-        
+
         # Message to send
         await self.bot.say('What message should the bot send?\nSay `None` to send the default `Success!` message')
-        
+
         answer = await self.bot.wait_for_message(timeout=120, author=author)
         if not answer:
             await self.bot.say("Timed out, canceling")
             return
         text = "Success!"
-        if answer.content.upper()!="NONE":
+        if answer.content.upper() != "NONE":
             text = answer.content
 
         # Save the command
-        
-        cmdlist[command] = {'text': text, 'aroles': arole_list, 'rroles': rrole_list, "proles": prole_list, "targeted": targeted}
-        
+
+        cmdlist[command] = {'text': text, 'aroles': arole_list, 'rroles': rrole_list, "proles": prole_list,
+                            "targeted": targeted}
+
         self.c_commands[server.id] = cmdlist
         dataIO.save_json(self.file_path, self.c_commands)
         await self.bot.say("Custom command successfully added.")
 
     @ccrole.command(name="delete", pass_context=True)
     @checks.mod_or_permissions(administrator=True)
-    async def ccrole_delete(self, ctx, command : str):
+    async def ccrole_delete(self, ctx, command: str):
         """Deletes a custom command
         Example:
         [p]ccrole delete yourcommand"""
@@ -202,72 +204,73 @@ class CCRole:
             if message.content.startswith(p):
                 return p
         return False
-        
+
     async def eval_cc(self, cmd, message):
         if cmd['proles'] and not (set(role.id for role in message.author.roles) & set(cmd['proles'])):
             return  # Not authorized, do nothing
-        
+
         if cmd['targeted']:
             try:
                 target = discord.utils.get(message.server.members, mention=message.content.split()[1])
             except:
                 target = None
-            
+
             if not target:
-                out_message = "This command is targeted! @mention a target\n`{} <target>`".format(message.content.split()[0])
-                
+                out_message = "This command is targeted! @mention a target\n`{} <target>`".format(
+                    message.content.split()[0])
+
                 await self.bot.send_message(message.channel, out_message)
-                
+
                 return
         else:
             target = message.author
-            
+
         if cmd['aroles']:
             arole_list = [discord.utils.get(message.server.roles, id=roleid) for roleid in cmd['aroles']]
             # await self.bot.send_message(message.channel, "Adding: "+str([str(arole) for arole in arole_list]))
             await self.bot.add_roles(target, *arole_list)
-            
+
         await asyncio.sleep(1)
-        
+
         if cmd['rroles']:
             rrole_list = [discord.utils.get(message.server.roles, id=roleid) for roleid in cmd['rroles']]
             # await self.bot.send_message(message.channel, "Removing: "+str([str(rrole) for rrole in rrole_list]))
             await self.bot.remove_roles(target, *rrole_list)
-        
+
         await self.bot.send_message(message.channel, cmd['text'])
-            
+
         # {'text': text, 'aroles': arole_list, 'rroles': rrole_list, "proles", prole_list, "targeted": targeted}
 
     # def format_cc(self, command, message):
-        # results = re.findall("\{([^}]+)\}", command)
-        # for result in results:
-            # param = self.transform_parameter(result, message)
-            # command = command.replace("{" + result + "}", param)
-        # return command
-
+    #     results = re.findall("\{([^}]+)\}", command)
+    #     for result in results:
+    #         param = self.transform_parameter(result, message)
+    #         command = command.replace("{" + result + "}", param)
+    #     return command
+    #
     # def transform_parameter(self, result, message):
-        # """
-        # For security reasons only specific objects are allowed
-        # Internals are ignored
-        # """
-        # raw_result = "{" + result + "}"
-        # objects = {
-            # "message" : message,
-            # "author"  : message.author,
-            # "channel" : message.channel,
-            # "server"  : message.server
-        # }
-        # if result in objects:
-            # return str(objects[result])
-        # try:
-            # first, second = result.split(".")
-        # except ValueError:
-            # return raw_result
-        # if first in objects and not second.startswith("_"):
-            # first = objects[first]
-        # else:
-            # return raw_result
-        # return str(getattr(first, second, raw_result))
+    #     """
+    #     For security reasons only specific objects are allowed
+    #     Internals are ignored
+    #     """
+    #     raw_result = "{" + result + "}"
+    #     objects = {
+    #         "message" : message,
+    #         "author"  : message.author,
+    #         "channel" : message.channel,
+    #         "server"  : message.server
+    #     }
+    #     if result in objects:
+    #         return str(objects[result])
+    #     try:
+    #         first, second = result.split(".")
+    #     except ValueError:
+    #         return raw_result
+    #     if first in objects and not second.startswith("_"):
+    #         first = objects[first]
+    #     else:
+    #         return raw_result
+    #     return str(getattr(first, second, raw_result))
 
 
 def check_folders():

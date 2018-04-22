@@ -1,6 +1,6 @@
 import discord
 import os
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 from discord.ext import commands
 
 from .utils.dataIO import dataIO
@@ -9,6 +9,7 @@ from .utils.chat_formatting import box
 from .utils.chat_formatting import pagify
 
 import asyncio
+
 
 class Timerole:
     """Add roles to users based on time on server"""
@@ -22,14 +23,15 @@ class Timerole:
     def save_data(self):
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
-    
+
     @commands.command(pass_context=True, no_pm=True)
     @checks.is_owner()
     async def runtimerole(self, ctx):
         """Trigger the daily timerole"""
-        
+
         await self.timerole_update()
         await self.bot.say("Success")
+
     @commands.group(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(administrator=True)
     async def timerole(self, ctx):
@@ -45,10 +47,10 @@ class Timerole:
         if server.id not in self.the_data:
             self.the_data[server.id] = {}
             self.save_data()
-        
+
         if 'ROLES' not in self.the_data[server.id]:
             self.the_data[server.id]['ROLES'] = {}
-            
+
         self.the_data[server.id]['ROLES'][role.id] = {'DAYS': days}
 
         if requiredroles:
@@ -56,7 +58,7 @@ class Timerole:
 
         self.save_data()
         await self.bot.say("Time Role for {0} set to {1} days".format(role.name, days))
-        
+
     @timerole.command(pass_context=True, no_pm=True)
     async def channel(self, ctx, channel: discord.Channel):
         """Sets the announce channel for role adds"""
@@ -64,13 +66,12 @@ class Timerole:
         if server.id not in self.the_data:
             self.the_data[server.id] = {}
             self.save_data()
-        
-        
+
         self.the_data[server.id]['ANNOUNCE'] = channel.id
 
         self.save_data()
         await self.bot.say("Announce channel set to {0}".format(channel.mention))
-        
+
     @timerole.command(pass_context=True, no_pm=True)
     async def removerole(self, ctx, role: discord.Role):
         """Removes a role from being added after specified time"""
@@ -78,80 +79,76 @@ class Timerole:
         if server.id not in self.the_data:
             self.the_data[server.id] = {}
             self.save_data()
-        
-        
+
         self.the_data[server.id]['ROLES'].pop(role.id, None)
 
         self.save_data()
         await self.bot.say("{0} will no longer be applied".format(role.name))
-    
-    
+
     async def timerole_update(self):
         for server in self.bot.servers:
             print("In server {}".format(server.name))
             addlist = []
-            if server.id not in self.the_data: # Hasn't been configured
+            if server.id not in self.the_data:  # Hasn't been configured
                 print("Not configured")
                 continue
-            
-            if 'ROLES' not in self.the_data[server.id]: # No roles
+
+            if 'ROLES' not in self.the_data[server.id]:  # No roles
                 print("No roles")
                 continue
-            
+
             for member in server.members:
                 has_roles = [r.id for r in member.roles]
-                
+
                 get_roles = [rID for rID in self.the_data[server.id]['ROLES']]
-                
+
                 check_roles = set(get_roles) - set(has_roles)
-                
+
                 print("{} is being checked for {}".format(member.display_name, list(check_roles)))
-                
+
                 for role_id in check_roles:
                     # Check for required role
                     if 'REQUIRED' in self.the_data[server.id]['ROLES'][role_id]:
-                        if not set(self.the_data[server.id]['ROLES'][role_id]['REQUIRED']) & set(has_roles): 
+                        if not set(self.the_data[server.id]['ROLES'][role_id]['REQUIRED']) & set(has_roles):
                             print("Doesn't have required role")
                             continue
-                    
-                    
-                    if member.joined_at + timedelta(days=self.the_data[server.id]['ROLES'][role_id]['DAYS']) <= datetime.today():
+
+                    if member.joined_at + timedelta(
+                            days=self.the_data[server.id]['ROLES'][role_id]['DAYS']) <= datetime.today():
                         print("Qualifies")
-                        addlist.append( (member, role_id) )
+                        addlist.append((member, role_id))
                     print("Out")
             channel = None
             if "ANNOUNCE" in self.the_data[server.id]:
                 channel = server.get_channel(self.the_data[server.id]["ANNOUNCE"])
-            
+
             title = "**These members have received the following roles**\n"
             results = ""
             for member, role_id in addlist:
                 role = discord.utils.get(server.roles, id=role_id)
                 await self.bot.add_roles(member, role)
                 results += "{} : {}\n".format(member.display_name, role.name)
-            
-            
+
             if channel and results:
                 await self.bot.send_message(channel, title)
                 for page in pagify(
                         results, shorten_by=50):
                     await self.bot.send_message(channel, page)
-                
-            print(title+results)
-            
+
+            print(title + results)
+
     async def check_day(self):
         while self is self.bot.get_cog("Timerole"):
-            tomorrow = datetime.now()+timedelta(days=1)
-            midnight = datetime(year=tomorrow.year, month=tomorrow.month, 
-                            day=tomorrow.day, hour=0, minute=0, second=0)
+            tomorrow = datetime.now() + timedelta(days=1)
+            midnight = datetime(year=tomorrow.year, month=tomorrow.month,
+                                day=tomorrow.day, hour=0, minute=0, second=0)
 
             await asyncio.sleep((midnight - datetime.now()).seconds)
 
             await self.timerole_update()
-            
-            await asyncio.sleep(3) 
-            #then start loop over again
 
+            await asyncio.sleep(3)
+            # then start loop over again
 
 
 def check_folders():
@@ -176,4 +173,3 @@ def setup(bot):
     loop = asyncio.get_event_loop()
     loop.create_task(q.check_day())
     bot.add_cog(q)
-    

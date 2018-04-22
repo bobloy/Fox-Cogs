@@ -21,10 +21,10 @@ class Immortal:
         """Saves the json"""
         dataIO.save_json(self.file_path, self.the_data)
 
-    async def adj_roles(self, server, author, member: discord.Member=None, rrole_names=[], arole_names=[]):
+    async def adj_roles(self, server, author, member: discord.Member = None, rrole_names=[], arole_names=[]):
         # Thank you SML for the addrole code
         # https://github.com/smlbiobot/SML-Cogs/tree/master/mm
-        
+
         rroles = [r for r in server.roles if r.name in rrole_names]
         aroles = [r for r in server.roles if r.name in arole_names]
         try:
@@ -44,12 +44,9 @@ class Immortal:
         except:
             await self.bot.say("Unknown Exception")
 
-        
-
-
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
-    async def iresort(self, ctx, member: discord.Member=None):
+    async def iresort(self, ctx, member: discord.Member = None):
         """Sends someone on vacation!"""
 
         if member is None:
@@ -57,19 +54,20 @@ class Immortal:
         else:
             server = ctx.message.server
             author = ctx.message.author
-            role_names = ["Member", "Immortal", "Eternal", "Phantom", "Ghost", "Undead", "Revenant", "Crypt", "Relocate", "Guest"]
+            role_names = ["Member", "Immortal", "Eternal", "Phantom", "Ghost", "Undead", "Revenant", "Crypt",
+                          "Relocate", "Guest"]
             arole_names = ["Resort"]
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Resort" in [r.name for r in member.roles]:
                 await self.bot.say("You are being sent on Vacation! :tada:" +
                                    "Please relocate to Immortal Resort (#889L92UQ) when you find the time.")
                 await self.bot.send_message(member, "You are being sent on Vacation! :tada: Please relocate " +
-                                                    "to Immortal Resort (#889L92UQ) when you find the time.\n" +
-                                                    "You'll have limited access to the server until you rejoin a main clan")
+                                            "to Immortal Resort (#889L92UQ) when you find the time.\n" +
+                                            "You'll have limited access to the server until you rejoin a main clan")
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
-    async def icrypt(self, ctx, member: discord.Member=None):
+    async def icrypt(self, ctx, member: discord.Member = None):
         """Sends someone to Crypt!"""
 
         if member is None:
@@ -77,16 +75,17 @@ class Immortal:
         else:
             server = ctx.message.server
             author = ctx.message.author
-            role_names = ["Immortal", "Eternal", "Ghost", "Phantom", "Revenant", "Undead", "Relocate", "Guest", "Resort"]
+            role_names = ["Immortal", "Eternal", "Ghost", "Phantom", "Revenant", "Undead", "Relocate", "Guest",
+                          "Resort"]
             arole_names = ["Member", "Crypt"]
             await self.adj_roles(server, author, member, role_names, arole_names)
             if "Crypt" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
                 await self.send_welcome(member, "Reddit Crypt")
-                
+
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
-    async def irevenant(self, ctx, member: discord.Member=None):
+    async def irevenant(self, ctx, member: discord.Member = None):
         """Sends someone to Revenant!"""
 
         if member is None:
@@ -100,10 +99,10 @@ class Immortal:
             if "Revenant" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
                 await self.send_welcome(member, "Reddit Revenant")
-                
+
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
-    async def iundead(self, ctx, member: discord.Member=None):
+    async def iundead(self, ctx, member: discord.Member = None):
         """Sends someone to Undead!"""
 
         if member is None:
@@ -117,10 +116,10 @@ class Immortal:
             if "Undead" in [r.name for r in member.roles]:
                 await self.bot.say("Success")
                 await self.send_welcome(member, "Reddit Undead")
-                
+
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
-    async def iphantom(self, ctx, member: discord.Member=None):
+    async def iphantom(self, ctx, member: discord.Member = None):
         """Sends someone to Phantom!"""
 
         if member is None:
@@ -137,7 +136,7 @@ class Immortal:
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
-    async def ieternal(self, ctx, member: discord.Member=None):
+    async def ieternal(self, ctx, member: discord.Member = None):
         """Sends someone to Eternal!"""
 
         if member is None:
@@ -154,7 +153,7 @@ class Immortal:
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_roles=True)
-    async def iimmortal(self, ctx, member: discord.Member=None):
+    async def iimmortal(self, ctx, member: discord.Member = None):
         """Sends someone to Immortal!"""
 
         if member is None:
@@ -190,18 +189,20 @@ class Immortal:
 
         self.the_data[server.id]['WELCOMECHANNEL'] = ctx.message.channel.id
         self.save_data()
-        await self.bot.say("Welcome Channel set to "+ctx.message.channel.name)
+        await self.bot.say("Welcome Channel set to " + ctx.message.channel.name)
 
     async def send_welcome(self, member, clanname=""):
         server = member.server
         if server.id in self.the_data:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['WELCOMECHANNEL']),
-                                        "Please welcome " + member.mention + ", who just joined " + clanname +"!\n" +
+                                        "Please welcome " + member.mention + ", who just joined " + clanname + "!\n" +
                                         "Check " + server.get_channel("257557008662790145").mention + " & " +
-                                        server.get_channel("257560603093106688").mention+" for clan rules etc.\n" +
-                                        "We recommend turning all message notifications on for " + server.get_channel("257560603093106688").mention +
+                                        server.get_channel("257560603093106688").mention + " for clan rules etc.\n" +
+                                        "We recommend turning all message notifications on for " + server.get_channel(
+                                            "257560603093106688").mention +
                                         " if you want to know when tourneys are posted and other important info.\n" +
                                         "You can also type `!help` for a list of bot commands/features.")
+
 
 #    @immortalset.command(pass_context=True)
 #    async def channel(self, ctx):

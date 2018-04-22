@@ -1,9 +1,15 @@
 {
-	"AUTHOR": "Bobloy",
-	"INSTALL_MSG": "Thank you for installing timerole. Configure with [p]timeroleset",
-	"NAME": "Timerole",
-	"SHORT": "Apply or remove roles after # of days",
-	"DESCRIPTION": "Apply or remove roles based on the # of days on server",
-	"TAGS": ["bobloy", "utilities", "tools", "tool", "roles"],
-	"HIDDEN": false
+  "AUTHOR": "Bobloy",
+  "INSTALL_MSG": "Thank you for installing timerole. Configure with [p]timeroleset",
+  "NAME": "Timerole",
+  "SHORT": "Apply or remove roles after # of days",
+  "DESCRIPTION": "Apply or remove roles based on the # of days on server",
+  "TAGS": [
+    "bobloy",
+    "utilities",
+    "tools",
+    "tool",
+    "roles"
+  ],
+  "HIDDEN": false
 }

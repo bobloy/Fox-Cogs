@@ -24,13 +24,12 @@ class Leaver:
     @checks.mod_or_permissions(administrator=True)
     async def leaverset(self, ctx):
         """Adjust leaver settings"""
-        
+
         server = ctx.message.server
         if server.id not in self.the_data:
             self.the_data[server.id] = {}
             self.save_data()
 
-        
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
@@ -39,19 +38,18 @@ class Leaver:
         server = ctx.message.server
         if 'CHANNEL' not in self.the_data[server.id]:
             self.the_data[server.id]['CHANNEL'] = ''
-        
 
         self.the_data[server.id]['CHANNEL'] = ctx.message.channel.id
         self.save_data()
-        await self.bot.say("Channel set to "+ctx.message.channel.name)
+        await self.bot.say("Channel set to " + ctx.message.channel.name)
 
     async def when_leave(self, member):
         server = member.server
         if member.nick:
-            leavemessage = str(member) + " (*" + str(member.nick) +"*) has left the server!"
+            leavemessage = str(member) + " (*" + str(member.nick) + "*) has left the server!"
         else:
             leavemessage = str(member) + " has left the server!"
-        
+
         if server.id in self.the_data:
             await self.bot.send_message(server.get_channel(self.the_data[server.id]['CHANNEL']),
                                         leavemessage)
@@ -81,4 +79,3 @@ def setup(bot):
     q = Leaver(bot)
     bot.add_listener(q.when_leave, "on_member_remove")
     bot.add_cog(q)
-    
