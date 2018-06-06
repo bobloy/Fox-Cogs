@@ -3,7 +3,7 @@
   "INSTALL_MSG": "Thank you for installing! Ask a question with [p]cleverio",
   "NAME": "cleverio",
   "SHORT": "Talk to cleverbot",
-  "DESCRIPTION": "Implementation of cleverbot using clever.io",
+  "DESCRIPTION": "Implementation of cleverbot using cleverbot.io",
   "TAGS": [
     "clever",
     "cleverbot",
