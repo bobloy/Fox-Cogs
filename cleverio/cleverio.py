@@ -4,6 +4,7 @@ import aiohttp
 from discord.ext import commands
 
 from cogs.utils.dataIO import dataIO
+from cogs.utils import checks
 
 
 class Cleverio:
@@ -27,6 +28,7 @@ class Cleverio:
             await self.bot.send_cmd_help(ctx)
 
     @cleverset.command(pass_context=True, name="apikey")
+    @checks.is_owner()
     async def cleverset_apikey(self, ctx, user, key):
         """Adjust api key settings"""
 
