@@ -18,7 +18,7 @@ class WhatsMyIP:
         """Print your bot's IP address"""
         my_ip = ipgetter.myip()
 
-        await self.bot.send_message(ctx.author, "Your IP address is {}".format(my_ip))
+        await self.bot.send_message(ctx.message.author, "Your IP address is {}".format(my_ip))
 
 
 def setup(bot):
