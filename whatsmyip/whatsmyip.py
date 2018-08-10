@@ -14,7 +14,7 @@ class WhatsMyIP:
 
     @commands.command(pass_context=True)
     @checks.is_owner()
-    async def whatsmyip(self, ctx):
+    async def whatsmyip(self, ctx: commands.Context):
         """Print your bot's IP address"""
         my_ip = ipgetter.myip()
 
