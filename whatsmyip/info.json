@@ -1,0 +1,16 @@
+{
+  "AUTHOR": "Bobloy",
+  "INSTALL_MSG": "Thank you for installing WhatsMyIP. Use `[p]whatsmyip` to get started",
+  "NAME": "WhatsMyIP",
+  "SHORT": "[Beta] Check your bot's IP address",
+  "DESCRIPTION": "[Beta] Check your bot's IP address. DM only",
+  "TAGS": [
+    "tools",
+    "utilities",
+    "bobloy",
+    "fox",
+    "ip"
+  ],
+  "REQUIREMENTS": ["ipgetter"],
+  "HIDDEN": false
+}
