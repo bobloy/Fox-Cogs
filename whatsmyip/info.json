@@ -11,6 +11,8 @@
     "fox",
     "ip"
   ],
-  "REQUIREMENTS": ["ipgetter"],
+  "REQUIREMENTS": [
+    "ipgetter"
+  ],
   "HIDDEN": false
 }
