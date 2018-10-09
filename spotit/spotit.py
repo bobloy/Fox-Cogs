@@ -15,7 +15,7 @@ LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 class Spotit:
-    """Lets anyone play a game of hangman with custom phrases"""
+    """Lets anyone play a game of Spotit!"""
 
     def __init__(self, bot):
         self.bot = bot
