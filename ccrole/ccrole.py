@@ -211,7 +211,7 @@ class CCRole:
 
         if cmd['targeted']:
             try:
-                target = discord.utils.get(message.server.members, mention=message.content.split()[1])
+                target = discord.utils.get(message.server.members, mention=message.content.split(maxsplit=1)[1])
             except:
                 target = None
 
